@@ -19,8 +19,7 @@
   display: none;
   position: static;
   float: right;
-/*  width: 255px;*/
-  margin: 6px 6px 0 0;
+  margin: 2px 6px 0 0;
 }
 
 .DV-docViewer.DV-searchable .DV-searchBox {
@@ -36,7 +35,7 @@
   width:210px;
   font-size: 11px;
   line-height: 14px;
-  background: #FFF url(../../../images/DV/embed/search_icon.png) no-repeat 5px 5px;
+  background: #FFF url(../../../images/DV/embed/search_icon.png) no-repeat 5px 8px;
   outline: none;
 }
 
