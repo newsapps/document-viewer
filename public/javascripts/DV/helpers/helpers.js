@@ -11,17 +11,23 @@ DV.Schema.helpers = {
       var doc       = context.models.document;
       var value     = _.indexOf(doc.ZOOM_RANGES, doc.zoomLevel);
       var viewer    = this.viewer;
-      viewer.slider = viewer.$('.DV-zoomBox').slider({
-        step: 1,
-        min: 0,
-        max: 4,
-        value: value,
-        slide: function(el,d){
-          boundZoom(context.models.document.ZOOM_RANGES[parseInt(d.value, 10)]);
-        },
-        change: function(el,d){
-          boundZoom(context.models.document.ZOOM_RANGES[parseInt(d.value, 10)]);
-        }
+
+      viewer.zoomControls = viewer.$('.DV-zoomBox').html(JST.zoomControls);
+
+      viewer.$('.DV-zoomBox').delegate('.inc', 'click', function() {
+        var doc = context.models.document;
+        var nextLevel = _.indexOf(doc.ZOOM_RANGES, doc.zoomLevel) + 1;
+
+        if (!!doc.ZOOM_RANGES[parseInt(nextLevel, 10)] && nextLevel >= 0)
+            boundZoom(doc.ZOOM_RANGES[parseInt(nextLevel, 10)]);
+      });
+
+      viewer.$('.DV-zoomBox').delegate('.dec', 'click', function() {
+        var doc = context.models.document;
+        var prevLevel = _.indexOf(doc.ZOOM_RANGES, doc.zoomLevel) - 1;
+
+        if (!!doc.ZOOM_RANGES[parseInt(prevLevel, 10)] && prevLevel >= 0)
+            boundZoom(doc.ZOOM_RANGES[parseInt(prevLevel, 10)]);
       });
 
       // next/previous
@@ -29,7 +35,6 @@ DV.Schema.helpers = {
       var compiled        = viewer.compiled;
       compiled.next       = this.events.compile('next');
       compiled.previous   = this.events.compile('previous');
-
 
       var states = context.states;
       viewer.$('.DV-navControls').delegate('span.DV-next','click', compiled.next);
@@ -468,7 +473,7 @@ DV.Schema.helpers = {
       history.register(/search\/p(\d*)\/(.*)$/, _.bind(events.handleHashChangeViewSearchRequest,this.events));
     },
 
-    // Sets up the zoom slider to match the appropriate for the specified
+    // Sets up zoom ranges to match the appropriate for the specified
     // initial zoom level, and real document page sizes.
     autoZoomPage: function() {
       var windowWidth = this.elements.window.outerWidth(true);
@@ -483,23 +488,22 @@ DV.Schema.helpers = {
       var ranges = [];
       if (zoom <= 500) {
         var zoom2 = (zoom + 700) / 2;
-        ranges = [zoom, zoom2, 700, 850, 1000];
+        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800];
       } else if (zoom <= 750) {
         var zoom2 = ((1000 - 700) / 3) + zoom;
         var zoom3 = ((1000 - 700) / 3)*2 + zoom;
-        ranges = [.66*zoom, zoom, zoom2, zoom3, 1000];
+        ranges = [.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800];
       } else if (750 < zoom && zoom <= 850){
         var zoom2 = ((1000 - zoom) / 2) + zoom;
-        ranges = [.66*zoom, 700, zoom, zoom2, 1000];
+        ranges = [.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800];
       } else if (850 < zoom && zoom < 1000){
         var zoom2 = ((zoom - 700) / 2) + 700;
-        ranges = [.66*zoom, 700, zoom2, zoom, 1000];
+        ranges = [.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800];
       } else if (zoom >= 1000) {
         zoom = 1000;
         ranges = this.viewer.models.document.ZOOM_RANGES;
       }
       this.viewer.models.document.ZOOM_RANGES = ranges;
-      this.viewer.slider.slider({'value': parseInt(_.indexOf(ranges, zoom), 10)});
       this.events.zoom(zoom);
     },
 

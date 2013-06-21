@@ -83,7 +83,10 @@ DV.Thumbnails.prototype.getZoom = function(zoom) {
   if (zoom != null) {
     return this.zoomLevel = _.indexOf(this.viewer.models.document.ZOOM_RANGES, zoom);
   } else {
-    return this.zoomLevel = this.viewer.slider.slider('value');
+    return this.zoomLevel = _.indexOf(
+      this.viewer.models.document.ZOOM_RANGES,
+      this.viewer.models.document.zoomLevel
+    );
   }
 };
 
