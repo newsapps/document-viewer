@@ -19,17 +19,22 @@
   }
   .DV-footer .DV-navControlsContainer {
     position: relative;
-    width: 240px;
     margin: 0 auto;
   }
     .DV-footer .DV-navControls {
-      right: 0; top: 0;
+      right: 0;
+      top: 0;
+      margin: 0 auto;
+      text-align: center;
     }
       .DV-footer .DV-trigger {
-        top: 5px;
+        position: relative;
+        top: 4px;
       }
       .DV-footer .DV-pageNumberContainer {
-        padding-top: 5px;
+        position: absolute;
+        left: 0;
+        top: 4px;
       }
   .DV-fullscreen {
     cursor: pointer;

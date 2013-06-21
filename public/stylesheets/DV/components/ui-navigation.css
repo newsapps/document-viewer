@@ -50,52 +50,6 @@
   text-decoration:underline;
 }
 
-.DV-previous, .DV-next {
-  border: 1px solid #bbb; border-top-color: #ccc; border-bottom-color: #999;
-  background-image:url(../../../images/DV/embed/controlsArrows.png);
-  background-repeat: no-repeat;
-  width:32px; height:22px;
-  position:absolute;
-  top: 0px;
-  cursor:pointer;
-  text-indent:-1000em;
-  -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;
-}
-
-.DV-previous{
-  background-position: 0 0;
-  left:10px;
-}
-
-.DV-previous:hover{
-  background-position: -32px 0;
-}
-
-.DV-previous:active {
-  background-position: -64px 0;
-}
-
-.DV-previous:focus {
-  outline: 0;
-}
-
-.DV-next{
-  background-position: -96px 0;
-  right: 10px;
-}
-
-.DV-next:hover{
-  background-position: -128px 0;
-}
-
-.DV-next:active{
-  background-position: -160px 0;
-}
-
-.DV-next:focus {
-  outline: 0;
-}
-
 .DV-pageNumberContainer{
   width:154px;
   text-align:center;
