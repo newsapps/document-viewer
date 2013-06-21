@@ -57,7 +57,6 @@ DV.Schema.states = {
     this.helpers.addObserver('drawPages');
     this.dragReporter.setBinding();
     this.elements.window.mouseleave(DV.jQuery.proxy(this.dragReporter.stop, this.dragReporter));
-    this.acceptInput.allow();
 
     this.helpers.toggleContent('viewDocument');
 
@@ -92,7 +91,6 @@ DV.Schema.states = {
 
   ViewText: function(){
     this.helpers.reset();
-    this.acceptInput.allow();
     this.pageSet.zoomText();
     this.helpers.toggleContent('viewText');
     this.events.loadText();
