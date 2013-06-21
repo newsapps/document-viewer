@@ -149,8 +149,6 @@ DV.Schema.helpers = {
 
       this.elements.coverPages.live('mousedown', cleanUp);
 
-      viewer.acceptInput = this.elements.currentPage.acceptInput({ changeCallBack: DV.jQuery.proxy(this.acceptInputCallBack,this) });
-
     },
 
     // Unbind jQuery events that have been bound to objects outside of the viewer.
