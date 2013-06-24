@@ -6,6 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
   <title>Document Viewer (Dev)</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <!-- Chicago Tribune -->
+  <link rel="stylesheet" type="text/css" href="//s3.amazonaws.com/media.apps.chicagotribune.com/bootstrap/v2.2.2r1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//s3.amazonaws.com/media.apps.chicagotribune.com/bootstrap/v2.2.2r1/css/bootstrap-responsive.min.css">
+
+  <script src="public/javascripts/DV/vendor/jquery-1.7.2.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/vendor/underscore.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/vendor/backbone.js" type="text/javascript"></script>
+  <script src="//s3.amazonaws.com/media.apps.chicagotribune.com/bootstrap/v2.2.2r1/js/bootstrap.js"></script>
+
+  <!-- Document Viewer -->
   <link href="public/stylesheets/DV/components/reset.css" media="screen" rel="stylesheet" type="text/css" />
   <link href="public/stylesheets/DV/components/structure.css" media="screen" rel="stylesheet" type="text/css" />
   <link href="public/stylesheets/DV/components/ui.css" media="screen" rel="stylesheet" type="text/css" />
@@ -33,44 +45,41 @@
     body { margin: 0; }
   </style>
 
-<script src="public/javascripts/DV/vendor/jquery-1.5.1.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/vendor/jquery-ui-1.8.1.custom.min.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/vendor/underscore.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/vendor/jquery.acceptInput.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/vendor/jquery.placeholder.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/initializer.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/history.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/annotation.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/drag_reporter.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/elements.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/page.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/page_set.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/lib/thumbnails.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/schema/schema.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/elements/elements.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/models/annotation.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/models/chapter.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/models/document.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/models/page.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/events.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/ViewAnnotation.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/ViewDocument.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/ViewSearch.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/ViewText.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/ViewThumbnails.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/history.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/events/navigation.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/helpers/helpers.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/helpers/annotations.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/helpers/construction.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/helpers/editor.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/helpers/navigation.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/helpers/search.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/states/states.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/controllers/document_viewer.js" type="text/javascript"></script>
-<script src="public/javascripts/DV/controllers/api.js" type="text/javascript"></script>
-<script src="public/assets/templates.js" type="text/javascript"></script>
-
+  <script src="public/javascripts/DV/vendor/jquery-ui-1.8.1.custom.min.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/vendor/jquery.acceptInput.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/vendor/jquery.placeholder.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/initializer.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/history.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/annotation.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/drag_reporter.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/elements.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/page.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/page_set.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/lib/thumbnails.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/schema/schema.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/elements/elements.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/models/annotation.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/models/chapter.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/models/document.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/models/page.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/events.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/ViewAnnotation.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/ViewDocument.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/ViewSearch.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/ViewText.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/ViewThumbnails.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/history.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/events/navigation.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/helpers/helpers.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/helpers/annotations.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/helpers/construction.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/helpers/editor.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/helpers/navigation.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/helpers/search.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/states/states.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/controllers/document_viewer.js" type="text/javascript"></script>
+  <script src="public/javascripts/DV/controllers/api.js" type="text/javascript"></script>
+  <script src="public/assets/templates.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -78,7 +87,7 @@
 <script type="text/javascript">
   window.currentDocument = DV.load(
     'http://www.documentcloud.org/documents/96522-torrance-statement-on-crime-map.js',
-    {container: '#document-viewer'}
+    {container: '#document-viewer', showSidebar: false}
   );
 </script>
 
