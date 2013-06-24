@@ -40,7 +40,6 @@ DV.Schema.states = {
     this.helpers.reset();
     this.helpers.ensureAnnotationImages();
     this.activeAnnotationId = null;
-    this.acceptInput.deny();
     // Nudge IE to force the annotations to repaint.
     if (DV.jQuery.browser.msie) {
       this.elements.annotations.css({zoom : 0});
@@ -82,7 +81,6 @@ DV.Schema.states = {
     }
 
     this.helpers.getSearchResponse(searchRequest);
-    this.acceptInput.deny();
 
     this.helpers.toggleContent('viewSearch');
 
