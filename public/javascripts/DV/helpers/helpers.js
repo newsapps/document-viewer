@@ -15,7 +15,6 @@ DV.Schema.helpers = {
       viewer.zoomControls = viewer.$('.DV-zoomBox').html(JST.zoomControls);
 
       viewer.$('.DV-zoomBox').delegate('.inc', 'click', function() {
-        var doc = context.models.document;
         var nextLevel = _.indexOf(doc.ZOOM_RANGES, doc.zoomLevel) + 1;
 
         if (!!doc.ZOOM_RANGES[parseInt(nextLevel, 10)] && nextLevel >= 0)
@@ -23,7 +22,6 @@ DV.Schema.helpers = {
       });
 
       viewer.$('.DV-zoomBox').delegate('.dec', 'click', function() {
-        var doc = context.models.document;
         var prevLevel = _.indexOf(doc.ZOOM_RANGES, doc.zoomLevel) - 1;
 
         if (!!doc.ZOOM_RANGES[parseInt(prevLevel, 10)] && prevLevel >= 0)
@@ -149,6 +147,7 @@ DV.Schema.helpers = {
 
       this.elements.coverPages.live('mousedown', cleanUp);
 
+      this.setupShareLinks();
     },
 
     // Unbind jQuery events that have been bound to objects outside of the viewer.
@@ -516,6 +515,28 @@ DV.Schema.helpers = {
           this.jump(opts.page - 1);
         }
       }
+    },
+
+    setupShareLinks: function() {
+      var viewer = this.viewer;
+      var dropdown = viewer.$('.DV-shareTools .dropdown-menu');
+
+      var socialServices = _.defaults({
+        'Facebook': 'http://www.facebook.com/sharer/sharer.php?u=<%= url %>',
+        'Twitter': 'https://twitter.com/share?url=<%= url %>&text=<%= text %>',
+        'Tumblr': 'http://www.tumblr.com/share'
+      }, viewer.options.socialServices);
+
+      _.each(socialServices, function(v, i) {
+        var tmpl = _.template('<li><a target="_blank" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
+
+        var shareLi = _.template(tmpl, {
+          url: encodeURIComponent(window.location),
+          text: encodeURIComponent(viewer.schema.document.description + ' ' + viewer.schema.document.title)
+        });
+
+        dropdown.append(shareLi);
+      });
     }
 
 };

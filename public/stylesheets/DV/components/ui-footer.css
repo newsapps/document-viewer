@@ -6,7 +6,7 @@
   z-index: 20000;
   text-shadow: 0px 1px 0px #ddd;
   color: #333;
-  overflow: hidden;
+  /*overflow: hidden;*/
   background: url(../../../images/DV/embed/headerbg.png);
   box-shadow: 0 0 25px rgba(0,0,0,.05); -webkit-box-shadow: 0 0 25px rgba(0,0,0,.05); -moz-box-shadow: 0 0 25px rgba(0,0,0,.05);
 }
@@ -36,6 +36,15 @@
         left: 0;
         top: 4px;
       }
+      .DV-footer .DV-shareTools {
+        position: absolute;
+        right: 10px;
+        top: 0;
+      }
+        .DV-footer .DV-shareTools .dropdown-menu {
+          left: auto;
+          right: 0;
+        }
   .DV-fullscreen {
     cursor: pointer;
     position: absolute;
