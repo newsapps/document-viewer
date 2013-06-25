@@ -1,10 +1,13 @@
-.DV-controls .brand {
-  margin-left: 0;
+.DV-controls.navbar {
+    margin-bottom: 0;
 }
-  .DV-controls .brand img {
-    height:18px;
-    margin-top:-10px;
+  .DV-controls .brand {
+    margin-left: -6px;
+    padding: 4px;
   }
+    .DV-controls .brand img {
+      height:18px;
+    }
 
 .DV-header{
   padding:10px 0;
@@ -38,18 +41,4 @@
   margin: -2px 12px 0;
   padding: 0 36px;
   position: relative;
-}
-
-@media (max-width: 940px) {
-    .navbar .brand {
-        padding-right: 10px;
-        padding-left: 10px;
-        margin: -5px 0 0 0;
-    }
-}
-
-@media (max-width: 767px) {
-    .navbar .brand {
-        margin-left: 20px;
-    }
 }
