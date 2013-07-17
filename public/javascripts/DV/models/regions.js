@@ -27,13 +27,17 @@ DV.model.Regions.prototype = {
 
     var currentPage = this.viewer.api.currentPage();
     var currentWidth = this.viewer.models.document.zoomLevel;
-    var data = this.loadedPages['page-' + currentPage];
-    var scaleFactor = currentWidth / data.size.width;
     var elements = this.viewer.elements;
+    var data = this.loadedPages['page-' + currentPage];
+
+    if ( typeof data == 'undefined' )
+        return false;
+
+    var scaleFactor = currentWidth / data.size.width;
 
     _.each(data.regions, _.bind(function(v, i) {
       var highlighter = $(JST.regionHighlight({
-        idx: i, currentPage: currentPage
+        idx: i, id: v.id, currentPage: currentPage
       }));
 
       if ( typeof this.loadedArticles['article-' + v.id] == 'undefined' ) {
@@ -48,6 +52,7 @@ DV.model.Regions.prototype = {
 
             var modal = $(JST.regionModal({
               idx: i,
+              id: v.id,
               currentPage: currentPage,
               title: data.title,
               body: data.body
@@ -63,6 +68,7 @@ DV.model.Regions.prototype = {
 
         var modal = $(JST.regionModal({
           idx: i,
+          id: v.id,
           currentPage: currentPage,
           title: _data.title,
           body: _data.body
@@ -92,23 +98,26 @@ DV.model.Regions.prototype = {
     }, this));
   },
 
-  getData: function(succes, error) {
+  getData: function() {
     var currentPage = this.viewer.api.currentPage();
+    return this.getDataForPage(currentPage);
+  },
 
-    if ( !!this.loadedPages['page-' + currentPage] )
-      return this.render(this.loadedPages['page-' + currentPage]);
+  getDataForPage: function(page) {
+    if ( typeof this.loadedPages['page-' + page] !== 'undefined' )
+      return this.render(this.loadedPages['page-' + page]);
 
     $.getJSON(this.url(), _.bind(function(data) {
-      this.loadedPages['page-' + currentPage] = data;
-
+      this.loadedPages['page-' + page] = data;
       this.render(data);
+    }, this));
+  },
 
-      if (!!succes)
-        return succes(data);
-    }, this), function() {
-      if (!!error)
-        return error();
-    });
+  showText: function(articleId) {
+    if ( $('#modal-' + articleId).length === 0 )
+        return false;
+
+    $('#modal-' + articleId).modal('show');
   },
 
   init: function() {
