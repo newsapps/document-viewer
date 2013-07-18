@@ -136,6 +136,8 @@ DV.model.Regions.prototype = {
 
       $(elements.pages[(currentPage - 1) % 3]).append(highlighter);
 
+      this.bindModalOpener(v.id);
+
     }, this));
 
     this.events.pageRegionsLoaded(this.viewer);
@@ -161,6 +163,19 @@ DV.model.Regions.prototype = {
         return false;
 
     $('#modal-' + articleId).modal('show');
+  },
+
+  bindModalOpener: function(id) {
+    var currentPage = this.viewer.api.currentPage();
+
+    $('#modal-opener-' + id).on('click', _.bind(function() {
+      if (window.location.hash == '#page/' + currentPage + '/region/' + id)
+        this.showText(id);
+      else
+        window.location.hash = '#page/' + currentPage + '/region/' + id;
+
+      return false;
+    }, this));
   },
 
   init: function() {
