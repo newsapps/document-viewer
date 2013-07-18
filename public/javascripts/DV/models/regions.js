@@ -35,7 +35,28 @@ DV.model.Regions.prototype = {
 
     var scaleFactor = currentWidth / data.size.width;
 
-    _.each(data.regions, _.bind(function(v, i) {
+    // Get min and max coords to draw an aggregate shape for the region
+    // TODO: Refactor this to draw an svg path so we're not stuck with
+    // rectangles only
+    var regions = [];
+    var regionsGrouped = _.groupBy(data.regions, function(x) { return x.id; });
+    _.each(regionsGrouped, function(v, i) {
+
+      var min_x = _.min(v, function(x) { return x.x1; });
+      var max_x = _.max(v, function(x) { return x.x2; });
+      var min_y = _.min(v, function(x) { return x.y1; });
+      var max_y = _.max(v, function(x) { return x.y2; });
+
+      regions.push({
+        id: i,
+        x1: min_x.x1,
+        y1: min_y.y1,
+        x2: max_x.x2,
+        y2: max_y.y2
+      });
+    });
+
+    _.each(regions, _.bind(function(v, i) {
       var highlighter = $(JST.regionHighlight({
         idx: i, id: v.id, currentPage: currentPage
       }));
