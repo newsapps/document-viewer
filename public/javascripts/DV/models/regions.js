@@ -3,10 +3,22 @@
 DV.model.Regions = function(viewer, options) {
   this.options = options;
   this.viewer = viewer;
+  this.viewer.regions = this;
+
   // "Cache" page data after loading
   this.loadedPages = {};
   // "Cache" article data after loading
   this.loadedArticles = {};
+
+  this.events = _.extend({
+    pageRegionsLoaded: function() {
+      return this.trigger('pageRegionsLoaded', arguments);
+    },
+    regionJsonLoaded: function() {
+      return this.trigger('regionJsonLoaded', arguments);
+    }
+  }, Backbone.Events);
+
   this.init();
 };
 
@@ -79,6 +91,8 @@ DV.model.Regions.prototype = {
               body: data.body
             }));
             $('body').append(modal);
+
+            this.events.trigger('regionJsonLoaded', v.id);
           }, this)
         );
       } else {
@@ -95,6 +109,8 @@ DV.model.Regions.prototype = {
           body: _data.body
         }));
         $('body').append(modal);
+
+        this.events.trigger('regionJsonLoaded', v.id);
       }
 
       var width = Math.round((v.x2 - v.x1) * scaleFactor);
@@ -117,6 +133,8 @@ DV.model.Regions.prototype = {
       $(elements.pages[(currentPage - 1) % 3]).append(highlighter);
 
     }, this));
+
+    this.events.pageRegionsLoaded(this.viewer);
   },
 
   getData: function() {

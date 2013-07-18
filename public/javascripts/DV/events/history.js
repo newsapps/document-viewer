@@ -46,6 +46,22 @@ _.extend(DV.Schema.events, {
     }
   },
 
+  // #page/[pageNumber]/region/[regionId]
+  handleHashChangeViewRegion: function(page, region) {
+    var viewer = this.viewer;
+
+    var regionJsonLoaded = _.bind(function(regionId) {
+      if (regionId == region) {
+        this.showText(region);
+        this.events.off('regionJsonLoaded', regionJsonLoaded);
+      }
+    }, viewer.regions);
+
+    viewer.regions.events.on('regionJsonLoaded', regionJsonLoaded);
+
+    this.handleHashChangeViewDocumentPage(page);
+  },
+
   // Default route if all else fails
   handleHashChangeDefault: function(){
     this.viewer.pageSet.cleanUp();
