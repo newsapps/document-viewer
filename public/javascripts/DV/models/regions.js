@@ -1,7 +1,6 @@
 // regions
 
 DV.model.Regions = function(viewer, options) {
-  this.options = options;
   this.viewer = viewer;
   this.viewer.regions = this;
 
@@ -19,7 +18,12 @@ DV.model.Regions = function(viewer, options) {
     }
   }, Backbone.Events);
 
-  this.init();
+  if (!viewer.options.regions)
+    this.options = null;
+  else {
+    this.options = viewer.options.regions;
+    this.init();
+  }
 };
 
 DV.model.Regions.prototype = {
