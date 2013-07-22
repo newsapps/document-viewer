@@ -37,18 +37,12 @@ DV.model.Regions.prototype = {
     return url;
   },
 
-  render: function() {
+  render: function(data) {
     $('.DV-region-modal').remove();
     $('.DV-region-highlight').remove();
 
     var currentPage = this.viewer.api.currentPage();
     var currentWidth = this.viewer.models.document.zoomLevel;
-    var elements = this.viewer.elements;
-    var data = this.loadedPages['page-' + currentPage];
-
-    if ( typeof data == 'undefined' )
-        return false;
-
     var scaleFactor = currentWidth / data.size.width;
 
     // Get min and max coords to draw an aggregate shape for the region
@@ -73,10 +67,6 @@ DV.model.Regions.prototype = {
     });
 
     _.each(regions, _.bind(function(v, i) {
-      var highlighter = $(JST.regionHighlight({
-        idx: i, id: v.id, currentPage: currentPage
-      }));
-
       if ( typeof this.loadedArticles['article-' + v.id] == 'undefined' ) {
         // TODO: Factor this stuff out into a different view and/or model,
         // make article json url configurable option.
@@ -117,6 +107,10 @@ DV.model.Regions.prototype = {
         this.events.trigger('regionJsonLoaded', v.id);
       }
 
+      var highlighter = $(JST.regionHighlight({
+        idx: i, id: v.id, currentPage: currentPage
+      }));
+
       var width = Math.round((v.x2 - v.x1) * scaleFactor);
       var height = Math.round((v.y2 - v.y1) * scaleFactor);
 
@@ -134,7 +128,7 @@ DV.model.Regions.prototype = {
         'z-index': 1000
       });
 
-      $(elements.pages[(currentPage - 1) % 3]).append(highlighter);
+      $(this.viewer.elements.pages[(currentPage - 1) % 3]).append(highlighter);
 
       this.bindModalOpener(v.id);
 

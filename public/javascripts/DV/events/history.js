@@ -50,16 +50,20 @@ _.extend(DV.Schema.events, {
   handleHashChangeViewRegion: function(page, region) {
     var viewer = this.viewer;
 
-    var regionJsonLoaded = _.bind(function(regionId) {
-      if (regionId == region) {
-        this.showText(region);
-        this.events.off('regionJsonLoaded', regionJsonLoaded);
-      }
-    }, viewer.regions);
+    if (this.viewer.api.currentPage() !== Number(page)) {
+      var regionJsonLoaded = _.bind(function(regionId) {
+        if (regionId == region) {
+          this.showText(region);
+          this.events.off('regionJsonLoaded', regionJsonLoaded);
+        }
+      }, viewer.regions);
 
-    viewer.regions.events.on('regionJsonLoaded', regionJsonLoaded);
+      viewer.regions.events.on('regionJsonLoaded', regionJsonLoaded);
 
-    this.handleHashChangeViewDocumentPage(page);
+      this.handleHashChangeViewDocumentPage(page);
+    } else {
+      viewer.regions.showText(region);
+    }
   },
 
   // Default route if all else fails
