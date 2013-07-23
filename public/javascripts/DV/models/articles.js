@@ -2,7 +2,6 @@
 
 DV.model.Articles = function(viewer, options) {
   this.viewer = viewer;
-  this.initialized = false;
 
   // "Cache" page data after loading
   this.loadedPages = {};
@@ -59,52 +58,60 @@ DV.model.Articles.prototype = {
       .remove();
 
     _.each(articles, _.bind(function(v, i) {
-      if ( typeof this.loadedArticles[v.id] == 'undefined' ) {
-        $.getJSON(this.articleUrl(v.id),
-          _.bind(function(data) {
-            this.loadedArticles[v.id] = data;
+      var callback = _.bind(function(data) {
+        this.loadedArticles[v.id] = data;
 
-            if ( !data )
-              data = { title: 'No title', body: 'No text' };
+        // If the article has no body text or title, don't draw a region
+        if (!data)
+          return false;
 
-            var modal = $(JST.articleModal({
-              idx: i,
-              id: v.id,
-              page: page,
-              title: data.title,
-              body: data.body
-            }));
-            $('body').append(modal);
+        // Build the modal
+        var modal = $(JST.articleModal({
+          idx: i,
+          id: v.id,
+          page: page,
+          title: data.title,
+          body: data.body
+        }));
 
-            this.events.trigger('articleJsonLoaded', v.id);
-          }, this));
-      } else
+        // Append modals to body to work around z-index issue
+        if ($('#' + modal.attr('id')).length === 0)
+          $('body').append(modal);
+
+        // Build the highlighter region
+        var highlighter = $(JST.articleHighlight({
+          idx: i, id: v.id, page: page
+        }));
+
+        var width = Math.round((v.x2 - v.x1) * scaleFactor);
+        var height = Math.round((v.y2 - v.y1) * scaleFactor);
+
+        var left = Math.round(v.x1 * scaleFactor);
+        var top = Math.round(v.y1 * scaleFactor);
+
+        highlighter.css({
+          display: 'block',
+          width: (width - 2) + 'px',
+          height: (height - 2) + 'px',
+          position: 'absolute',
+          top: top + 'px',
+          left: left + 'px',
+          border: '1px solid transparent',
+          'z-index': 1000
+        });
+
+        pageElement.append(highlighter);
+
+        this.bindModalOpener(v.id, page);
+
         this.events.trigger('articleJsonLoaded', v.id);
+      }, this);
 
-      var highlighter = $(JST.articleHighlight({
-        idx: i, id: v.id, page: page
-      }));
-
-      var width = Math.round((v.x2 - v.x1) * scaleFactor);
-      var height = Math.round((v.y2 - v.y1) * scaleFactor);
-
-      var left = Math.round(v.x1 * scaleFactor);
-      var top = Math.round(v.y1 * scaleFactor);
-
-      highlighter.css({
-        display: 'block',
-        width: (width - 2) + 'px',
-        height: (height - 2) + 'px',
-        position: 'absolute',
-        top: top + 'px',
-        left: left + 'px',
-        border: '1px solid transparent',
-        'z-index': 1000
-      });
-
-      pageElement.append(highlighter);
-
-      this.bindModalOpener(v.id, page);
+      // If the article has been loaded previously, use cached data
+      if (typeof this.loadedArticles[v.id] !== 'undefined')
+        callback(this.loadedArticles[v.id]);
+      else // Otherwise, load the data
+        $.getJSON(this.articleUrl(v.id), callback);
 
     }, this));
 
@@ -145,7 +152,7 @@ DV.model.Articles.prototype = {
   },
 
   drawArticlesForPage: function(page) {
-    if ( typeof this.loadedPages[page] !== 'undefined' )
+    if (typeof this.loadedPages[page] !== 'undefined')
         return this.render(this.loadedPages[page], page);
 
     $.getJSON(this.pageUrl(page), _.bind(function(data) {
@@ -155,26 +162,28 @@ DV.model.Articles.prototype = {
   },
 
   showText: function(articleId) {
-    if ( $('#modal-' + articleId).length === 0 )
+    if ($('#modal-' + articleId).length === 0)
       return false;
 
     $('#modal-' + articleId).modal('show');
   },
 
   bindModalOpener: function(id, page) {
-    $('#modal-opener-' + id + '-page-' + page).on('click', _.bind(function() {
-      if (window.location.hash == '#page/' + page + '/article/' + id)
-        this.showText(id);
-      else
-        window.location.hash = '#page/' + page + '/article/' + id;
+    var pageElement  = $(this.viewer.elements.pages[(page - 1) % 3]);
 
-      return false;
-    }, this));
+    $(pageElement).on('click', '#modal-opener-' + id + '-page-' + page,
+      _.bind(function() {
+        if (window.location.hash == '#page/' + page + '/article/' + id)
+          this.showText(id);
+        else
+          window.location.hash = '#page/' + page + '/article/' + id;
+
+        return false;
+      }, this));
   },
 
   init: function() {
     this.viewer.api.onPageChange(_.bind(this.getData, this));
-    this.initialized = true;
   }
 
 };
