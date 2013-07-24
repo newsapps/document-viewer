@@ -1,13 +1,23 @@
 .DV-controls.navbar {
     margin-bottom: 0;
 }
-  .DV-controls .brand {
-    margin-left: -6px;
-    padding: 4px;
-  }
-    .DV-controls .brand img {
-      height:18px;
-    }
+.DV-controls .brand a {
+  color: #757575;
+  font-size: 18px;
+}
+.DV-controls .brand {
+  margin-top: 2px;
+  margin-left: -6px;
+  padding: 4px;
+}
+.DV-controls .brand img {
+  height:18px;
+  margin-right: 35px;
+  margin-bottom: 4px;
+}
+.DV-controls #archive_search {
+  margin-left: 10px;
+}
 
 .DV-header{
   padding:10px 0;

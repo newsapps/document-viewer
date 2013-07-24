@@ -15,7 +15,8 @@
 
 .DV-docViewer a,
 .DV-docViewer a:visited{
-  color:#004276;
+  color:#757575;
+  font-size: 16px;
 }
 
 .DV-docViewer{
