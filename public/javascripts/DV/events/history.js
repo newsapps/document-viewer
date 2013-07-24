@@ -46,18 +46,18 @@ _.extend(DV.Schema.events, {
     }
   },
 
-  // #page/[pageNumber]/region/[regionId]
-  handleHashChangeViewRegion: function(page, region) {
+  // #page/[pageNumber]/article/[articleId]
+  handleHashChangeViewArticle: function(page, article) {
     var viewer = this.viewer;
 
-    var regionJsonLoaded = _.bind(function(regionId) {
-      if (regionId == region) {
-        this.showText(region);
-        this.events.off('regionJsonLoaded', regionJsonLoaded);
+    var articleJsonLoaded = _.bind(function(articleId) {
+      if (articleId == article) {
+        this.showText(article);
+        this.events.off('articleJsonLoaded', articleJsonLoaded);
       }
-    }, viewer.regions);
+    }, viewer.models.articles);
 
-    viewer.regions.events.on('regionJsonLoaded', regionJsonLoaded);
+    viewer.models.articles.events.on('articleJsonLoaded', articleJsonLoaded);
 
     this.handleHashChangeViewDocumentPage(page);
   },

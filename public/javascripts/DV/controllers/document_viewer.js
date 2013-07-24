@@ -71,7 +71,7 @@ DV.DocumentViewer.prototype.loadModels = function() {
   this.models.document     = new DV.model.Document(this);
   this.models.pages        = new DV.model.Pages(this);
   this.models.annotations  = new DV.model.Annotations(this);
-  this.models.regions      = new DV.model.Regions(this);
+  this.models.articles     = new DV.model.Articles(this);
   this.models.removedPages = {};
 };
 

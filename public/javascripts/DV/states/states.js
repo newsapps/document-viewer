@@ -62,6 +62,7 @@ DV.Schema.states = {
     this.helpers.setActiveChapter(this.models.chapters.getChapterId(this.models.document.currentIndex()));
 
     this.helpers.jump(this.models.document.currentIndex());
+
     return true;
   },
 

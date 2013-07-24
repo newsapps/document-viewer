@@ -469,7 +469,7 @@ DV.Schema.helpers = {
       // Handle search requests
       history.register(/search\/p(\d*)\/(.*)$/, _.bind(events.handleHashChangeViewSearchRequest,this.events));
 
-      history.register(/page\/(\d*)\/region\/(\d*)$/, _.bind(events.handleHashChangeViewRegion, this.events));
+      history.register(/page\/(\d*)\/article\/(\d*)$/, _.bind(events.handleHashChangeViewArticle, this.events));
     },
 
     // Sets up zoom ranges to match the appropriate for the specified
