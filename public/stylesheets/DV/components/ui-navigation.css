@@ -60,6 +60,7 @@
 }
 
 .DV-currentPagePrefix,
+.DV-currentPage,
 .DV-currentPageSuffix,
 .DV-currentAnnotationPrefix{
   font-family:Arial,Helvetica,sans-serif;
