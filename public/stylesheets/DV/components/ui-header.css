@@ -19,6 +19,14 @@
   margin-left: 10px;
 }
 
+.DV-controls p.issue-pub-date {
+  color: #eee;
+  text-shadow: none;
+  margin-top: 10px;
+  margin-right: 45px;
+  text-align: right;
+}
+
 .DV-header{
   padding:10px 0;
 }
