@@ -483,6 +483,7 @@ DV.Schema.helpers = {
         zoom = this.viewer.options.zoom;
       }
 
+      console.log(zoom);
       // Setup ranges for auto-width zooming
       var ranges = [];
       if (zoom <= 500) {
@@ -498,10 +499,23 @@ DV.Schema.helpers = {
       } else if (850 < zoom && zoom < 1000){
         var zoom2 = ((zoom - 700) / 2) + 700;
         ranges = [.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800];
-      } else if (zoom >= 1000) {
+      } else if (1000 < zoom && zoom <= 1200) {
+        zoom = 850;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (1200 < zoom && zoom <= 1400) {
         zoom = 1000;
         ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (1400 < zoom && zoom <= 1600) {
+        zoom = 1200;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (1600 < zoom && zoom <= 1923) {
+        zoom = 1400;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (zoom > 1924) {
+        zoom = 1800;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
       }
+
       this.viewer.models.document.ZOOM_RANGES = ranges;
       this.events.zoom(zoom);
     },
