@@ -78,6 +78,11 @@ DV.model.Document.prototype = {
         adjustedOffset   = annotationModel.offsetsAdjustments[i];
       }
 
+      if ( this.viewer.options.ads ) {
+        if ( i % this.viewer.options.ads.interval === 0 )
+          adjustedOffset += 250;
+      }
+
       var pageHeight     = this.viewer.models.pages.getPageHeight(i);
       var previousOffset = this.offsets[i] || 0;
       var h              = this.offsets[i] = adjustedOffset + totalDocHeight;

@@ -69,6 +69,16 @@ DV.Page.prototype.draw = function(argHash) {
   // Set the page number as a class, for page-dependent elements.
   this.el[0].className = this.el[0].className.replace(/\s*DV-page-\d+/, '') + ' DV-page-' + (this.index + 1);
 
+  // Add ads
+  if (this.viewer.options.ads && argHash.force && this.pageNumber != this.index+1) {
+    if ( (this.index + 1) % this.viewer.options.ads.interval === 0 ) {
+      if ( !this.el.find('.advert').length ) {
+        this.el.append('<div class="advert" data-ad-type="cube"></div>');
+        this.el.find('.advert').ad();
+      }
+    }
+  }
+
   if (this.imgSource != source) {
     this.imgSource = source;
     this.loadImage();
