@@ -72,6 +72,7 @@ DV.model.Document.prototype = {
     var len              = this.totalPages;
     var diff             = 0;
     var scrollPos        = this.viewer.elements.window[0].scrollTop;
+    var adHeight         = 250;
 
     for(var i = 0; i < len; i++) {
       if(annotationModel.offsetsAdjustments[i]){
@@ -79,8 +80,8 @@ DV.model.Document.prototype = {
       }
 
       if ( this.viewer.options.ads ) {
-        if ( i % this.viewer.options.ads.interval === 0 )
-          adjustedOffset += 250;
+        if ( i > 0 && i % this.viewer.options.ads.interval === 0 )
+          adjustedOffset += adHeight;
       }
 
       var pageHeight     = this.viewer.models.pages.getPageHeight(i);
