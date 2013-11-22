@@ -86,3 +86,17 @@
     .DV-fullscreen:active {
       background-position: -44px 0;
     }
+
+
+@media (max-width: 320px) {
+  .DV-footer .DV-thumbnailsView .DV-trigger {
+    display: none;
+  }
+  .DV-footer .DV-pageNumberContainer {
+    display: none;
+  }
+  .DV-footer .DV-navControls {
+    text-align: left;
+    margin-left: 10px;
+  }
+}
