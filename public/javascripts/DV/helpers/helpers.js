@@ -452,6 +452,7 @@ DV.Schema.helpers = {
       // Legacy NYT stuff
       history.register(/p(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
       history.register(/p=(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
+      history.register(/page\/(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
 
       // Handle annotation loading in document view
       history.register(/document\/p(\d*)\/a(\d*)$/, _.bind(events.handleHashChangeViewDocumentAnnotation,this.events));
