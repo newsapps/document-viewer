@@ -148,6 +148,8 @@ DV.Schema.helpers = {
       this.elements.coverPages.live('mousedown', cleanUp);
 
       this.setupShareLinks();
+
+      viewer.$('.DV-shareTools').delegate('.DV-show-embed-code', 'click', _.bind(this.showEmbedCode, this));
     },
 
     // Unbind jQuery events that have been bound to objects outside of the viewer.
@@ -564,6 +566,22 @@ DV.Schema.helpers = {
 
         dropdown.append(shareLi);
       });
+
+      dropdown.append('<li><a class="DV-show-embed-code" href="#">Embed</a></li>');
+    },
+
+    showEmbedCode: function() {
+      var viewer = this.viewer,
+          embed_url = window.location.origin + window.location.pathname;
+
+      if ( viewer.api.currentPage() > 1 )
+        embed_url += '#pages/' + viewer.api.currentPage();
+
+      var modal = $(JST.embedModal({ embed_url: embed_url }));
+      modal.modal();
+      modal.on('hidden', function() { $(this).remove(); });
+
+      return false;
     }
 
 };
