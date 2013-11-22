@@ -65,14 +65,28 @@ DV.model.Articles.prototype = {
         if (!data)
           return false;
 
+        var body = data.body;
+        if (this.viewer.options.ads)
+          body = '<div class="advert" data-ad-type="cube"></div>' + body;
+
         // Build the modal
         var modal = $(JST.articleModal({
           idx: i,
           id: v.id,
           page: page,
           title: data.title,
-          body: data.body
+          body: body
         }));
+
+        if (this.viewer.options.ads) {
+          modal.on('shown', function() {
+            modal.find('.advert').css({
+              float: 'right',
+              margin: '0 0 10px 10px'
+            });
+            jQuery(modal.find('.advert')[0]).ad();
+          });
+        }
 
         // Append modals to body to work around z-index issue
         if ($('#' + modal.attr('id')).length === 0)
