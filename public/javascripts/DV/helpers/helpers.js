@@ -593,16 +593,15 @@ DV.Schema.helpers = {
                               'width="<%= width %>" height="<%= height %>" ' +
                               'scrolling="no" frameborder="0"></iframe>');
 
-        if ($(this).hasClass('small-embed')) {
+        if ($(this).hasClass('small-embed'))
           args.width = 300, args.height = 600;
-          modal.find('textarea').text(text(args));
-        } else if ($(this).hasClass('medium-embed')) {
+        else if ($(this).hasClass('medium-embed'))
           args.width = 650, args.height = 600;
-          modal.find('textarea').text(text(args));
-        } else if ($(this).hasClass('large-embed')) {
+        else if ($(this).hasClass('large-embed'))
           args.width = 900, args.height = 700;
-          modal.find('textarea').text(text(args));
-        }
+
+        modal.find('textarea').text(text(args));
+        modal.find('textarea')[0].select();
       });
 
       return false;
