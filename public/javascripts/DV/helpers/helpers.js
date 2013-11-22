@@ -580,7 +580,30 @@ DV.Schema.helpers = {
 
       var modal = $(JST.embedModal({ embed_url: embed_url }));
       modal.modal();
+
       modal.on('hidden', function() { $(this).remove(); });
+      modal.on('shown', function() { modal.find('textarea')[0].select(); });
+
+      modal.find('.embed-size-select button').on('click', function() {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+
+        var args = {width: null, height: null, embed_url: embed_url};
+        var text = _.template('<iframe src="<%= embed_url %>" ' +
+                              'width="<%= width %>" height="<%= height %>" ' +
+                              'scrolling="no" frameborder="0"></iframe>');
+
+        if ($(this).hasClass('small-embed')) {
+          args.width = 300, args.height = 600;
+          modal.find('textarea').text(text(args));
+        } else if ($(this).hasClass('medium-embed')) {
+          args.width = 650, args.height = 600;
+          modal.find('textarea').text(text(args));
+        } else if ($(this).hasClass('large-embed')) {
+          args.width = 900, args.height = 700;
+          modal.find('textarea').text(text(args));
+        }
+      });
 
       return false;
     }

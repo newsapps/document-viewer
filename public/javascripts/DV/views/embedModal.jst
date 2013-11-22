@@ -6,10 +6,12 @@
         <h4 class="modal-title" id="myModalLabel">Embed code</h4>
       </div>
       <div class="modal-body">
-        <textarea style="width:95%;">&lt;iframe src=&quot;<%= embed_url %>&quot; width=&quot;650&quot; height=&quot;600&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</textarea>
-
-        <!--<p>Preview:</p>-->
-        <!--<iframe src="<%= embed_url %>" width="650" height="600" scrolling="no" frameborder="0"></iframe>-->
+        <p><div class="btn-group embed-size-select">
+          <button class="btn small-embed active">Small</button>
+          <button class="btn medium-embed">Medium</button>
+          <button class="btn large-embed">Large</button>
+        </div></p>
+        <p><textarea style="width:95%;min-height:90px;">&lt;iframe src=&quot;<%= embed_url %>&quot; width=&quot;300&quot; height=&quot;600&quot; scrolling=&quot;no&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</textarea></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
