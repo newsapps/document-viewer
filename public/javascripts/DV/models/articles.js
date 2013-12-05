@@ -73,6 +73,11 @@ DV.model.Articles.prototype = {
       canvas.clear();
       _.each(articles, _.bind(function(article, i) {
         var callback = _.bind(function(data) {
+          // make sure the page number hasn't changed on us
+          if (page != pageElement.data('page-num')) {
+            return;
+          }
+
           this.loadedArticles[article.id] = data;
 
           // If the article has no body text or title, don't draw a region
@@ -109,7 +114,7 @@ DV.model.Articles.prototype = {
           // Build the highlighter region
           var highlighter = canvas.group();
           highlighter.attr('class', 'article-' + article.id);
-          _.each(article.regions, function(x) {
+          _.each(article.regions, _.bind(function(x) {
             var v = {
               x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
               x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
@@ -125,8 +130,11 @@ DV.model.Articles.prototype = {
               color: 'orange',
               opacity: 0.5
             });
-            highlighter.opacity(0);
-          });
+            if (article.id == this.activeArticleId)
+              highlighter.opacity(0.5);
+            else
+              highlighter.opacity(0);
+          }, this));
           highlighter.on('mouseover', function() {
             highlighter.opacity(0.2 + highlighter.opacity());
           });
@@ -194,7 +202,7 @@ DV.model.Articles.prototype = {
 
     // Get data for two pages at a time
     this.drawArticlesForPage(currentPage);
-    this.drawArticlesForPage(currentPage + 1);
+    //this.drawArticlesForPage(currentPage + 1);
   },
 
   drawArticlesForPage: function(page) {
