@@ -120,7 +120,7 @@ DV.model.Articles.prototype = {
               x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
               y1: 5*Math.ceil((x.y1 * scaleFactor)/5),
               y2: 5*Math.ceil((x.y2 * scaleFactor)/5)
-            }
+            };
             highlighter.polyline([
               [v.x1, v.y1],
               [v.x2, v.y1],
@@ -201,7 +201,8 @@ DV.model.Articles.prototype = {
     var currentPage = this.viewer.api.currentPage();
 
     // Get data for two pages at a time
-    this.drawArticlesForPage(currentPage);
+    if ( !isNaN(currentPage) )
+      this.drawArticlesForPage(currentPage);
     //this.drawArticlesForPage(currentPage + 1);
   },
 

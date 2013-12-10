@@ -523,7 +523,7 @@ DV.Schema.helpers = {
     },
 
     handleInitialState: function(){
-      var initialRouteMatch = this.viewer.history.loadURL(true);
+      var initialRouteMatch = this.viewer.history.loadUrl();
       if(!initialRouteMatch) {
         var opts = this.viewer.options;
         this.viewer.open('ViewDocument');
