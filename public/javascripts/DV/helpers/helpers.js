@@ -452,7 +452,7 @@ DV.Schema.helpers = {
       // Legacy NYT stuff
       history.register(/p(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
       history.register(/p=(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
-      history.register(/page\/(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
+      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
 
       // Handle annotation loading in document view
       history.register(/document\/p(\d*)\/a(\d*)$/, _.bind(events.handleHashChangeViewDocumentAnnotation,this.events));
@@ -472,7 +472,7 @@ DV.Schema.helpers = {
       // Handle search requests
       history.register(/search\/p(\d*)\/(.*)$/, _.bind(events.handleHashChangeViewSearchRequest,this.events));
 
-      history.register(/page\/(\d*)\/article\/(\d*)$/, _.bind(events.handleHashChangeViewArticle, this.events));
+      history.register(/page\/(\d*)\/article\/(\d*)\/?$/, _.bind(events.handleHashChangeViewArticle, this.events));
     },
 
     // Sets up zoom ranges to match the appropriate for the specified

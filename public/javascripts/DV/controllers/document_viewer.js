@@ -6,7 +6,10 @@ DV.DocumentViewer = function(options) {
   this.api            = new DV.Api(this);
   this.history        = new DV.History(this);
 
-  this.history.start({ pushState: true });
+  if (options.history)
+    this.history.start(options.history);
+  else
+    this.history.start();
 
   // Build the data models
   this.models     = this.schema.models;

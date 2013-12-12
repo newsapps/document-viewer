@@ -145,15 +145,20 @@ DV.model.Articles.prototype = {
             else
               highlighter.opacity(newOpacity);
           });
+
           highlighter.on('click', _.bind(function(ev) {
             var id = article.id;
-            if (window.location.hash == '#page/' + page + '/article/' + id)
+
+            if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + id)
               this.showText(id);
             else {
               this.markRegionActive(id);
-              window.location.hash = '#page/' + page + '/article/' + id;
+              this.viewer.history.navigate(
+                'page/' + page + '/article/' + id, {trigger: false});
+              this.showText(id);
             }
-            ev.preventDefault();
+
+            return false;
           }, this));
 
           this.events.trigger('articleJsonLoaded', article.id);
