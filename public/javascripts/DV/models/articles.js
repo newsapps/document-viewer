@@ -5,8 +5,6 @@ DV.model.Articles = function(viewer, options) {
 
   // "Cache" page data after loading
   this.loadedPages = {};
-  // "Cache" article data after loading
-  this.loadedArticles = {};
 
   this.events = _.extend({
     pageArticlesLoaded: function() {
@@ -32,15 +30,6 @@ DV.model.Articles.prototype = {
 
     url = url.replace(/\{\s*?id\s*?\}/, this.viewer.api.getId());
     url = url.replace(/\{\s*?page\s*?\}/, page);
-
-    return url;
-  },
-
-  articleUrl: function(articleId) {
-    var url = this.options.article.url;
-
-    url = url.replace(/\{\s*?id\s*?\}/, this.viewer.api.getId());
-    url = url.replace(/\{\s*?article\s*?\}/, articleId);
 
     return url;
   },
@@ -72,103 +61,97 @@ DV.model.Articles.prototype = {
       pageElement.data('page-num', page);
       canvas.clear();
       _.each(articles, _.bind(function(article, i) {
-        var callback = _.bind(function(data) {
-          // make sure the page number hasn't changed on us
-          if (page != pageElement.data('page-num')) {
-            return;
+        // make sure the page number hasn't changed on us
+        if (page != pageElement.data('page-num')) {
+          return;
+        }
+
+        var data = _.find(this.loadedPages[page].regions, function(r) {
+          if (r.id == article.id) return true;
+        }).data;
+
+        // If the article has no body text or title, don't draw a region
+        if (!data)
+          return false;
+
+        var body = data.body;
+        if (this.viewer.options.ads)
+          body = '<div class="advert" data-ad-type="cube"></div>' + body;
+
+        // Build the modal
+        var modal = $(JST.articleModal({
+          idx: i,
+          id: article.id,
+          page: page,
+          title: data.title,
+          body: body
+        }));
+
+        if (this.viewer.options.ads) {
+          modal.on('shown', function() {
+            modal.find('.advert').css({
+              float: 'right',
+              margin: '0 0 10px 10px'
+            });
+            jQuery(modal.find('.advert')[0]).ad();
+          });
+        }
+
+        // Append modals to body to work around z-index issue
+        if ($('#' + modal.attr('id')).length === 0)
+          $('body').append(modal);
+
+        // Build the highlighter region
+        var highlighter = canvas.group();
+        highlighter.attr('class', 'article-' + article.id);
+        _.each(article.regions, _.bind(function(x) {
+          var v = {
+            x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
+            x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
+            y1: 5*Math.ceil((x.y1 * scaleFactor)/5),
+            y2: 5*Math.ceil((x.y2 * scaleFactor)/5)
+          };
+          highlighter.polyline([
+            [v.x1, v.y1],
+            [v.x2, v.y1],
+            [v.x2, v.y2],
+            [v.x1, v.y2]
+          ]).fill({
+            color: 'orange',
+            opacity: 0.5
+          });
+          if (article.id == this.activeArticleId)
+            highlighter.opacity(0.5);
+          else
+            highlighter.opacity(0);
+        }, this));
+        highlighter.on('mouseover', function() {
+          highlighter.opacity(0.2 + highlighter.opacity());
+        });
+        highlighter.on('mouseout', function() {
+          var newOpacity = highlighter.opacity() - 0.2;
+          if (newOpacity < 0)
+            highlighter.opacity(0);
+          else
+            highlighter.opacity(newOpacity);
+        });
+
+        highlighter.on('click', _.bind(function(ev) {
+          var id = article.id;
+
+          if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + id)
+            this.showText(id);
+          else {
+            this.markRegionActive(id);
+            this.viewer.history.navigate(
+              'page/' + page + '/article/' + id, {trigger: false});
+            this.showText(id);
           }
 
-          this.loadedArticles[article.id] = data;
+          return false;
+        }, this));
 
-          // If the article has no body text or title, don't draw a region
-          if (!data)
-            return false;
-
-          var body = data.body;
-          if (this.viewer.options.ads)
-            body = '<div class="advert" data-ad-type="cube"></div>' + body;
-
-          // Build the modal
-          var modal = $(JST.articleModal({
-            idx: i,
-            id: article.id,
-            page: page,
-            title: data.title,
-            body: body
-          }));
-
-          if (this.viewer.options.ads) {
-            modal.on('shown', function() {
-              modal.find('.advert').css({
-                float: 'right',
-                margin: '0 0 10px 10px'
-              });
-              jQuery(modal.find('.advert')[0]).ad();
-            });
-          }
-
-          // Append modals to body to work around z-index issue
-          if ($('#' + modal.attr('id')).length === 0)
-            $('body').append(modal);
-
-          // Build the highlighter region
-          var highlighter = canvas.group();
-          highlighter.attr('class', 'article-' + article.id);
-          _.each(article.regions, _.bind(function(x) {
-            var v = {
-              x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
-              x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
-              y1: 5*Math.ceil((x.y1 * scaleFactor)/5),
-              y2: 5*Math.ceil((x.y2 * scaleFactor)/5)
-            };
-            highlighter.polyline([
-              [v.x1, v.y1],
-              [v.x2, v.y1],
-              [v.x2, v.y2],
-              [v.x1, v.y2]
-            ]).fill({
-              color: 'orange',
-              opacity: 0.5
-            });
-            if (article.id == this.activeArticleId)
-              highlighter.opacity(0.5);
-            else
-              highlighter.opacity(0);
-          }, this));
-          highlighter.on('mouseover', function() {
-            highlighter.opacity(0.2 + highlighter.opacity());
-          });
-          highlighter.on('mouseout', function() {
-            var newOpacity = highlighter.opacity() - 0.2;
-            if (newOpacity < 0)
-              highlighter.opacity(0);
-            else
-              highlighter.opacity(newOpacity);
-          });
-
-          highlighter.on('click', _.bind(function(ev) {
-            var id = article.id;
-
-            if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + id)
-              this.showText(id);
-            else {
-              this.markRegionActive(id);
-              this.viewer.history.navigate(
-                'page/' + page + '/article/' + id, {trigger: false});
-              this.showText(id);
-            }
-
-            return false;
-          }, this));
-
-          this.events.trigger('articleJsonLoaded', article.id);
-        }, this);
-
-        // If the article has been loaded previously, use cached data
-        if (typeof this.loadedArticles[article.id] !== 'undefined')
-          callback(this.loadedArticles[article.id]);
-        else // Otherwise, load the data
-          $.getJSON(this.articleUrl(article.id), callback);
+        this.events.trigger('articleJsonLoaded', article.id);
 
       }, this));
     }
