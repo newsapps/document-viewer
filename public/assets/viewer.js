@@ -742,7 +742,7 @@ page=this.viewer.api.currentPage();return this.viewer.elements.pages[(page-1)%3]
 if(page!=elementPageNum){pageElement.data('page-num',page);canvas.clear();_.each(articles,_.bind(function(article,i){if(page!=pageElement.data('page-num')){return;}
 var data=_.find(this.loadedPages[page].regions,function(r){if(r.id==article.id)return true;}).data;if(!data)
 return false;var body=data.body;if(this.viewer.options.ads)
-body='<div class="advert" data-ad-type="cube"></div>'+body;var modal=$(JST.articleModal({idx:i,id:article.id,page:page,title:data.title,body:body}));if(this.viewer.options.ads){modal.on('shown',function(){modal.find('.advert').css({float:'right',margin:'0 0 10px 10px'});jQuery(modal.find('.advert')[0]).ad();});}
+body='<div class="advert" data-ad-type="cube"></div>'+body;var modal=$(JST.articleModal({idx:i,id:article.id,page:page,title:data.title,body:body,legible:article.regions[0].data.legible,image:'/issues/'+this.viewer.api.getId()+'/'+article.id+'-large.png'}));if(this.viewer.options.ads){modal.on('shown',function(){modal.find('.advert').css({float:'right',margin:'0 0 10px 10px'});jQuery(modal.find('.advert')[0]).ad();});}
 if($('#'+modal.attr('id')).length===0)
 $('body').append(modal);var highlighter=canvas.group();highlighter.attr('class','article-'+article.id);_.each(article.regions,_.bind(function(x){var v={x1:5*Math.ceil((x.x1*scaleFactor)/5),x2:5*Math.ceil((x.x2*scaleFactor)/5),y1:5*Math.ceil((x.y1*scaleFactor)/5),y2:5*Math.ceil((x.y2*scaleFactor)/5)};highlighter.polyline([[v.x1,v.y1],[v.x2,v.y1],[v.x2,v.y2],[v.x1,v.y2]]).fill({color:'orange',opacity:0.5});if(article.id==this.activeArticleId)
 highlighter.opacity(0.5);else

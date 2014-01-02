@@ -4,7 +4,11 @@
         <h3 id="article-title"><%= title %></h3>
     </div>
     <div class="modal-body">
-        <p><%= body %></p>
+        <% if (legible) { %>
+          <p><%= body %></p>
+        <% } else { %>
+          <img src="<%= image %>" />
+        <% } %>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal">Close</button>

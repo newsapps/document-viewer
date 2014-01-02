@@ -84,7 +84,9 @@ DV.model.Articles.prototype = {
           id: article.id,
           page: page,
           title: data.title,
-          body: body
+          body: body,
+          legible: article.regions[0].data.legible,
+          image: '/issues/' + this.viewer.api.getId() + '/' + article.id + '-large.png'
         }));
 
         if (this.viewer.options.ads) {
