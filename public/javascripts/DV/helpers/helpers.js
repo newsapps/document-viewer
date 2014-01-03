@@ -481,7 +481,7 @@ DV.Schema.helpers = {
       var windowWidth = this.elements.window.outerWidth(true);
       var zoom;
       if (this.viewer.options.zoom == 'auto') {
-        zoom = Math.min(700, windowWidth - (this.viewer.models.pages.getPadding() * 2));
+        zoom = windowWidth - (this.viewer.models.pages.getPadding() * 2);
       } else {
         zoom = this.viewer.options.zoom;
       }
@@ -505,13 +505,13 @@ DV.Schema.helpers = {
         zoom = 850;
         ranges = this.viewer.models.document.ZOOM_RANGES;
       } else if (1200 < zoom && zoom <= 1400) {
-        zoom = 1000;
-        ranges = this.viewer.models.document.ZOOM_RANGES;
-      } else if (1400 < zoom && zoom <= 1600) {
         zoom = 1200;
         ranges = this.viewer.models.document.ZOOM_RANGES;
-      } else if (1600 < zoom && zoom <= 1923) {
+      } else if (1400 < zoom && zoom <= 1600) {
         zoom = 1400;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (1600 < zoom && zoom <= 1923) {
+        zoom = 1600;
         ranges = this.viewer.models.document.ZOOM_RANGES;
       } else if (zoom > 1924) {
         zoom = 1800;
