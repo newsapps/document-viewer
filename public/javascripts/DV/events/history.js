@@ -50,8 +50,8 @@ _.extend(DV.Schema.events, {
   handleHashChangeViewArticle: function(page, article) {
     var viewer = this.viewer;
 
-    var articleJsonLoaded = _.bind(function(articleId) {
-      if (articleId == article) {
+    var articleJsonLoaded = _.bind(function(articleSlug) {
+      if (articleSlug == article) {
         this.showText(article);
         this.events.off('articleJsonLoaded', articleJsonLoaded);
       }

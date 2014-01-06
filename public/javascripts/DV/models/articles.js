@@ -78,15 +78,18 @@ DV.model.Articles.prototype = {
         if (this.viewer.options.ads)
           body = '<div class="advert" data-ad-type="cube"></div>' + body;
 
+        var first_region = article.regions[0];
+
         // Build the modal
         var modal = $(JST.articleModal({
           idx: i,
           id: article.id,
+          slug: first_region.data.slug,
           page: page,
           title: data.title,
           body: body,
-          legible: article.regions[0].data.legible,
-          image: '/issues/' + this.viewer.api.getId() + '/' + article.id + '-large.png'
+          legible: first_region.data.legible,
+          image: '/issues/' + this.viewer.api.getId() + '/' + first_region.data.slug + '-large.png'
         }));
 
         if (this.viewer.options.ads) {
@@ -105,7 +108,7 @@ DV.model.Articles.prototype = {
 
         // Build the highlighter region
         var highlighter = canvas.group();
-        highlighter.attr('class', 'article-' + article.id);
+        highlighter.attr('class', 'article-' + first_region.data.slug);
         _.each(article.regions, _.bind(function(x) {
           var v = {
             x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
@@ -122,7 +125,7 @@ DV.model.Articles.prototype = {
             color: 'orange',
             opacity: 0.5
           });
-          if (article.id == this.activeArticleId)
+          if (first_region.data.slug == this.activeArticleSlug)
             highlighter.opacity(0.5);
           else
             highlighter.opacity(0);
@@ -139,21 +142,23 @@ DV.model.Articles.prototype = {
         });
 
         highlighter.on('click', _.bind(function(ev) {
-          var id = article.id;
+          var id = article.id,
+              first_region = article.regions[0],
+              slug = first_region.data.slug;
 
-          if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + id)
-            this.showText(id);
+          if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + slug)
+            this.showText(slug);
           else {
-            this.markRegionActive(id);
+            this.markRegionActive(slug);
             this.viewer.history.navigate(
-              'page/' + page + '/article/' + id, {trigger: false});
-            this.showText(id);
+              'page/' + page + '/article/' + slug, {trigger: false});
+            this.showText(slug);
           }
 
           return false;
         }, this));
 
-        this.events.trigger('articleJsonLoaded', article.id);
+        this.events.trigger('articleJsonLoaded', first_region.data.slug);
 
       }, this));
     }
@@ -206,23 +211,23 @@ DV.model.Articles.prototype = {
     }, this));
   },
 
-  showText: function(articleId) {
-    if ($('#modal-' + articleId).length === 0)
+  showText: function(articleSlug) {
+    if ($('#modal-' + articleSlug).length === 0)
       return false;
 
-    $('#modal-' + articleId).modal('show');
-    this.markRegionActive(articleId);
+    $('#modal-' + articleSlug).modal('show');
+    this.markRegionActive(articleSlug);
   },
 
-  markRegionActive: function(id) {
+  markRegionActive: function(slug) {
     // Hide currently active article regions
-    $('.article-' + this.activeArticleId).each(function() {
+    $('.article-' + this.activeArticleSlug).each(function() {
       this.instance.opacity(0);
     });
 
     // New active article
-    this.activeArticleId = id;
-    $('.article-' + this.activeArticleId).each(function() {
+    this.activeArticleSlug = slug;
+    $('.article-' + this.activeArticleSlug).each(function() {
       this.instance.opacity(0.5);
     });
   },
