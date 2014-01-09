@@ -57,111 +57,112 @@ DV.model.Articles.prototype = {
       pageElement.data('canvas', canvas);
     }
 
-    if (page != elementPageNum) {
-      pageElement.data('page-num', page);
-      canvas.clear();
-      _.each(articles, _.bind(function(article, i) {
-        // make sure the page number hasn't changed on us
-        if (page != pageElement.data('page-num')) {
-          return;
-        }
+    if (page == elementPageNum)
+      return false;
 
-        var data = _.find(this.loadedPages[page].regions, function(r) {
-          if (r.id == article.id) return true;
-        }).data;
+    pageElement.data('page-num', page);
+    canvas.clear();
+    _.each(articles, _.bind(function(article, i) {
+      // make sure the page number hasn't changed on us
+      if (page != pageElement.data('page-num')) {
+        return;
+      }
 
-        // If the article has no body text or title, don't draw a region
-        if (!data)
-          return false;
+      var data = _.find(this.loadedPages[page].regions, function(r) {
+        if (r.id == article.id) return true;
+      }).data;
 
-        var body = data.body;
-        if (this.viewer.options.ads)
-          body = '<div class="advert" data-ad-type="cube"></div>' + body;
+      // If the article has no body text or title, don't draw a region
+      if (!data)
+        return false;
 
-        var first_region = article.regions[0];
+      var body = data.body;
+      if (this.viewer.options.ads)
+        body = '<div class="advert" data-ad-type="cube"></div>' + body;
 
-        // Build the modal
-        var modal = $(JST.articleModal({
-          idx: i,
-          id: article.id,
-          slug: first_region.data.slug,
-          page: page,
-          title: data.title,
-          body: body,
-          legible: first_region.data.legible,
-          image: '/issues/' + this.viewer.api.getId() + '/' + first_region.data.slug + '-large.png'
-        }));
+      var first_region = article.regions[0];
 
-        if (this.viewer.options.ads) {
-          modal.on('shown', function() {
-            modal.find('.advert').css({
-              float: 'right',
-              margin: '0 0 10px 10px'
-            });
-            jQuery(modal.find('.advert')[0]).ad();
+      // Build the modal
+      var modal = $(JST.articleModal({
+        idx: i,
+        id: article.id,
+        slug: first_region.data.slug,
+        page: page,
+        title: data.title,
+        body: body,
+        legible: first_region.data.legible,
+        image: '/issues/' + this.viewer.api.getId() + '/' + first_region.data.slug + '-large.png'
+      }));
+
+      if (this.viewer.options.ads) {
+        modal.on('shown', function() {
+          modal.find('.advert').css({
+            float: 'right',
+            margin: '0 0 10px 10px'
           });
-        }
-
-        // Append modals to body to work around z-index issue
-        if ($('#' + modal.attr('id')).length === 0)
-          $('body').append(modal);
-
-        // Build the highlighter region
-        var highlighter = canvas.group();
-        highlighter.attr('class', 'article-' + first_region.data.slug);
-        _.each(article.regions, _.bind(function(x) {
-          var v = {
-            x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
-            x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
-            y1: 5*Math.ceil((x.y1 * scaleFactor)/5),
-            y2: 5*Math.ceil((x.y2 * scaleFactor)/5)
-          };
-          highlighter.polyline([
-            [v.x1, v.y1],
-            [v.x2, v.y1],
-            [v.x2, v.y2],
-            [v.x1, v.y2]
-          ]).fill({
-            color: 'orange',
-            opacity: 0.5
-          });
-          if (first_region.data.slug == this.activeArticleSlug)
-            highlighter.opacity(0.5);
-          else
-            highlighter.opacity(0);
-        }, this));
-        highlighter.on('mouseover', function() {
-          highlighter.opacity(0.2 + highlighter.opacity());
+          jQuery(modal.find('.advert')[0]).ad();
         });
-        highlighter.on('mouseout', function() {
-          var newOpacity = highlighter.opacity() - 0.2;
-          if (newOpacity < 0)
-            highlighter.opacity(0);
-          else
-            highlighter.opacity(newOpacity);
+      }
+
+      // Append modals to body to work around z-index issue
+      if ($('#' + modal.attr('id')).length === 0)
+        $('body').append(modal);
+
+      // Build the highlighter region
+      var highlighter = canvas.group();
+      highlighter.attr('class', 'article-' + first_region.data.slug);
+      _.each(article.regions, _.bind(function(x) {
+        var v = {
+          x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
+          x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
+          y1: 5*Math.ceil((x.y1 * scaleFactor)/5),
+          y2: 5*Math.ceil((x.y2 * scaleFactor)/5)
+        };
+        highlighter.polyline([
+          [v.x1, v.y1],
+          [v.x2, v.y1],
+          [v.x2, v.y2],
+          [v.x1, v.y2]
+        ]).fill({
+          color: 'orange',
+          opacity: 0.5
         });
-
-        highlighter.on('click', _.bind(function(ev) {
-          var id = article.id,
-              first_region = article.regions[0],
-              slug = first_region.data.slug;
-
-          if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + slug)
-            this.showText(slug);
-          else {
-            this.markRegionActive(slug);
-            this.viewer.history.navigate(
-              'page/' + page + '/article/' + slug, {trigger: false});
-            this.showText(slug);
-          }
-
-          return false;
-        }, this));
-
-        this.events.trigger('articleJsonLoaded', first_region.data.slug);
-
+        if (first_region.data.slug == this.activeArticleSlug)
+          highlighter.opacity(0.5);
+        else
+          highlighter.opacity(0);
       }, this));
-    }
+      highlighter.on('mouseover', function() {
+        highlighter.opacity(0.2 + highlighter.opacity());
+      });
+      highlighter.on('mouseout', function() {
+        var newOpacity = highlighter.opacity() - 0.2;
+        if (newOpacity < 0)
+          highlighter.opacity(0);
+        else
+          highlighter.opacity(newOpacity);
+      });
+
+      highlighter.on('click', _.bind(function(ev) {
+        var id = article.id,
+            first_region = article.regions[0],
+            slug = first_region.data.slug;
+
+        if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + slug)
+          this.showText(slug);
+        else {
+          this.markRegionActive(slug);
+          this.viewer.history.navigate(
+            'page/' + page + '/article/' + slug, {trigger: false});
+          this.showText(slug);
+        }
+
+        return false;
+      }, this));
+
+      this.events.trigger('articleJsonLoaded', first_region.data.slug);
+
+    }, this));
 
     this.events.pageArticlesLoaded(this.viewer);
   },
@@ -196,9 +197,10 @@ DV.model.Articles.prototype = {
     var currentPage = this.viewer.api.currentPage();
 
     // Get data for two pages at a time
-    if ( !isNaN(currentPage) )
+    if ( !isNaN(currentPage) ) {
       this.drawArticlesForPage(currentPage);
-    //this.drawArticlesForPage(currentPage + 1);
+      this.drawArticlesForPage(currentPage + 1);
+    }
   },
 
   drawArticlesForPage: function(page) {
