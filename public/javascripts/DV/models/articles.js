@@ -28,8 +28,17 @@ DV.model.Articles.prototype = {
   pageUrl: function(page) {
     var url = this.options.page.url;
 
-    url = url.replace(/\{\s*?id\s*?\}/, this.viewer.api.getId());
     url = url.replace(/\{\s*?page\s*?\}/, page);
+
+    return url;
+  },
+
+  articleImageUrl: function(page, slug, size) {
+    var url = this.options.image.url;
+
+    url = url.replace(/\{\s*?page\s*?\}/, page);
+    url = url.replace(/\{\s*?slug\s*?\}/, slug);
+    url = url.replace(/\{\s*?size\s*?\}/, size);
 
     return url;
   },
@@ -91,7 +100,7 @@ DV.model.Articles.prototype = {
         title: data.title,
         body: body,
         legible: first_region.data.legible,
-        image: '/issues/' + this.viewer.api.getId() + '/' + first_region.data.slug + '-large.png'
+        image: this.articleImageUrl(page, first_region.data.slug, 'large')
       }));
 
       if (this.viewer.options.ads) {
