@@ -54,7 +54,7 @@ DV.model.Articles.prototype = {
     var pageElement  = $(this.getPageElement(page));
     var currentWidth = this.viewer.models.document.zoomLevel;
     var scaleFactor  = currentWidth / data.size.width;
-    var articles = this.aggregateArticleRegions(data);
+    var articles = data.articles;
 
     var canvas = pageElement.data('canvas');
     var elementPageNum = pageElement.data('page-num');
@@ -77,15 +77,7 @@ DV.model.Articles.prototype = {
         return;
       }
 
-      var data = _.find(this.loadedPages[page].regions, function(r) {
-        if (r.id == article.id) return true;
-      }).data;
-
-      // If the article has no body text or title, don't draw a region
-      if (!data)
-        return false;
-
-      var body = data.body;
+      var body = article.body;
       if (this.viewer.options.ads)
         body = '<div class="advert" data-ad-type="cube"></div>' + body;
 
@@ -95,12 +87,12 @@ DV.model.Articles.prototype = {
       var modal = $(JST.articleModal({
         idx: i,
         id: article.id,
-        slug: first_region.data.slug,
+        slug: article.slug,
         page: page,
-        title: data.title,
+        title: article.title,
         body: body,
-        legible: first_region.data.legible,
-        image: this.articleImageUrl(page, first_region.data.slug, 'large')
+        legible: article.legible,
+        image: this.articleImageUrl(page, article.slug, 'large')
       }));
 
       if (this.viewer.options.ads) {
@@ -119,7 +111,7 @@ DV.model.Articles.prototype = {
 
       // Build the highlighter region
       var highlighter = canvas.group();
-      highlighter.attr('class', 'article-' + first_region.data.slug);
+      highlighter.attr('class', 'article-' + article.slug);
       _.each(article.regions, _.bind(function(x) {
         var v = {
           x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
@@ -136,7 +128,7 @@ DV.model.Articles.prototype = {
           color: 'orange',
           opacity: 0.5
         });
-        if (first_region.data.slug == this.activeArticleSlug)
+        if (article.slug == this.activeArticleSlug)
           highlighter.opacity(0.5);
         else
           highlighter.opacity(0);
@@ -155,7 +147,7 @@ DV.model.Articles.prototype = {
       highlighter.on('click', _.bind(function(ev) {
         var id = article.id,
             first_region = article.regions[0],
-            slug = first_region.data.slug;
+            slug = article.slug;
 
         if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + slug)
           this.showText(slug);
@@ -169,37 +161,11 @@ DV.model.Articles.prototype = {
         return false;
       }, this));
 
-      this.events.trigger('articleJsonLoaded', first_region.data.slug);
+      this.events.trigger('articleJsonLoaded', article.slug);
 
     }, this));
 
     this.events.pageArticlesLoaded(this.viewer);
-  },
-
-  aggregateArticleRegions: function(data) {
-    // Get min and max coords to draw an aggregate shape for the article
-    // TODO: Refactor this to draw an svg path so we're not stuck with
-    // rectangles only
-    var articles = [];
-    var articlesGrouped = _.groupBy(data.regions, function(x) { return x.id; });
-    _.each(articlesGrouped, function(v, i) {
-
-      var min_x = _.min(v, function(x) { return x.x1; });
-      var max_x = _.max(v, function(x) { return x.x2; });
-      var min_y = _.min(v, function(x) { return x.y1; });
-      var max_y = _.max(v, function(x) { return x.y2; });
-
-      articles.push({
-        id: i,
-        x1: min_x.x1,
-        y1: min_y.y1,
-        x2: max_x.x2,
-        y2: max_y.y2,
-        regions: v
-      });
-    });
-
-    return articles;
   },
 
   getData: function() {
