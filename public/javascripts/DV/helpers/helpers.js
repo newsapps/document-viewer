@@ -449,11 +449,6 @@ DV.Schema.helpers = {
 
       // Handle page loading
       history.register(/document\/p(\d*)$/, _.bind(events.handleHashChangeViewDocumentPage,this.events));
-      // Legacy NYT stuff
-      history.register(/p(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
-      history.register(/p=(\d*)$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
-      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
-
       // Handle annotation loading in document view
       history.register(/document\/p(\d*)\/a(\d*)$/, _.bind(events.handleHashChangeViewDocumentAnnotation,this.events));
 
@@ -462,6 +457,8 @@ DV.Schema.helpers = {
 
       // Handle loading of the pages view
       history.register(/pages$/, _.bind(events.handleHashChangeViewPages, events));
+      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
+      history.register(/page\/(\d*)\/article\/([\d\w\-]+)\/?$/, _.bind(events.handleHashChangeViewArticle, this.events));
 
       // Handle page loading in text view
       history.register(/text\/p(\d*)$/, _.bind(events.handleHashChangeViewText,this.events));
@@ -471,8 +468,6 @@ DV.Schema.helpers = {
 
       // Handle search requests
       history.register(/search\/p(\d*)\/(.*)$/, _.bind(events.handleHashChangeViewSearchRequest,this.events));
-
-      history.register(/page\/(\d*)\/article\/([\d\w\-]+)\/?$/, _.bind(events.handleHashChangeViewArticle, this.events));
     },
 
     // Sets up zoom ranges to match the appropriate for the specified
@@ -487,20 +482,20 @@ DV.Schema.helpers = {
       }
 
       // Setup ranges for auto-width zooming
-      var ranges = [];
+      var ranges = [], zoom2, zoom3;
       if (zoom <= 500) {
-        var zoom2 = (zoom + 700) / 2;
+        zoom2 = (zoom + 700) / 2;
         ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800];
       } else if (zoom <= 750) {
-        var zoom2 = ((1000 - 700) / 3) + zoom;
-        var zoom3 = ((1000 - 700) / 3)*2 + zoom;
-        ranges = [.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800];
+        zoom2 = ((1000 - 700) / 3) + zoom;
+        zoom3 = ((1000 - 700) / 3)*2 + zoom;
+        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800];
       } else if (750 < zoom && zoom <= 850){
-        var zoom2 = ((1000 - zoom) / 2) + zoom;
-        ranges = [.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800];
+        zoom2 = ((1000 - zoom) / 2) + zoom;
+        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800];
       } else if (850 < zoom && zoom < 1000){
-        var zoom2 = ((zoom - 700) / 2) + 700;
-        ranges = [.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800];
+        zoom2 = ((zoom - 700) / 2) + 700;
+        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800];
       } else if (1000 < zoom && zoom <= 1200) {
         zoom = 850;
         ranges = this.viewer.models.document.ZOOM_RANGES;
@@ -510,10 +505,10 @@ DV.Schema.helpers = {
       } else if (1400 < zoom && zoom <= 1600) {
         zoom = 1400;
         ranges = this.viewer.models.document.ZOOM_RANGES;
-      } else if (1600 < zoom && zoom <= 1923) {
+      } else if (1600 < zoom && zoom <= 1800) {
         zoom = 1600;
         ranges = this.viewer.models.document.ZOOM_RANGES;
-      } else if (zoom > 1924) {
+      } else if (zoom > 1800) {
         zoom = 1800;
         ranges = this.viewer.models.document.ZOOM_RANGES;
       }
