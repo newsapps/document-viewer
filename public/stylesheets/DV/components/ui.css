@@ -19,12 +19,14 @@
     box-shadow:         0px 1px 10px rgba(255, 97, 50, 0.75);
 }
 
-.DV-article-modal.modal {
-  width: 868px;
-  margin-left: -434px;
+@media (min-width: 768px) {
+  .DV-article-modal.modal {
+    width: 868px;
+    margin-left: -434px;
+  }
 }
 
-@media (max-width: 1080px) {
+@media (min-width: 768px) and (max-width: 1080px) {
   .DV-article-modal.modal {
     width: 80%;
     margin-left: -40%;
