@@ -5,6 +5,7 @@ DV.model.Articles = function(viewer, options) {
 
   // "Cache" page data after loading
   this.loadedPages = {};
+  this.pendingPages = {};
 
   this.events = _.extend({
     pageArticlesLoaded: function() {
@@ -114,10 +115,10 @@ DV.model.Articles.prototype = {
       highlighter.attr('class', 'article-' + article.slug);
       _.each(article.regions, _.bind(function(x) {
         var v = {
-          x1: 5*Math.ceil((x.x1 * scaleFactor)/5),
-          x2: 5*Math.ceil((x.x2 * scaleFactor)/5),
-          y1: 5*Math.ceil((x.y1 * scaleFactor)/5),
-          y2: 5*Math.ceil((x.y2 * scaleFactor)/5)
+          x1: (x.x1 * scaleFactor),
+          x2: (x.x2 * scaleFactor),
+          y1: (x.y1 * scaleFactor),
+          y2: (x.y2 * scaleFactor)
         };
         highlighter.polyline([
           [v.x1, v.y1],
@@ -133,9 +134,11 @@ DV.model.Articles.prototype = {
         else
           highlighter.opacity(0);
       }, this));
+
       highlighter.on('mouseover', function() {
         highlighter.opacity(0.2 + highlighter.opacity());
       });
+
       highlighter.on('mouseout', function() {
         var newOpacity = highlighter.opacity() - 0.2;
         if (newOpacity < 0)
@@ -182,10 +185,25 @@ DV.model.Articles.prototype = {
     if (typeof this.loadedPages[page] !== 'undefined')
         return this.render(this.loadedPages[page], page);
 
-    $.getJSON(this.pageUrl(page), _.bind(function(data) {
-      this.loadedPages[page] = data;
-      this.render(data, page);
-    }, this));
+    if (_.keys(this.pendingPages).length > 0) {
+      _.each(_.keys(this.pendingPages), _.bind(function(key) {
+        var abortable = key != String(page) && key != String(page + 1) && key != String(page - 1);
+
+        if (abortable) {
+          this.pendingPages[key].abort();
+          delete(this.pendingPages[key]);
+        }
+      }, this));
+    }
+
+    if (_.keys(this.pendingPages).indexOf(String(page)) == -1) {
+      this.pendingPages[page] = $.getJSON(this.pageUrl(page),
+        _.bind(function(data) {
+          this.loadedPages[page] = data;
+          this.render(data, page);
+          delete(this.pendingPages[page]);
+        }, this));
+    }
   },
 
   showText: function(articleSlug) {
