@@ -67,9 +67,6 @@ DV.model.Articles.prototype = {
       pageElement.data('canvas', canvas);
     }
 
-    if (page == elementPageNum)
-      return false;
-
     pageElement.data('page-num', page);
     canvas.clear();
     _.each(articles, _.bind(function(article, i) {
