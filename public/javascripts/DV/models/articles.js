@@ -63,7 +63,8 @@ DV.model.Articles.prototype = {
       canvas = SVG(pageElement[0]);
       canvas
         .size('100%', '100%')
-        .style("z-index", 99999999999);
+        .style("z-index", 99999999999)
+        .attr('class', 'PAGECANVASBAM');
       pageElement.data('canvas', canvas);
     }
 
@@ -145,19 +146,48 @@ DV.model.Articles.prototype = {
       });
 
       highlighter.on('click', _.bind(function(ev) {
-        var id = article.id,
-            first_region = article.regions[0],
-            slug = article.slug;
+        window.hl = highlighter;
+        var zoomRanges = this.viewer.models.document.ZOOM_RANGES,
+            currentZoomLevel = this.viewer.models.pages.zoomLevel,
+            pages = this.viewer.elements.window,
+            scaleFactor;
 
-        if (this.viewer.history.getFragment() == 'page/' + page + '/article/' + slug)
-          this.showText(slug);
-        else {
-          this.markRegionActive(slug);
-          this.viewer.history.navigate(
-            'page/' + page + '/article/' + slug, {trigger: false});
-          this.showText(slug);
+        var find_min_x = function(v) { return v.x1; },
+            find_min_y = function(v) { return v.y1; },
+            find_max_x = function(v) { return v.x2; },
+            find_max_y = function(v) { return v.y2; },
+            min_x, min_y, max_x, max_y, width, height;
+
+        for (var i = zoomRanges.length; i-- > 0; ) {
+          scaleFactor = zoomRanges[i] / data.size.width;
+
+          min_x = _.min(article.regions, find_min_x);
+          min_y = _.min(article.regions, find_min_y);
+          max_x = _.max(article.regions, find_max_x);
+          max_y = _.max(article.regions, find_min_y);
+
+          width = (max_x.x2 - min_x.x1) * scaleFactor;
+          height = (max_y.y2 - min_y.y1) * scaleFactor;
+
+          if (width <= pages.width()) {
+            newZoomLevel = zoomRanges[i];
+            break;
+          }
         }
 
+        this.viewer.pageSet.zoom({ zoomLevel: newZoomLevel });
+
+        var leftPadding = ($(window).width() - width) / 2;
+        var newLeftScroll = (min_x.x1 * scaleFactor) - leftPadding;
+        var newTopScroll  = (min_y.y1 * scaleFactor) + $(pageElement).parent().position().top;
+
+        if (newLeftScroll < 0)
+          newLeftScroll = 0;
+
+        pages.scrollLeft(newLeftScroll);
+        pages.scrollTop(newTopScroll);
+
+        this.markRegionActive(article.slug);
         return false;
       }, this));
 
