@@ -146,48 +146,7 @@ DV.model.Articles.prototype = {
       });
 
       highlighter.on('click', _.bind(function(ev) {
-        window.hl = highlighter;
-        var zoomRanges = this.viewer.models.document.ZOOM_RANGES,
-            currentZoomLevel = this.viewer.models.pages.zoomLevel,
-            pages = this.viewer.elements.window,
-            scaleFactor;
-
-        var find_min_x = function(v) { return v.x1; },
-            find_min_y = function(v) { return v.y1; },
-            find_max_x = function(v) { return v.x2; },
-            find_max_y = function(v) { return v.y2; },
-            min_x, min_y, max_x, max_y, width, height;
-
-        for (var i = zoomRanges.length; i-- > 0; ) {
-          scaleFactor = zoomRanges[i] / data.size.width;
-
-          min_x = _.min(article.regions, find_min_x);
-          min_y = _.min(article.regions, find_min_y);
-          max_x = _.max(article.regions, find_max_x);
-          max_y = _.max(article.regions, find_min_y);
-
-          width = (max_x.x2 - min_x.x1) * scaleFactor;
-          height = (max_y.y2 - min_y.y1) * scaleFactor;
-
-          if (width <= pages.width()) {
-            newZoomLevel = zoomRanges[i];
-            break;
-          }
-        }
-
-        this.viewer.pageSet.zoom({ zoomLevel: newZoomLevel });
-
-        var leftPadding = ($(window).width() - width) / 2;
-        var newLeftScroll = (min_x.x1 * scaleFactor) - leftPadding;
-        var newTopScroll  = (min_y.y1 * scaleFactor) + $(pageElement).parent().position().top;
-
-        if (newLeftScroll < 0)
-          newLeftScroll = 0;
-
-        pages.scrollLeft(newLeftScroll);
-        pages.scrollTop(newTopScroll);
-
-        this.markRegionActive(article.slug);
+        this.zoomToArticle(page, article.slug);
         return false;
       }, this));
 
@@ -196,6 +155,77 @@ DV.model.Articles.prototype = {
     }, this));
 
     this.events.pageArticlesLoaded(this.viewer);
+  },
+
+  zoomToArticle: function(page, slug) {
+    var pageData = this.loadedPages[page],
+        pageElement = $(this.getPageElement(page)),
+        zoomRanges = this.viewer.models.document.ZOOM_RANGES,
+        currentZoomLevel = this.viewer.models.pages.zoomLevel,
+        pages = this.viewer.elements.window,
+        scaleFactor;
+
+    var article = _.find(pageData.articles, function(obj) { return obj.slug == slug; });
+
+    var find_min_x = function(v) { return v.x1; },
+        find_min_y = function(v) { return v.y1; },
+        find_max_x = function(v) { return v.x2; },
+        find_max_y = function(v) { return v.y2; },
+        min_x, min_y, max_x, max_y, width, height;
+
+    for (var i = zoomRanges.length; i-- > 0; ) {
+      scaleFactor = zoomRanges[i] / pageData.size.width;
+
+      min_x = _.min(article.regions, find_min_x);
+      min_y = _.min(article.regions, find_min_y);
+      max_x = _.max(article.regions, find_max_x);
+      max_y = _.max(article.regions, find_min_y);
+
+      width = (max_x.x2 - min_x.x1) * scaleFactor;
+      height = (max_y.y2 - min_y.y1) * scaleFactor;
+
+      if (width <= pages.width()) {
+        newZoomLevel = zoomRanges[i];
+        break;
+      }
+    }
+
+    this.viewer.pageSet.zoom({ zoomLevel: newZoomLevel });
+
+    console.log(pageElement);
+    var leftPadding = ($(window).width() - width) / 2;
+    var newLeftScroll = (min_x.x1 * scaleFactor) - leftPadding;
+    var newTopScroll  = (min_y.y1 * scaleFactor) + $(pageElement).parent().position().top;
+
+    if (newLeftScroll < 0)
+      newLeftScroll = 0;
+
+    pages.scrollLeft(newLeftScroll);
+    pages.scrollTop(newTopScroll);
+
+    this.markRegionActive(article.slug);
+
+    if (article.legible)
+      this.showOptions(article.slug);
+
+    this.viewer.history.navigate(
+      'page/' + pageData.id + '/article/' + article.slug, {trigger: false});
+
+    return false;
+  },
+
+  showOptions: function(articleSlug) {
+    $('.DV-options').remove();
+
+    var options = $(JST.articleOptions({}));
+
+    options.find('.DV-read-full-text').click(_.bind(function() {
+      this.showText(articleSlug);
+      return false;
+    }, this));
+
+    this.viewer.elements.footer.before(options);
+    options.fadeIn();
   },
 
   getData: function() {
@@ -234,6 +264,8 @@ DV.model.Articles.prototype = {
   },
 
   showText: function(articleSlug) {
+    $('.DV-options').remove();
+
     if ($('#modal-' + articleSlug).length === 0)
       return false;
 

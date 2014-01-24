@@ -52,7 +52,7 @@ _.extend(DV.Schema.events, {
 
     var articleJsonLoaded = _.bind(function(articleSlug) {
       if (articleSlug == article) {
-        this.showText(article);
+        this.zoomToArticle(page, article);
         this.events.off('articleJsonLoaded', articleJsonLoaded);
       }
     }, viewer.models.articles);

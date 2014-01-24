@@ -1,3 +1,15 @@
+.DV-options {
+  position: absolute;
+  bottom: 34px;
+  width: 100%;
+  background: #EEEEEE;
+  border-top: 1px solid #666666;
+  z-index: 9999999;
+  padding: 10px 0;
+  text-align: center;
+  display: none;
+}
+
 .DV-trigger{
   cursor: pointer;
   cursor: hand;
