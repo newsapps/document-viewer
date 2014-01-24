@@ -209,7 +209,7 @@ DV.model.Articles.prototype = {
       this.showOptions(article.slug);
 
     this.viewer.history.navigate(
-      'page/' + pageData.id + '/article/' + article.slug, {trigger: false});
+      'page/' + page + '/article/' + article.slug, {trigger: false});
 
     return false;
   },
