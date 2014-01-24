@@ -123,7 +123,7 @@ DV.PageSet.prototype.zoom = function(argHash){
 DV.PageSet.prototype.zoomText = function() {
   var padding = this.viewer.models.pages.getPadding();
   var width   = this.viewer.models.pages.zoomLevel;
-  this.viewer.$('.DV-textContents').width(width - padding);
+  //this.viewer.$('.DV-textContents').width(width - padding);
   this.viewer.$('.DV-textPage').width(width);
   this.viewer.elements.collection.css({'width' : width + padding});
 };

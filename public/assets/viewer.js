@@ -13137,7 +13137,7 @@ DV.PageSet.prototype.zoom = function(argHash){
 DV.PageSet.prototype.zoomText = function() {
   var padding = this.viewer.models.pages.getPadding();
   var width   = this.viewer.models.pages.zoomLevel;
-  this.viewer.$('.DV-textContents').width(width - padding);
+  //this.viewer.$('.DV-textContents').width(width - padding);
   this.viewer.$('.DV-textPage').width(width);
   this.viewer.elements.collection.css({'width' : width + padding});
 };
@@ -13744,34 +13744,6 @@ DV.model.Articles.prototype = {
       if (this.viewer.options.ads)
         body = '<div class="advert" data-ad-type="cube"></div>' + body;
 
-      var first_region = article.regions[0];
-
-      // Build the modal
-      var modal = $(JST.articleModal({
-        idx: i,
-        id: article.id,
-        slug: article.slug,
-        page: page,
-        title: article.title,
-        body: body,
-        legible: article.legible,
-        image: this.articleImageUrl(page, article.slug, 'large')
-      }));
-
-      if (this.viewer.options.ads) {
-        modal.on('shown', function() {
-          modal.find('.advert').css({
-            float: 'right',
-            margin: '0 0 10px 10px'
-          });
-          jQuery(modal.find('.advert')[0]).ad();
-        });
-      }
-
-      // Append modals to body to work around z-index issue
-      if ($('#' + modal.attr('id')).length === 0)
-        $('body').append(modal);
-
       // Build the highlighter region
       var highlighter = canvas.group();
       highlighter.attr('class', 'article-' + article.slug);
@@ -13822,12 +13794,17 @@ DV.model.Articles.prototype = {
   },
 
   zoomToArticle: function(page, slug) {
-    var pageData = this.loadedPages[page],
-        pageElement = $(this.getPageElement(page)),
+    var pageData = this.loadedPages[page];
+
+    if (typeof pageData == 'undefined') // Page data hasn't loaded yet
+      return false;
+
+    var pageElement = $(this.getPageElement(page)),
         zoomRanges = this.viewer.models.document.ZOOM_RANGES,
         currentZoomLevel = this.viewer.models.pages.zoomLevel,
         pages = this.viewer.elements.window,
         scaleFactor;
+
 
     var article = _.find(pageData.articles, function(obj) { return obj.slug == slug; });
 
@@ -13869,7 +13846,7 @@ DV.model.Articles.prototype = {
     this.markRegionActive(article.slug);
 
     if (article.legible)
-      this.showOptions(article.slug);
+      this.showOptions(page, article.slug);
 
     this.viewer.history.navigate(
       'page/' + page + '/article/' + article.slug, {trigger: false});
@@ -13877,13 +13854,13 @@ DV.model.Articles.prototype = {
     return false;
   },
 
-  showOptions: function(articleSlug) {
+  showOptions: function(page, articleSlug) {
     $('.DV-options').remove();
 
     var options = $(JST.articleOptions({}));
 
     options.find('.DV-read-full-text').click(_.bind(function() {
-      this.showText(articleSlug);
+      this.showText(page, articleSlug);
       return false;
     }, this));
 
@@ -13926,14 +13903,38 @@ DV.model.Articles.prototype = {
     }
   },
 
-  showText: function(articleSlug) {
+  showText: function(page, articleSlug) {
     $('.DV-options').remove();
 
-    if ($('#modal-' + articleSlug).length === 0)
-      return false;
+    var pageData = this.loadedPages[page],
+        article = _.find(pageData.articles, function(obj) {
+          return obj.slug == articleSlug; });
 
-    $('#modal-' + articleSlug).modal('show');
-    this.markRegionActive(articleSlug);
+    this.viewer.helpers.reset();
+    this.viewer.helpers.autoZoomPage();
+    this.viewer.helpers.toggleContent('viewText');
+    this.viewer.$('.DV-textContents').text('');
+    $('.DV-pages').scrollTop(0);
+
+    var pageIndex = page - 1,
+        text = article.body;
+
+    this.viewer.$('.DV-textContents').html(text);
+    this.viewer.elements.currentPage.text(page);
+    this.viewer.models.document.setPageIndex(pageIndex);
+
+    // TODO: Make this work
+    //if (this.viewer.options.ads) {
+      //modal.on('shown', function() {
+        //modal.find('.advert').css({
+          //float: 'right',
+          //margin: '0 0 10px 10px'
+        //});
+        //jQuery(modal.find('.advert')[0]).ad();
+      //});
+    //}
+
+    return true;
   },
 
   markRegionActive: function(slug) {
