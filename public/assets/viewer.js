@@ -13856,7 +13856,6 @@ DV.model.Articles.prototype = {
 
     this.viewer.pageSet.zoom({ zoomLevel: newZoomLevel });
 
-    console.log(pageElement);
     var leftPadding = ($(window).width() - width) / 2;
     var newLeftScroll = (min_x.x1 * scaleFactor) - leftPadding;
     var newTopScroll  = (min_y.y1 * scaleFactor) + $(pageElement).parent().position().top;
