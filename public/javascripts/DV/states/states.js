@@ -73,22 +73,27 @@ DV.Schema.states = {
   },
 
   ViewArticleText: function(name, page, slug) {
-    var pageData, article;
-
-    $('.DV-options .DV-read-full-text').replaceWith(
-      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
-      'Back to paper</button>');
-
-    $('.DV-back-to-paper').click(_.bind(function() {
-      $('.DV-options').remove();
-      this.open('ViewDocument');
-    }, this));
+    var pageData, article,
+        options = $(JST.articleOptions());
 
     pageData = this.models.articles.loadedPages[page],
     article = _.find(pageData.articles, function(obj) {
       return obj.slug == slug; });
 
     this.helpers.reset();
+
+    options.find('div').append(
+      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
+      'Back to paper</button>');
+
+    options.find('.DV-back-to-paper').click(_.bind(function() {
+      $('.DV-options').remove();
+      this.open('ViewDocument');
+    }, this));
+
+    this.elements.footer.before(options);
+    options.fadeIn();
+
     this.helpers.autoZoomPage();
     this.helpers.toggleContent('viewText');
     this.$('.DV-textContents').text('');

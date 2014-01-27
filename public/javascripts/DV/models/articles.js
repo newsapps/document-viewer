@@ -195,6 +195,10 @@ DV.model.Articles.prototype = {
 
     var options = $(JST.articleOptions());
 
+    options.find('div').append(
+      '<button class="btn btn-primary btn-large DV-read-full-text">' +
+      'Read full text</button>');
+
     options.find('.DV-read-full-text').click(_.bind(function() {
       this.viewer.open('ViewArticleText', page, articleSlug);
       return false;
@@ -250,6 +254,10 @@ DV.model.Articles.prototype = {
     $('.article-' + this.activeArticleSlug).each(function() {
       this.instance.opacity(0.5);
     });
+  },
+
+  cleanUp: function() {
+    $('.DV-options').remove();
   },
 
   init: function() {

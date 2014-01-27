@@ -13220,13 +13220,28 @@ DV.Thumbnails = function(viewer){
   this.pageCount       = viewer.schema.document.pages;
   this.viewer          = viewer;
   this.resizeId        = _.uniqueId();
-  this.sizes           = {
-    "0": {w: 60, h: 75},
-    "1": {w: 90, h: 112},
-    "2": {w: 120, h: 150},
-    "3": {w: 150, h: 188},
-    "4": {w: 180, h: 225}
-  };
+  this.sizes           = {};
+
+  this.BASE_WIDTH = 60;
+  this.BASE_HEIGHT = 75;
+
+  _.each(_.range(this.viewer.models.document.ZOOM_RANGES.length + 1), _.bind(function(idx) {
+    var width, height;
+
+    if (idx === 0) {
+      width = this.BASE_WIDTH;
+      height = this.BASE_HEIGHT;
+    } else {
+      width = this.BASE_WIDTH + (idx * 30);
+      height = this.BASE_HEIGHT + (idx * 40);
+    }
+
+    this.sizes[String(idx)] = {
+      w: width,
+      h: height
+    };
+  }, this));
+
   _.bindAll(this, 'lazyloadThumbnails', 'loadThumbnails');
 };
 
@@ -13289,10 +13304,8 @@ DV.Thumbnails.prototype.setZoom = function(zoom) {
   this.el.addClass('DV-zoom-' + this.zoomLevel);
 };
 
-// The thumbnails (unfortunately) have their own notion of the current zoom
-// level -- specified from 0 - 4.
 DV.Thumbnails.prototype.getZoom = function(zoom) {
-  if (zoom != null) {
+  if (zoom !== null && typeof zoom !== 'undefined') {
     return this.zoomLevel = _.indexOf(this.viewer.models.document.ZOOM_RANGES, zoom);
   } else {
     return this.zoomLevel = _.indexOf(
@@ -13859,6 +13872,10 @@ DV.model.Articles.prototype = {
 
     var options = $(JST.articleOptions());
 
+    options.find('div').append(
+      '<button class="btn btn-primary btn-large DV-read-full-text">' +
+      'Read full text</button>');
+
     options.find('.DV-read-full-text').click(_.bind(function() {
       this.viewer.open('ViewArticleText', page, articleSlug);
       return false;
@@ -13914,6 +13931,10 @@ DV.model.Articles.prototype = {
     $('.article-' + this.activeArticleSlug).each(function() {
       this.instance.opacity(0.5);
     });
+  },
+
+  cleanUp: function() {
+    $('.DV-options').remove();
   },
 
   init: function() {
@@ -15597,6 +15618,7 @@ _.extend(DV.Schema.helpers, {
 
   // Reset the view state to a baseline, when transitioning between views.
   reset : function() {
+    this.models.articles.cleanUp();
     this.resetNavigationState();
     this.cleanUpSearch();
     this.viewer.pageSet.cleanUp();
@@ -15947,22 +15969,27 @@ DV.Schema.states = {
   },
 
   ViewArticleText: function(name, page, slug) {
-    var pageData, article;
-
-    $('.DV-options .DV-read-full-text').replaceWith(
-      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
-      'Back to paper</button>');
-
-    $('.DV-back-to-paper').click(_.bind(function() {
-      $('.DV-options').remove();
-      this.open('ViewDocument');
-    }, this));
+    var pageData, article,
+        options = $(JST.articleOptions());
 
     pageData = this.models.articles.loadedPages[page],
     article = _.find(pageData.articles, function(obj) {
       return obj.slug == slug; });
 
     this.helpers.reset();
+
+    options.find('div').append(
+      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
+      'Back to paper</button>');
+
+    options.find('.DV-back-to-paper').click(_.bind(function() {
+      $('.DV-options').remove();
+      this.open('ViewDocument');
+    }, this));
+
+    this.elements.footer.before(options);
+    options.fadeIn();
+
     this.helpers.autoZoomPage();
     this.helpers.toggleContent('viewText');
     this.$('.DV-textContents').text('');

@@ -261,6 +261,7 @@ _.extend(DV.Schema.helpers, {
 
   // Reset the view state to a baseline, when transitioning between views.
   reset : function() {
+    this.models.articles.cleanUp();
     this.resetNavigationState();
     this.cleanUpSearch();
     this.viewer.pageSet.cleanUp();
