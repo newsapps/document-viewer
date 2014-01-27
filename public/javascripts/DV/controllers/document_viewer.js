@@ -82,10 +82,11 @@ DV.DocumentViewer.prototype.loadModels = function() {
 
 // Transition to a given state ... unless we're already in it.
 DV.DocumentViewer.prototype.open = function(state) {
+  var args = arguments;
   if (this.state == state) return;
   var continuation = _.bind(function() {
     this.state = state;
-    this.states[state].apply(this, arguments);
+    this.states[state].apply(this, args);
     this.slapIE();
     this.notifyChangedState();
     return true;

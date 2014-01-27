@@ -13857,10 +13857,10 @@ DV.model.Articles.prototype = {
   showOptions: function(page, articleSlug) {
     $('.DV-options').remove();
 
-    var options = $(JST.articleOptions({}));
+    var options = $(JST.articleOptions());
 
     options.find('.DV-read-full-text').click(_.bind(function() {
-      this.showText(page, articleSlug);
+      this.viewer.open('ViewArticleText', page, articleSlug);
       return false;
     }, this));
 
@@ -13901,40 +13901,6 @@ DV.model.Articles.prototype = {
           delete(this.pendingPages[page]);
         }, this));
     }
-  },
-
-  showText: function(page, articleSlug) {
-    $('.DV-options').remove();
-
-    var pageData = this.loadedPages[page],
-        article = _.find(pageData.articles, function(obj) {
-          return obj.slug == articleSlug; });
-
-    this.viewer.helpers.reset();
-    this.viewer.helpers.autoZoomPage();
-    this.viewer.helpers.toggleContent('viewText');
-    this.viewer.$('.DV-textContents').text('');
-    $('.DV-pages').scrollTop(0);
-
-    var pageIndex = page - 1,
-        text = article.body;
-
-    this.viewer.$('.DV-textContents').html(text);
-    this.viewer.elements.currentPage.text(page);
-    this.viewer.models.document.setPageIndex(pageIndex);
-
-    // TODO: Make this work
-    //if (this.viewer.options.ads) {
-      //modal.on('shown', function() {
-        //modal.find('.advert').css({
-          //float: 'right',
-          //margin: '0 0 10px 10px'
-        //});
-        //jQuery(modal.find('.advert')[0]).ad();
-      //});
-    //}
-
-    return true;
   },
 
   markRegionActive: function(slug) {
@@ -15980,6 +15946,50 @@ DV.Schema.states = {
     this.helpers.showEntity(name, offset, length);
   },
 
+  ViewArticleText: function(name, page, slug) {
+    var pageData, article;
+
+    $('.DV-options .DV-read-full-text').replaceWith(
+      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
+      'Back to paper</button>');
+
+    $('.DV-back-to-paper').click(_.bind(function() {
+      $('.DV-options').remove();
+      this.open('ViewDocument');
+    }, this));
+
+    pageData = this.models.articles.loadedPages[page],
+    article = _.find(pageData.articles, function(obj) {
+      return obj.slug == slug; });
+
+    this.helpers.reset();
+    this.helpers.autoZoomPage();
+    this.helpers.toggleContent('viewText');
+    this.$('.DV-textContents').text('');
+    $('.DV-pages').scrollTop(0);
+
+    var pageIndex = page - 1,
+        text = article.body;
+
+    this.$('.DV-textContents').html(text);
+    this.elements.currentPage.text(page);
+    this.models.document.setPageIndex(pageIndex);
+
+
+    // TODO: Make this work
+    //if (this.viewer.options.ads) {
+      //modal.on('shown', function() {
+        //modal.find('.advert').css({
+          //float: 'right',
+          //margin: '0 0 10px 10px'
+        //});
+        //jQuery(modal.find('.advert')[0]).ad();
+      //});
+    //}
+
+    return true;
+  },
+
   ViewSearch: function(){
     this.helpers.reset();
 
@@ -16434,10 +16444,11 @@ DV.DocumentViewer.prototype.loadModels = function() {
 
 // Transition to a given state ... unless we're already in it.
 DV.DocumentViewer.prototype.open = function(state) {
+  var args = arguments;
   if (this.state == state) return;
   var continuation = _.bind(function() {
     this.state = state;
-    this.states[state].apply(this, arguments);
+    this.states[state].apply(this, args);
     this.slapIE();
     this.notifyChangedState();
     return true;

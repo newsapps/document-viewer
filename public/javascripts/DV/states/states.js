@@ -72,6 +72,50 @@ DV.Schema.states = {
     this.helpers.showEntity(name, offset, length);
   },
 
+  ViewArticleText: function(name, page, slug) {
+    var pageData, article;
+
+    $('.DV-options .DV-read-full-text').replaceWith(
+      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
+      'Back to paper</button>');
+
+    $('.DV-back-to-paper').click(_.bind(function() {
+      $('.DV-options').remove();
+      this.open('ViewDocument');
+    }, this));
+
+    pageData = this.models.articles.loadedPages[page],
+    article = _.find(pageData.articles, function(obj) {
+      return obj.slug == slug; });
+
+    this.helpers.reset();
+    this.helpers.autoZoomPage();
+    this.helpers.toggleContent('viewText');
+    this.$('.DV-textContents').text('');
+    $('.DV-pages').scrollTop(0);
+
+    var pageIndex = page - 1,
+        text = article.body;
+
+    this.$('.DV-textContents').html(text);
+    this.elements.currentPage.text(page);
+    this.models.document.setPageIndex(pageIndex);
+
+
+    // TODO: Make this work
+    //if (this.viewer.options.ads) {
+      //modal.on('shown', function() {
+        //modal.find('.advert').css({
+          //float: 'right',
+          //margin: '0 0 10px 10px'
+        //});
+        //jQuery(modal.find('.advert')[0]).ad();
+      //});
+    //}
+
+    return true;
+  },
+
   ViewSearch: function(){
     this.helpers.reset();
 
