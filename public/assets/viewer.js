@@ -14763,10 +14763,9 @@ DV.Schema.helpers = {
       viewer.$('.DV-thumbnails').delegate('.DV-thumbnail-page', 'click', function(e) {
         var $thumbnail = viewer.$(e.currentTarget);
         if (!viewer.openEditor) {
-          var pageIndex = $thumbnail.closest('.DV-thumbnail').attr('data-pageNumber') - 1;
-          viewer.models.document.setPageIndex(pageIndex);
-          viewer.open('ViewDocument');
-          // viewer.history.save('document/p'+pageNumber);
+          var pageNum = $thumbnail.closest('.DV-thumbnail').attr('data-pageNumber');
+          viewer.helpers.autoZoomPage();
+          viewer.history.navigate('page/' + pageNum, {trigger: true});
         }
       });
 
