@@ -8,13 +8,28 @@ DV.Thumbnails = function(viewer){
   this.pageCount       = viewer.schema.document.pages;
   this.viewer          = viewer;
   this.resizeId        = _.uniqueId();
-  this.sizes           = {
-    "0": {w: 60, h: 75},
-    "1": {w: 90, h: 112},
-    "2": {w: 120, h: 150},
-    "3": {w: 150, h: 188},
-    "4": {w: 180, h: 225}
-  };
+  this.sizes           = {};
+
+  this.BASE_WIDTH = 60;
+  this.BASE_HEIGHT = 75;
+
+  _.each(_.range(this.viewer.models.document.ZOOM_RANGES.length + 1), _.bind(function(idx) {
+    var width, height;
+
+    if (idx === 0) {
+      width = this.BASE_WIDTH;
+      height = this.BASE_HEIGHT;
+    } else {
+      width = this.BASE_WIDTH + (idx * 30);
+      height = this.BASE_HEIGHT + (idx * 40);
+    }
+
+    this.sizes[String(idx)] = {
+      w: width,
+      h: height
+    };
+  }, this));
+
   _.bindAll(this, 'lazyloadThumbnails', 'loadThumbnails');
 };
 
@@ -77,10 +92,8 @@ DV.Thumbnails.prototype.setZoom = function(zoom) {
   this.el.addClass('DV-zoom-' + this.zoomLevel);
 };
 
-// The thumbnails (unfortunately) have their own notion of the current zoom
-// level -- specified from 0 - 4.
 DV.Thumbnails.prototype.getZoom = function(zoom) {
-  if (zoom != null) {
+  if (zoom !== null && typeof zoom !== 'undefined') {
     return this.zoomLevel = _.indexOf(this.viewer.models.document.ZOOM_RANGES, zoom);
   } else {
     return this.zoomLevel = _.indexOf(
