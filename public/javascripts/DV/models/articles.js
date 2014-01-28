@@ -8,8 +8,8 @@ DV.model.Articles = function(viewer, options) {
   this.pendingPages = {};
 
   this.events = _.extend({
-    pageArticlesLoaded: function() {
-      return this.trigger('pageArticlesLoaded', arguments);
+    pageArticlesLoaded: function(page) {
+      return this.trigger('pageArticlesLoaded', page);
     }
   }, Backbone.Events);
 
@@ -121,7 +121,7 @@ DV.model.Articles.prototype = {
 
     }, this));
 
-    this.events.pageArticlesLoaded(this.viewer);
+    this.events.pageArticlesLoaded(page);
   },
 
   zoomToArticle: function(page, slug) {

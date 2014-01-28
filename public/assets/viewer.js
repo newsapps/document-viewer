@@ -13684,8 +13684,8 @@ DV.model.Articles = function(viewer, options) {
   this.pendingPages = {};
 
   this.events = _.extend({
-    pageArticlesLoaded: function() {
-      return this.trigger('pageArticlesLoaded', arguments);
+    pageArticlesLoaded: function(page) {
+      return this.trigger('pageArticlesLoaded', page);
     }
   }, Backbone.Events);
 
@@ -13797,7 +13797,7 @@ DV.model.Articles.prototype = {
 
     }, this));
 
-    this.events.pageArticlesLoaded(this.viewer);
+    this.events.pageArticlesLoaded(page);
   },
 
   zoomToArticle: function(page, slug) {
@@ -14539,9 +14539,11 @@ _.extend(DV.Schema.events, {
   handleHashChangeViewArticle: function(page, article) {
     var viewer = this.viewer;
 
-    var pageArticlesLoaded = _.bind(function(articleSlug) {
-      this.zoomToArticle(page, article);
-      this.events.off('pageArticlesLoaded', pageArticlesLoaded);
+    var pageArticlesLoaded = _.bind(function(pageNum) {
+      if (pageNum == page) {
+        this.zoomToArticle(page, article);
+        this.events.off('pageArticlesLoaded', pageArticlesLoaded);
+      }
     }, viewer.models.articles);
 
     viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);

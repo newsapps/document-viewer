@@ -44,9 +44,11 @@ _.extend(DV.Schema.events, {
   handleHashChangeViewArticle: function(page, article) {
     var viewer = this.viewer;
 
-    var pageArticlesLoaded = _.bind(function(articleSlug) {
-      this.zoomToArticle(page, article);
-      this.events.off('pageArticlesLoaded', pageArticlesLoaded);
+    var pageArticlesLoaded = _.bind(function(pageNum) {
+      if (pageNum == page) {
+        this.zoomToArticle(page, article);
+        this.events.off('pageArticlesLoaded', pageArticlesLoaded);
+      }
     }, viewer.models.articles);
 
     viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);
