@@ -14142,8 +14142,8 @@ DV.model.Pages = function(viewer) {
   this.pageNoteHeights = [];
 
   // In pixels.
-  this.BASE_WIDTH      = 1800;
-  this.BASE_HEIGHT     = 2800;
+  this.BASE_WIDTH      = 1200;
+  this.BASE_HEIGHT     = 1900;
 
   // For viewing page text.
   this.DEFAULT_PADDING = 100;
@@ -14219,7 +14219,7 @@ DV.model.Pages.prototype = {
   // Update the height for a page, when its real image has loaded.
   updateHeight: function(image, pageIndex) {
     var h = this.getPageHeight(pageIndex);
-    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? 0.7 : 1.0);
+    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? 0.666666 : 1.0);
     if (image.width < this.baseWidth) {
       // Not supposed to happen, but too-small images sometimes do.
       height *= (this.baseWidth / image.width);
@@ -14512,12 +14512,6 @@ _.extend(DV.Schema.events, {
       this.models.document.setPageIndex(pageIndex);
       this.viewer.open('ViewDocument');
     }
-  },
-
-  // #p[pageID]
-  handleHashChangeLegacyViewDocumentPage: function(page){
-    var pageIndex   = parseInt(page,10) - 1;
-    this.handleHashChangeViewDocumentPage(page);
   },
 
   // #document/p[pageID]/a[annotationID]
@@ -15125,7 +15119,7 @@ DV.Schema.helpers = {
 
       // Handle loading of the pages view
       history.register(/pages$/, _.bind(events.handleHashChangeViewPages, events));
-      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
+      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeViewDocumentPage,this.events));
       history.register(/page\/(\d*)\/article\/([\d\w\-]+)\/?$/, _.bind(events.handleHashChangeViewArticle, this.events));
 
       // Handle page loading in text view

@@ -12,12 +12,6 @@ _.extend(DV.Schema.events, {
     }
   },
 
-  // #p[pageID]
-  handleHashChangeLegacyViewDocumentPage: function(page){
-    var pageIndex   = parseInt(page,10) - 1;
-    this.handleHashChangeViewDocumentPage(page);
-  },
-
   // #document/p[pageID]/a[annotationID]
   handleHashChangeViewDocumentAnnotation: function(page,annotation){
     var pageIndex   = parseInt(page,10) - 1;

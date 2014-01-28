@@ -456,7 +456,7 @@ DV.Schema.helpers = {
 
       // Handle loading of the pages view
       history.register(/pages$/, _.bind(events.handleHashChangeViewPages, events));
-      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeLegacyViewDocumentPage,this.events));
+      history.register(/page\/(\d*)\/?$/, _.bind(events.handleHashChangeViewDocumentPage,this.events));
       history.register(/page\/(\d*)\/article\/([\d\w\-]+)\/?$/, _.bind(events.handleHashChangeViewArticle, this.events));
 
       // Handle page loading in text view

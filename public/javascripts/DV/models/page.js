@@ -13,8 +13,8 @@ DV.model.Pages = function(viewer) {
   this.pageNoteHeights = [];
 
   // In pixels.
-  this.BASE_WIDTH      = 1800;
-  this.BASE_HEIGHT     = 2800;
+  this.BASE_WIDTH      = 1200;
+  this.BASE_HEIGHT     = 1900;
 
   // For viewing page text.
   this.DEFAULT_PADDING = 100;
@@ -90,7 +90,7 @@ DV.model.Pages.prototype = {
   // Update the height for a page, when its real image has loaded.
   updateHeight: function(image, pageIndex) {
     var h = this.getPageHeight(pageIndex);
-    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? 0.7 : 1.0);
+    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? 0.666666 : 1.0);
     if (image.width < this.baseWidth) {
       // Not supposed to happen, but too-small images sometimes do.
       height *= (this.baseWidth / image.width);
