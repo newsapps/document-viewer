@@ -13093,7 +13093,6 @@ DV.PageSet.prototype.zoom = function(argHash){
   var diff        = (parseInt(scrollPos, 10)>parseInt(oldOffset, 10)) ? scrollPos - oldOffset : oldOffset - scrollPos;
 
   var diffPercentage   = diff / this.viewer.models.pages.height;
-
   this.reflowPages();
   this.zoomText();
 
@@ -13687,9 +13686,6 @@ DV.model.Articles = function(viewer, options) {
   this.events = _.extend({
     pageArticlesLoaded: function() {
       return this.trigger('pageArticlesLoaded', arguments);
-    },
-    articleJsonLoaded: function() {
-      return this.trigger('articleJsonLoaded', arguments);
     }
   }, Backbone.Events);
 
@@ -13799,8 +13795,6 @@ DV.model.Articles.prototype = {
         return false;
       }, this));
 
-      this.events.trigger('articleJsonLoaded', article.slug);
-
     }, this));
 
     this.events.pageArticlesLoaded(this.viewer);
@@ -13848,7 +13842,7 @@ DV.model.Articles.prototype = {
 
     var leftPadding = ($(window).width() - width) / 2;
     var newLeftScroll = (min_x.x1 * scaleFactor) - leftPadding;
-    var newTopScroll  = (min_y.y1 * scaleFactor) + $(pageElement).parent().position().top;
+    var newTopScroll  = (min_y.y1 * scaleFactor) + this.viewer.models.document.getOffset(page - 1);
 
     if (newLeftScroll < 0)
       newLeftScroll = 0;
@@ -13888,7 +13882,6 @@ DV.model.Articles.prototype = {
   getData: function() {
     var currentPage = this.viewer.api.currentPage();
 
-    // Get data for two pages at a time
     if ( !isNaN(currentPage) ) {
       this.drawArticlesForPage(currentPage);
       this.drawArticlesForPage(currentPage + 1);
@@ -14546,14 +14539,12 @@ _.extend(DV.Schema.events, {
   handleHashChangeViewArticle: function(page, article) {
     var viewer = this.viewer;
 
-    var articleJsonLoaded = _.bind(function(articleSlug) {
-      if (articleSlug == article) {
-        this.zoomToArticle(page, article);
-        this.events.off('articleJsonLoaded', articleJsonLoaded);
-      }
+    var pageArticlesLoaded = _.bind(function(articleSlug) {
+      this.zoomToArticle(page, article);
+      this.events.off('pageArticlesLoaded', pageArticlesLoaded);
     }, viewer.models.articles);
 
-    viewer.models.articles.events.on('articleJsonLoaded', articleJsonLoaded);
+    viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);
 
     this.handleHashChangeViewDocumentPage(page);
   },
@@ -15025,25 +15016,6 @@ DV.Schema.helpers = {
         }
       }
     },
-
-    // TODO: This function is not currently being called. Candidate for removal.
-
-    // setWindowSize: function(windowDimensions){
-    //   var viewer          = this.viewer;
-    //   var elements        = this.elements;
-    //   var headerHeight    = elements.header.outerHeight() + 15;
-    //   var offset          = DV.jQuery(this.viewer.options.container).offset().top;
-    //   var uiHeight        = Math.round((windowDimensions.height) - headerHeight - offset);
-    //
-    //   // doc window
-    //   elements.window.css({ height: uiHeight, width: windowDimensions.width-267 });
-    //
-    //   // well
-    //   elements.well.css( { height: uiHeight });
-    //
-    //   // store this for later
-    //   viewer.windowDimensions = windowDimensions;
-    // },
 
     toggleContent: function(toggleClassName){
       this.elements.viewer.removeClass('DV-viewText DV-viewSearch DV-viewDocument DV-viewAnnotations DV-viewThumbnails').addClass('DV-'+toggleClassName);

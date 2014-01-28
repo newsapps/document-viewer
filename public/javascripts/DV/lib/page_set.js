@@ -79,7 +79,6 @@ DV.PageSet.prototype.zoom = function(argHash){
   var diff        = (parseInt(scrollPos, 10)>parseInt(oldOffset, 10)) ? scrollPos - oldOffset : oldOffset - scrollPos;
 
   var diffPercentage   = diff / this.viewer.models.pages.height;
-
   this.reflowPages();
   this.zoomText();
 

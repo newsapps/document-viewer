@@ -10,9 +10,6 @@ DV.model.Articles = function(viewer, options) {
   this.events = _.extend({
     pageArticlesLoaded: function() {
       return this.trigger('pageArticlesLoaded', arguments);
-    },
-    articleJsonLoaded: function() {
-      return this.trigger('articleJsonLoaded', arguments);
     }
   }, Backbone.Events);
 
@@ -122,8 +119,6 @@ DV.model.Articles.prototype = {
         return false;
       }, this));
 
-      this.events.trigger('articleJsonLoaded', article.slug);
-
     }, this));
 
     this.events.pageArticlesLoaded(this.viewer);
@@ -171,7 +166,7 @@ DV.model.Articles.prototype = {
 
     var leftPadding = ($(window).width() - width) / 2;
     var newLeftScroll = (min_x.x1 * scaleFactor) - leftPadding;
-    var newTopScroll  = (min_y.y1 * scaleFactor) + $(pageElement).parent().position().top;
+    var newTopScroll  = (min_y.y1 * scaleFactor) + this.viewer.models.document.getOffset(page - 1);
 
     if (newLeftScroll < 0)
       newLeftScroll = 0;
@@ -211,7 +206,6 @@ DV.model.Articles.prototype = {
   getData: function() {
     var currentPage = this.viewer.api.currentPage();
 
-    // Get data for two pages at a time
     if ( !isNaN(currentPage) ) {
       this.drawArticlesForPage(currentPage);
       this.drawArticlesForPage(currentPage + 1);

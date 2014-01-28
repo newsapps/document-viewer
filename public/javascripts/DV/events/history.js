@@ -44,14 +44,12 @@ _.extend(DV.Schema.events, {
   handleHashChangeViewArticle: function(page, article) {
     var viewer = this.viewer;
 
-    var articleJsonLoaded = _.bind(function(articleSlug) {
-      if (articleSlug == article) {
-        this.zoomToArticle(page, article);
-        this.events.off('articleJsonLoaded', articleJsonLoaded);
-      }
+    var pageArticlesLoaded = _.bind(function(articleSlug) {
+      this.zoomToArticle(page, article);
+      this.events.off('pageArticlesLoaded', pageArticlesLoaded);
     }, viewer.models.articles);
 
-    viewer.models.articles.events.on('articleJsonLoaded', articleJsonLoaded);
+    viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);
 
     this.handleHashChangeViewDocumentPage(page);
   },
