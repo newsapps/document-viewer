@@ -140,3 +140,27 @@
       .DV-thumbnails.DV-zoom-4 .DV-thumbnail-image {
         width: 180px; height: 225px;
       }
+    .DV-thumbnails.DV-zoom-5 .DV-thumbnail {
+      width: 216px; height: 303px;
+    }
+      .DV-thumbnails.DV-zoom-5 .DV-thumbnail-image {
+        width: 210px; height: 275px;
+      }
+    .DV-thumbnails.DV-zoom-6 .DV-thumbnail {
+      width: 246px; height: 343px;
+    }
+      .DV-thumbnails.DV-zoom-6 .DV-thumbnail-image {
+        width: 240px; height: 315px;
+      }
+    .DV-thumbnails.DV-zoom-7 .DV-thumbnail {
+      width: 276px; height: 383px;
+    }
+      .DV-thumbnails.DV-zoom-7 .DV-thumbnail-image {
+        width: 270px; height: 355px;
+      }
+    .DV-thumbnails.DV-zoom-8 .DV-thumbnail {
+      width: 306px; height: 423px;
+    }
+      .DV-thumbnails.DV-zoom-8 .DV-thumbnail-image {
+        width: 300px; height: 395px;
+      }
