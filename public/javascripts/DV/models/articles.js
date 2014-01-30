@@ -183,21 +183,45 @@ DV.model.Articles.prototype = {
   },
 
   showOptions: function(page, articleSlug) {
-    $('.DV-options').remove();
+    this.cleanUp();
 
     var options = $(JST.articleOptions());
 
-    options.find('div').append(
-      '<button class="btn btn-primary btn-large DV-read-full-text">' +
-      'Read full text</button>');
+    if (page && articleSlug) {
+      options
+        .find('.DV-read-full-text')
+        .show()
+        .click(_.bind(function() {
+          this.viewer.open('ViewArticleText', page, articleSlug);
+          return false;
+        }, this));
 
-    options.find('.DV-read-full-text').click(_.bind(function() {
-      this.viewer.open('ViewArticleText', page, articleSlug);
-      return false;
-    }, this));
+      this.viewer.helpers.setupShareLinks(
+        options.find('.dropdown-menu'), 'article');
+
+      options
+        .find('.DV-share-article')
+        .show();
+
+      options
+        .find('.DV-back-to-paper')
+        .remove();
+    } else {
+      options
+        .find('.DV-back-to-paper')
+        .show()
+        .click(_.bind(function() {
+          this.cleanUp();
+          this.viewer.open('ViewDocument');
+        }, this));
+
+      options
+        .find('.DV-read-full-text, .DV-share-article')
+        .remove();
+    }
 
     this.viewer.elements.footer.prepend(options);
-    options.fadeIn();
+    options.show();
   },
 
   getData: function() {

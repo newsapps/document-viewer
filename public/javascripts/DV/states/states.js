@@ -81,19 +81,7 @@ DV.Schema.states = {
       return obj.slug == slug; });
 
     this.helpers.reset();
-
-    options.find('div').append(
-      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
-      'Back to paper</button>');
-
-    options.find('.DV-back-to-paper').click(_.bind(function() {
-      $('.DV-options').remove();
-      this.open('ViewDocument');
-    }, this));
-
-    this.elements.footer.prepend(options);
-    options.fadeIn();
-
+    this.models.articles.showOptions();
     this.helpers.autoZoomPage();
     this.helpers.toggleContent('viewText');
     this.$('.DV-textContents').text('');

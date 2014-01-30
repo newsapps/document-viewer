@@ -13865,21 +13865,45 @@ DV.model.Articles.prototype = {
   },
 
   showOptions: function(page, articleSlug) {
-    $('.DV-options').remove();
+    this.cleanUp();
 
     var options = $(JST.articleOptions());
 
-    options.find('div').append(
-      '<button class="btn btn-primary btn-large DV-read-full-text">' +
-      'Read full text</button>');
+    if (page && articleSlug) {
+      options
+        .find('.DV-read-full-text')
+        .show()
+        .click(_.bind(function() {
+          this.viewer.open('ViewArticleText', page, articleSlug);
+          return false;
+        }, this));
 
-    options.find('.DV-read-full-text').click(_.bind(function() {
-      this.viewer.open('ViewArticleText', page, articleSlug);
-      return false;
-    }, this));
+      this.viewer.helpers.setupShareLinks(
+        options.find('.dropdown-menu'), 'article');
+
+      options
+        .find('.DV-share-article')
+        .show();
+
+      options
+        .find('.DV-back-to-paper')
+        .remove();
+    } else {
+      options
+        .find('.DV-back-to-paper')
+        .show()
+        .click(_.bind(function() {
+          this.cleanUp();
+          this.viewer.open('ViewDocument');
+        }, this));
+
+      options
+        .find('.DV-read-full-text, .DV-share-article')
+        .remove();
+    }
 
     this.viewer.elements.footer.prepend(options);
-    options.fadeIn();
+    options.show();
   },
 
   getData: function() {
@@ -14805,9 +14829,7 @@ DV.Schema.helpers = {
 
       this.elements.coverPages.live('mousedown', cleanUp);
 
-      this.setupShareLinks();
-
-      viewer.$('.DV-shareTools').delegate('.DV-show-embed-code', 'click', _.bind(this.showEmbedCode, this));
+      this.setupShareLinks('.DV-shareTools .dropdown-menu');
     },
 
     // Unbind jQuery events that have been bound to objects outside of the viewer.
@@ -15181,9 +15203,9 @@ DV.Schema.helpers = {
       }
     },
 
-    setupShareLinks: function() {
+    setupShareLinks: function(menu, type) {
       var viewer = this.viewer;
-      var dropdown = viewer.$('.DV-shareTools .dropdown-menu');
+      var dropdown = viewer.$(menu);
 
       var socialServices = _.defaults({
         'Facebook': 'http://www.facebook.com/sharer/sharer.php?u=<%= url %>',
@@ -15202,12 +15224,16 @@ DV.Schema.helpers = {
         dropdown.append(shareLi);
       });
 
+      dropdown.delegate('.DV-show-embed-code', 'click', _.bind(this.showEmbedCode, this, type));
       dropdown.append('<li><a class="DV-show-embed-code" href="#">Embed</a></li>');
     },
 
-    showEmbedCode: function() {
+    showEmbedCode: function(type) {
       var viewer = this.viewer,
           embed_url = window.location.origin + viewer.history.root;
+
+      if (type == 'article')
+        embed_url = window.location.href;
 
       var modal = $(JST.embedModal({ embed_url: embed_url }));
       modal.modal();
@@ -15944,19 +15970,7 @@ DV.Schema.states = {
       return obj.slug == slug; });
 
     this.helpers.reset();
-
-    options.find('div').append(
-      '<button class="btn btn-large btn-danger DV-back-to-paper">' +
-      'Back to paper</button>');
-
-    options.find('.DV-back-to-paper').click(_.bind(function() {
-      $('.DV-options').remove();
-      this.open('ViewDocument');
-    }, this));
-
-    this.elements.footer.prepend(options);
-    options.fadeIn();
-
+    this.models.articles.showOptions();
     this.helpers.autoZoomPage();
     this.helpers.toggleContent('viewText');
     this.$('.DV-textContents').text('');

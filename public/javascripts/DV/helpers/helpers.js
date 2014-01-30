@@ -146,9 +146,7 @@ DV.Schema.helpers = {
 
       this.elements.coverPages.live('mousedown', cleanUp);
 
-      this.setupShareLinks();
-
-      viewer.$('.DV-shareTools').delegate('.DV-show-embed-code', 'click', _.bind(this.showEmbedCode, this));
+      this.setupShareLinks('.DV-shareTools .dropdown-menu');
     },
 
     // Unbind jQuery events that have been bound to objects outside of the viewer.
@@ -522,9 +520,9 @@ DV.Schema.helpers = {
       }
     },
 
-    setupShareLinks: function() {
+    setupShareLinks: function(menu, type) {
       var viewer = this.viewer;
-      var dropdown = viewer.$('.DV-shareTools .dropdown-menu');
+      var dropdown = viewer.$(menu);
 
       var socialServices = _.defaults({
         'Facebook': 'http://www.facebook.com/sharer/sharer.php?u=<%= url %>',
@@ -543,12 +541,16 @@ DV.Schema.helpers = {
         dropdown.append(shareLi);
       });
 
+      dropdown.delegate('.DV-show-embed-code', 'click', _.bind(this.showEmbedCode, this, type));
       dropdown.append('<li><a class="DV-show-embed-code" href="#">Embed</a></li>');
     },
 
-    showEmbedCode: function() {
+    showEmbedCode: function(type) {
       var viewer = this.viewer,
           embed_url = window.location.origin + viewer.history.root;
+
+      if (type == 'article')
+        embed_url = window.location.href;
 
       var modal = $(JST.embedModal({ embed_url: embed_url }));
       modal.modal();
