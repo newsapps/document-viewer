@@ -196,7 +196,7 @@ DV.model.Articles.prototype = {
       return false;
     }, this));
 
-    this.viewer.elements.footer.before(options);
+    this.viewer.elements.footer.prepend(options);
     options.fadeIn();
   },
 

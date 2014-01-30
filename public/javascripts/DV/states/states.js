@@ -91,7 +91,7 @@ DV.Schema.states = {
       this.open('ViewDocument');
     }, this));
 
-    this.elements.footer.before(options);
+    this.elements.footer.prepend(options);
     options.fadeIn();
 
     this.helpers.autoZoomPage();

@@ -13878,7 +13878,7 @@ DV.model.Articles.prototype = {
       return false;
     }, this));
 
-    this.viewer.elements.footer.before(options);
+    this.viewer.elements.footer.prepend(options);
     options.fadeIn();
   },
 
@@ -15957,7 +15957,7 @@ DV.Schema.states = {
       this.open('ViewDocument');
     }, this));
 
-    this.elements.footer.before(options);
+    this.elements.footer.prepend(options);
     options.fadeIn();
 
     this.helpers.autoZoomPage();
