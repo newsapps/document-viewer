@@ -15195,7 +15195,7 @@ DV.Schema.helpers = {
         var tmpl = _.template('<li><a target="_blank" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
 
         var shareLi = _.template(tmpl, {
-          url: encodeURIComponent(window.location),
+          url: encodeURIComponent(window.location.origin + viewer.history.root),
           text: encodeURIComponent(viewer.schema.document.description + ' ' + viewer.schema.document.title)
         });
 
@@ -15207,10 +15207,7 @@ DV.Schema.helpers = {
 
     showEmbedCode: function() {
       var viewer = this.viewer,
-          embed_url = window.location.origin + window.location.pathname;
-
-      if ( viewer.api.currentPage() > 1 )
-        embed_url += '#pages/' + viewer.api.currentPage();
+          embed_url = window.location.origin + viewer.history.root;
 
       var modal = $(JST.embedModal({ embed_url: embed_url }));
       modal.modal();
