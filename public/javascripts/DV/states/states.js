@@ -82,15 +82,16 @@ DV.Schema.states = {
 
     this.helpers.reset();
     this.models.articles.showOptions();
-    this.helpers.autoZoomPage();
-    this.helpers.toggleContent('viewText');
-    this.$('.DV-textContents').text('');
+    this.elements.collection.width('100%');
+    this.$('.DV-textPage').width('auto');
+    this.helpers.toggleContent('viewArticleText');
+    this.$('.DV-articleTextContents').text('');
     $('.DV-pages').scrollTop(0);
 
     var pageIndex = page - 1,
         text = article.body;
 
-    this.$('.DV-textContents').html(text);
+    this.$('.DV-articleTextContents').html(text);
     this.elements.currentPage.text(page);
     this.models.document.setPageIndex(pageIndex);
 

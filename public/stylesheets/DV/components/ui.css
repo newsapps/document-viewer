@@ -36,6 +36,47 @@
   right: 0;
 }
 
+/* View Article Text Mode */
+.DV-articleTextContents {
+  background-color:#FFFFFF;
+  color:#333333;
+  font-size:16px;
+  font-family: courier, monotype;
+  line-height:1.4em;
+  overflow: hidden;
+  padding:4px;
+  margin: 46px;
+}
+.DV-articleTextContents p:first-child {
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.8em;
+}
+.DV-autoZoom.DV-viewArticleText .DV-textPage,
+.DV-viewArticleText .DV-textPage {
+  margin: 0 auto;
+  max-width: 900px;
+}
+.DV-viewArticleText .DV-articleTextContents {
+  font-size: 16px;
+}
+.DV-viewArticleText .DV-textContents,
+.DV-viewArticleText .DV-set,
+.DV-viewArticleText .DV-bar,
+.DV-viewArticleText .DV-allAnnotations,
+.DV-viewArticleText .DV-zoomControls,
+.DV-viewArticleText .DV-textCurrentPage,
+.DV-viewArticleText .DV-currentAnnotationPrefix,
+.DV-viewArticleText .DV-totalAnnotations,
+.DV-textView,
+.DV-docViewer.DV-searchable .DV-textView.DV-hide {
+  display: none;
+}
+.DV-viewArticleText .DV-pageCollection{
+  cursor: text;
+}
+/* End View Article Text Mode */
+
 @media (min-width: 768px) {
   .DV-article-modal.modal {
     width: 868px;

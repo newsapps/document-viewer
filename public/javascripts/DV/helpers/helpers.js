@@ -362,7 +362,7 @@ DV.Schema.helpers = {
     },
 
     toggleContent: function(toggleClassName){
-      this.elements.viewer.removeClass('DV-viewText DV-viewSearch DV-viewDocument DV-viewAnnotations DV-viewThumbnails').addClass('DV-'+toggleClassName);
+      this.elements.viewer.removeClass('DV-viewArticleText DV-viewText DV-viewSearch DV-viewDocument DV-viewAnnotations DV-viewThumbnails').addClass('DV-'+toggleClassName);
     },
 
     jump: function(pageIndex, modifier, forceRedraw){

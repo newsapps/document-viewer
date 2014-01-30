@@ -20,5 +20,7 @@ DV.Schema.elements =
   { name: 'textCurrentPage',    query: 'span.DV-textCurrentPage' },
   { name: 'coverPages',         query: 'div.DV-cover' },
   { name: 'fullscreen',         query: 'div.DV-fullscreen' },
-  { name: 'footer',             query: 'div.DV-footer' }
+  { name: 'footer',             query: 'div.DV-footer' },
+  { name: 'text',               query: '.DV-textContents' },
+  { name: 'articleText',        query: 'div.DV-articleTextContents' }
 ];

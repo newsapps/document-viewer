@@ -13469,7 +13469,9 @@ DV.Schema.elements =
   { name: 'textCurrentPage',    query: 'span.DV-textCurrentPage' },
   { name: 'coverPages',         query: 'div.DV-cover' },
   { name: 'fullscreen',         query: 'div.DV-fullscreen' },
-  { name: 'footer',             query: 'div.DV-footer' }
+  { name: 'footer',             query: 'div.DV-footer' },
+  { name: 'text',               query: '.DV-textContents' },
+  { name: 'articleText',        query: 'div.DV-articleTextContents' }
 ];
 
 DV.model.Annotations = function(viewer) {
@@ -13894,6 +13896,7 @@ DV.model.Articles.prototype = {
         .show()
         .click(_.bind(function() {
           this.cleanUp();
+          this.viewer.helpers.autoZoomPage();
           this.viewer.open('ViewDocument');
         }, this));
 
@@ -15045,7 +15048,7 @@ DV.Schema.helpers = {
     },
 
     toggleContent: function(toggleClassName){
-      this.elements.viewer.removeClass('DV-viewText DV-viewSearch DV-viewDocument DV-viewAnnotations DV-viewThumbnails').addClass('DV-'+toggleClassName);
+      this.elements.viewer.removeClass('DV-viewArticleText DV-viewText DV-viewSearch DV-viewDocument DV-viewAnnotations DV-viewThumbnails').addClass('DV-'+toggleClassName);
     },
 
     jump: function(pageIndex, modifier, forceRedraw){
@@ -15971,15 +15974,16 @@ DV.Schema.states = {
 
     this.helpers.reset();
     this.models.articles.showOptions();
-    this.helpers.autoZoomPage();
-    this.helpers.toggleContent('viewText');
-    this.$('.DV-textContents').text('');
+    this.elements.collection.width('100%');
+    this.$('.DV-textPage').width('auto');
+    this.helpers.toggleContent('viewArticleText');
+    this.$('.DV-articleTextContents').text('');
     $('.DV-pages').scrollTop(0);
 
     var pageIndex = page - 1,
         text = article.body;
 
-    this.$('.DV-textContents').html(text);
+    this.$('.DV-articleTextContents').html(text);
     this.elements.currentPage.text(page);
     this.models.document.setPageIndex(pageIndex);
 

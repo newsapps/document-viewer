@@ -212,6 +212,7 @@ DV.model.Articles.prototype = {
         .show()
         .click(_.bind(function() {
           this.cleanUp();
+          this.viewer.helpers.autoZoomPage();
           this.viewer.open('ViewDocument');
         }, this));
 
