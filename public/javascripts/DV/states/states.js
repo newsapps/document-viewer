@@ -81,7 +81,7 @@ DV.Schema.states = {
       return obj.slug == slug; });
 
     this.helpers.reset();
-    this.models.articles.showOptions();
+    this.models.articles.showBackToPaper(page, slug);
     this.elements.collection.width('100%');
     this.$('.DV-textPage').width('auto');
     this.helpers.toggleContent('viewArticleText');

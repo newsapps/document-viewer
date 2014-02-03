@@ -174,7 +174,7 @@ DV.model.Articles.prototype = {
     this.markRegionActive(article.slug);
 
     if (article.legible)
-      this.showOptions(page, article.slug);
+      this.showReadFullText(page, article.slug);
 
     this.viewer.history.navigate(
       'page/' + page + '/article/' + article.slug, {trigger: false});
@@ -182,44 +182,51 @@ DV.model.Articles.prototype = {
     return false;
   },
 
-  showOptions: function(page, articleSlug) {
+  showReadFullText: function(page, articleSlug) {
     this.cleanUp();
 
     var options = $(JST.articleOptions());
 
-    if (page && articleSlug) {
-      options
-        .find('.DV-read-full-text')
-        .show()
-        .click(_.bind(function() {
-          this.viewer.open('ViewArticleText', page, articleSlug);
-          return false;
-        }, this));
+    options
+      .find('.DV-read-full-text')
+      .show()
+      .click(_.bind(function() {
+        this.viewer.open('ViewArticleText', page, articleSlug);
+        return false;
+      }, this));
 
-      this.viewer.helpers.setupShareLinks(
-        options.find('.dropdown-menu'), 'article');
+    this.viewer.helpers.setupShareLinks(
+      options.find('.dropdown-menu'), 'article');
 
-      options
-        .find('.DV-share-article')
-        .show();
+    options
+      .find('.DV-share-article')
+      .show();
 
-      options
-        .find('.DV-back-to-paper')
-        .remove();
-    } else {
-      options
-        .find('.DV-back-to-paper')
-        .show()
-        .click(_.bind(function() {
-          this.cleanUp();
-          this.viewer.helpers.autoZoomPage();
-          this.viewer.open('ViewDocument');
-        }, this));
+    options
+      .find('.DV-back-to-paper')
+      .remove();
 
-      options
-        .find('.DV-read-full-text, .DV-share-article')
-        .remove();
-    }
+    this.viewer.elements.footer.prepend(options);
+    options.show();
+  },
+
+  showBackToPaper: function(page, articleSlug) {
+    this.cleanUp();
+
+    var options = $(JST.articleOptions());
+
+    options
+      .find('.DV-back-to-paper')
+      .show()
+      .click(_.bind(function() {
+        this.cleanUp();
+        this.viewer.open('ViewDocument');
+        this.zoomToArticle(page, articleSlug);
+      }, this));
+
+    options
+      .find('.DV-read-full-text, .DV-share-article')
+      .remove();
 
     this.viewer.elements.footer.prepend(options);
     options.show();
