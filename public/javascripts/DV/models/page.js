@@ -13,8 +13,17 @@ DV.model.Pages = function(viewer) {
   this.pageNoteHeights = [];
 
   // In pixels.
-  this.BASE_WIDTH      = 1200;
   this.BASE_HEIGHT     = 1900;
+
+  this.widths = {
+    xsmall: 320,
+    small: 600,
+    normal: 1200,
+    large: 1800,
+    xlarge: 2200
+  };
+
+  this.BASE_WIDTH      = this.widths.normal;
 
   // For viewing page text.
   this.DEFAULT_PADDING = 100;
@@ -39,6 +48,13 @@ DV.model.Pages.prototype = {
   imageURL: function(index) {
     var url  = this.viewer.schema.document.resources.page.image;
     var size = this.zoomLevel > this.BASE_WIDTH ? 'large' : 'normal';
+
+    _.each(this.widths, _.bind(function(width, name) {
+      if (this.zoomLevel == width) {
+        size = name;
+      }
+    }, this));
+
     var pageNumber = index + 1;
     if (this.viewer.schema.document.resources.page.zeropad) pageNumber = this.zeroPad(pageNumber, 5);
     url = url.replace(/\{size\}/, size);
@@ -90,7 +106,7 @@ DV.model.Pages.prototype = {
   // Update the height for a page, when its real image has loaded.
   updateHeight: function(image, pageIndex) {
     var h = this.getPageHeight(pageIndex);
-    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? 0.666666 : 1.0);
+    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? (this.BASE_WIDTH / image.width) : 1.0);
     if (image.width < this.baseWidth) {
       // Not supposed to happen, but too-small images sometimes do.
       height *= (this.baseWidth / image.width);

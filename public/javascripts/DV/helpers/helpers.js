@@ -463,17 +463,17 @@ DV.Schema.helpers = {
       var ranges = [], zoom2, zoom3;
       if (zoom <= 500) {
         zoom2 = (zoom + 700) / 2;
-        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800];
+        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (zoom <= 750) {
         zoom2 = ((1000 - 700) / 3) + zoom;
         zoom3 = ((1000 - 700) / 3)*2 + zoom;
-        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800];
+        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (750 < zoom && zoom <= 850){
         zoom2 = ((1000 - zoom) / 2) + zoom;
-        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800];
+        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (850 < zoom && zoom < 1000){
         zoom2 = ((zoom - 700) / 2) + 700;
-        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800];
+        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (1000 < zoom && zoom <= 1200) {
         zoom = 850;
         ranges = this.viewer.models.document.ZOOM_RANGES;
@@ -486,11 +486,13 @@ DV.Schema.helpers = {
       } else if (1600 < zoom && zoom <= 1800) {
         zoom = 1600;
         ranges = this.viewer.models.document.ZOOM_RANGES;
-      } else if (zoom > 1800) {
+      } else if (1800 < zoom && zoom <= 2200) {
         zoom = 1800;
         ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (2200 <= zoom) {
+        zoom = 2200;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
       }
-
       this.viewer.models.document.ZOOM_RANGES = ranges;
       this.events.zoom(zoom);
     },

@@ -14016,7 +14016,7 @@ DV.model.Document = function(viewer){
   this.totalDocumentHeight       = 0;
   this.totalPages                = 0;
   this.additionalPaddingOnPage   = 0;
-  this.ZOOM_RANGES               = [400, 700, 850, 1000, 1200, 1400, 1600, 1800];
+  this.ZOOM_RANGES               = [400, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200];
 
   var data                       = this.viewer.schema.data;
 
@@ -14165,8 +14165,17 @@ DV.model.Pages = function(viewer) {
   this.pageNoteHeights = [];
 
   // In pixels.
-  this.BASE_WIDTH      = 1200;
   this.BASE_HEIGHT     = 1900;
+
+  this.widths = {
+    xsmall: 320,
+    small: 600,
+    normal: 1200,
+    large: 1800,
+    xlarge: 2200
+  };
+
+  this.BASE_WIDTH      = this.widths.normal;
 
   // For viewing page text.
   this.DEFAULT_PADDING = 100;
@@ -14191,6 +14200,13 @@ DV.model.Pages.prototype = {
   imageURL: function(index) {
     var url  = this.viewer.schema.document.resources.page.image;
     var size = this.zoomLevel > this.BASE_WIDTH ? 'large' : 'normal';
+
+    _.each(this.widths, _.bind(function(width, name) {
+      if (this.zoomLevel == width) {
+        size = name;
+      }
+    }, this));
+
     var pageNumber = index + 1;
     if (this.viewer.schema.document.resources.page.zeropad) pageNumber = this.zeroPad(pageNumber, 5);
     url = url.replace(/\{size\}/, size);
@@ -14242,7 +14258,7 @@ DV.model.Pages.prototype = {
   // Update the height for a page, when its real image has loaded.
   updateHeight: function(image, pageIndex) {
     var h = this.getPageHeight(pageIndex);
-    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? 0.666666 : 1.0);
+    var height = image.height * (this.zoomLevel > this.BASE_WIDTH ? (this.BASE_WIDTH / image.width) : 1.0);
     if (image.width < this.baseWidth) {
       // Not supposed to happen, but too-small images sometimes do.
       height *= (this.baseWidth / image.width);
@@ -15149,17 +15165,17 @@ DV.Schema.helpers = {
       var ranges = [], zoom2, zoom3;
       if (zoom <= 500) {
         zoom2 = (zoom + 700) / 2;
-        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800];
+        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (zoom <= 750) {
         zoom2 = ((1000 - 700) / 3) + zoom;
         zoom3 = ((1000 - 700) / 3)*2 + zoom;
-        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800];
+        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (750 < zoom && zoom <= 850){
         zoom2 = ((1000 - zoom) / 2) + zoom;
-        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800];
+        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (850 < zoom && zoom < 1000){
         zoom2 = ((zoom - 700) / 2) + 700;
-        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800];
+        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800, 2200];
       } else if (1000 < zoom && zoom <= 1200) {
         zoom = 850;
         ranges = this.viewer.models.document.ZOOM_RANGES;
@@ -15172,11 +15188,13 @@ DV.Schema.helpers = {
       } else if (1600 < zoom && zoom <= 1800) {
         zoom = 1600;
         ranges = this.viewer.models.document.ZOOM_RANGES;
-      } else if (zoom > 1800) {
+      } else if (1800 < zoom && zoom <= 2200) {
         zoom = 1800;
         ranges = this.viewer.models.document.ZOOM_RANGES;
+      } else if (2200 <= zoom) {
+        zoom = 2200;
+        ranges = this.viewer.models.document.ZOOM_RANGES;
       }
-
       this.viewer.models.document.ZOOM_RANGES = ranges;
       this.events.zoom(zoom);
     },
