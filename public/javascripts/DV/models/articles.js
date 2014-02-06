@@ -111,10 +111,15 @@ DV.model.Articles.prototype = {
           highlighter.opacity(newOpacity);
       });
 
-      highlighter.on('click', _.bind(function(ev) {
-        this.zoomToArticle(page, article.slug);
-        return false;
-      }, this));
+      var drag;
+      highlighter
+        .on('mousedown', function() { drag = false; })
+        .on('mousemove', function() { drag = true; })
+        .on('mouseup', _.bind(function() {
+          if (!drag)
+            this.zoomToArticle(page, article.slug);
+
+        }, this));
 
     }, this));
 
@@ -238,7 +243,7 @@ DV.model.Articles.prototype = {
   showBackToPaper: function(page, articleSlug) {
     this.cleanUp();
 
-    var options = $(JST.articleOptions());
+    var options = $(JST.articleOptions({ next: false }));
 
     options
       .find('.DV-back-to-paper')
