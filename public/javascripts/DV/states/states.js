@@ -95,7 +95,6 @@ DV.Schema.states = {
     this.elements.currentPage.text(page);
     this.models.document.setPageIndex(pageIndex);
 
-
     // TODO: Make this work
     //if (this.viewer.options.ads) {
       //modal.on('shown', function() {

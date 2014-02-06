@@ -1,14 +1,17 @@
 <div class="DV-options" tabindex="-1">
   <div class="btn-group dropup">
     <button class="visible-desktop btn btn-primary btn-large DV-read-full-text">Read full text</button>
+    <% if (next) { %><button class="visible-desktop btn btn-inverse btn-large DV-jump-to-continuation">Jump to page <%= next %></button><% } %>
     <button class="visible-desktop btn btn-inverse btn-large DV-share-article" data-toggle="dropdown">Share article <span class="caret"></span></button>
     <button class="visible-desktop btn btn-large btn-danger DV-back-to-paper">Back to paper</button>
 
     <button class="visible-tablet btn btn-primary DV-read-full-text">Read full text</button>
+    <% if (next) { %><button class="visible-tablet btn btn-inverse DV-jump-to-continuation">Jump to page <%= next %></button><% } %>
     <button class="visible-tablet btn btn-inverse DV-share-article" data-toggle="dropdown">Share article <span class="caret"></span></button>
     <button class="visible-tablet btn btn-danger DV-back-to-paper">Back to paper</button>
 
     <button class="visible-phone btn btn-primary btn-small DV-read-full-text">Read full text</button>
+    <% if (next) { %><button class="visible-phone btn btn-inverse btn-small DV-jump-to-continuation">Jump to page <%= next %></button><% } %>
     <button class="visible-phone btn btn-inverse btn-small DV-share-article" data-toggle="dropdown">Share article <span class="caret"></span></button>
     <button class="visible-phone btn btn-small btn-danger DV-back-to-paper">Back to paper</button>
 

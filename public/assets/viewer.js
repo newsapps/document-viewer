@@ -13861,7 +13861,7 @@ DV.model.Articles.prototype = {
       this.showReadFullText(page, article.slug);
 
     this.viewer.history.navigate(
-      'page/' + page + '/article/' + article.slug, {trigger: false});
+      'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
 
     return false;
   },
@@ -13869,7 +13869,20 @@ DV.model.Articles.prototype = {
   showReadFullText: function(page, articleSlug) {
     this.cleanUp();
 
-    var options = $(JST.articleOptions());
+    var continuations, next = false;
+        article = _.find(this.loadedPages[page].articles, function(x) {
+          return x.slug === articleSlug;
+        });
+
+    if (typeof article.continuations !== 'undefined') {
+      continuations = article.continuations.sort();
+      if (continuations[continuations.indexOf(Number(page)) + 1])
+        next = continuations[continuations.indexOf(Number(page)) + 1];
+      else
+        next = continuations[0];
+    }
+
+    var options = $(JST.articleOptions({ next: next }));
 
     options
       .find('.DV-read-full-text')
@@ -13885,6 +13898,18 @@ DV.model.Articles.prototype = {
     options
       .find('.DV-share-article')
       .show();
+
+    if (next) {
+      options
+        .find('.DV-jump-to-continuation')
+        .click(_.bind(function() {
+          this.cleanUp();
+          this.viewer.helpers.jump(next - 1);
+          this.pendingPages[next].done(
+            this.zoomToArticle.bind(this, next, articleSlug));
+        }, this))
+        .show();
+    }
 
     options
       .find('.DV-back-to-paper')
@@ -13935,7 +13960,6 @@ DV.model.Articles.prototype = {
 
         if (abortable) {
           this.pendingPages[key].abort();
-          delete(this.pendingPages[key]);
         }
       }, this));
     }
@@ -13945,7 +13969,6 @@ DV.model.Articles.prototype = {
         _.bind(function(data) {
           this.loadedPages[page] = data;
           this.render(data, page);
-          delete(this.pendingPages[page]);
         }, this));
     }
   },
@@ -16011,7 +16034,6 @@ DV.Schema.states = {
     this.$('.DV-articleTextContents').html(text);
     this.elements.currentPage.text(page);
     this.models.document.setPageIndex(pageIndex);
-
 
     // TODO: Make this work
     //if (this.viewer.options.ads) {
