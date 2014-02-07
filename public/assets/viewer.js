@@ -16041,16 +16041,17 @@ DV.Schema.states = {
     this.elements.currentPage.text(page);
     this.models.document.setPageIndex(pageIndex);
 
-    // TODO: Make this work
-    //if (this.viewer.options.ads) {
-      //modal.on('shown', function() {
-        //modal.find('.advert').css({
-          //float: 'right',
-          //margin: '0 0 10px 10px'
-        //});
-        //jQuery(modal.find('.advert')[0]).ad();
-      //});
-    //}
+    if (this.options.ads) {
+      this.$('.DV-articleTextContents > p:first-child').after(
+        '<div class="advert" data-ad-type="cube"></div>');
+
+      this.$('.DV-articleTextContents').find('.advert').css({
+        float: 'right',
+        margin: '0 0 10px 10px'
+      });
+
+      jQuery(this.$('.DV-articleTextContents').find('.advert')[0]).ad();
+    }
 
     return true;
   },
