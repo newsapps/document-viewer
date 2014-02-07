@@ -34,6 +34,7 @@
 .DV-options .dropdown-menu {
   left: auto;
   right: 0;
+  text-align: left;
 }
 
 /* View Article Text Mode */
