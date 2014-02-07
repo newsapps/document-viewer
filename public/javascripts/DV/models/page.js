@@ -20,7 +20,8 @@ DV.model.Pages = function(viewer) {
     small: 600,
     normal: 1200,
     large: 1800,
-    xlarge: 2200
+    xlarge: 2200,
+    xxlarge: 2600
   };
 
   this.BASE_WIDTH      = this.widths.normal;

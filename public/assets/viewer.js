@@ -14051,7 +14051,7 @@ DV.model.Document = function(viewer){
   this.totalDocumentHeight       = 0;
   this.totalPages                = 0;
   this.additionalPaddingOnPage   = 0;
-  this.ZOOM_RANGES               = [400, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200];
+  this.ZOOM_RANGES               = [400, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200, 2600];
 
   var data                       = this.viewer.schema.data;
 
@@ -14207,7 +14207,8 @@ DV.model.Pages = function(viewer) {
     small: 600,
     normal: 1200,
     large: 1800,
-    xlarge: 2200
+    xlarge: 2200,
+    xxlarge: 2600
   };
 
   this.BASE_WIDTH      = this.widths.normal;
@@ -15200,17 +15201,17 @@ DV.Schema.helpers = {
       var ranges = [], zoom2, zoom3;
       if (zoom <= 500) {
         zoom2 = (zoom + 700) / 2;
-        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200];
+        ranges = [zoom, zoom2, 700, 850, 1000, 1200, 1400, 1600, 1800, 2200, 2600];
       } else if (zoom <= 750) {
         zoom2 = ((1000 - 700) / 3) + zoom;
         zoom3 = ((1000 - 700) / 3)*2 + zoom;
-        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800, 2200];
+        ranges = [0.66*zoom, zoom, zoom2, zoom3, 1000, 1200, 1400, 1600, 1800, 2200, 2600];
       } else if (750 < zoom && zoom <= 850){
         zoom2 = ((1000 - zoom) / 2) + zoom;
-        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800, 2200];
+        ranges = [0.66*zoom, 700, zoom, zoom2, 1000, 1200, 1400, 1600, 1800, 2200, 2600];
       } else if (850 < zoom && zoom < 1000){
         zoom2 = ((zoom - 700) / 2) + 700;
-        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800, 2200];
+        ranges = [0.66*zoom, 700, zoom2, zoom, 1000, 1200, 1400, 1600, 1800, 2200, 2600];
       } else if (1000 < zoom && zoom <= 1200) {
         zoom = 850;
         ranges = this.viewer.models.document.ZOOM_RANGES;
