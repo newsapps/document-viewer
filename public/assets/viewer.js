@@ -13800,9 +13800,14 @@ DV.model.Articles.prototype = {
         .on('mousedown', function() { drag = false; })
         .on('mousemove', function() { drag = true; })
         .on('mouseup', _.bind(function() {
-          if (!drag)
-            this.zoomToArticle(page, article.slug);
-
+          if (!drag) {
+            this.markRegionActive(article.slug);
+            this.viewer.history.navigate(
+              'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+          }
+        }, this))
+        .on('dblclick', _.bind(function() {
+          this.zoomToArticle(page, article.slug);
         }, this));
 
     }, this));
@@ -14623,7 +14628,7 @@ _.extend(DV.Schema.events, {
 
     var pageArticlesLoaded = _.bind(function(pageNum) {
       if (pageNum == page) {
-        this.zoomToArticle(page, article);
+        this.markRegionActive(article);
         this.events.off('pageArticlesLoaded', pageArticlesLoaded);
       }
     }, viewer.models.articles);

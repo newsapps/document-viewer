@@ -46,7 +46,7 @@ _.extend(DV.Schema.events, {
 
     var pageArticlesLoaded = _.bind(function(pageNum) {
       if (pageNum == page) {
-        this.zoomToArticle(page, article);
+        this.markRegionActive(article);
         this.events.off('pageArticlesLoaded', pageArticlesLoaded);
       }
     }, viewer.models.articles);
