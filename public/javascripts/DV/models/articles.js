@@ -118,6 +118,7 @@ DV.model.Articles.prototype = {
         .on('mouseup', _.bind(function() {
           if (!drag) {
             this.markRegionActive(article.slug);
+            this.showReadFullText(page, article.slug);
             this.viewer.history.navigate(
               'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
           }
@@ -231,8 +232,10 @@ DV.model.Articles.prototype = {
         .click(_.bind(function() {
           this.cleanUp();
           this.viewer.helpers.jump(next - 1);
-          this.pendingPages[next].done(
-            this.zoomToArticle.bind(this, next, articleSlug));
+          this.pendingPages[next].done(_.bind(function() {
+            this.markRegionActive(articleSlug);
+            this.showReadFullText(next, articleSlug);
+          }, this));
         }, this))
         .show();
     }
@@ -255,8 +258,11 @@ DV.model.Articles.prototype = {
       .show()
       .click(_.bind(function() {
         this.cleanUp();
+        this.viewer.helpers.autoZoomPage();
+        this.viewer.pageSet.reflowPages();
         this.viewer.open('ViewDocument');
-        this.zoomToArticle(page, articleSlug);
+        this.markRegionActive(articleSlug);
+        this.showReadFullText(page, articleSlug);
       }, this));
 
     options
