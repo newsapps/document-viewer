@@ -201,7 +201,7 @@ DV.model.Articles.prototype = {
           return x.slug === articleSlug;
         });
 
-    if (typeof article.continuations !== 'undefined') {
+    if (article.continuations.length > 1) {
       continuations = article.continuations.sort();
       if (continuations[continuations.indexOf(Number(page)) + 1])
         next = continuations[continuations.indexOf(Number(page)) + 1];
