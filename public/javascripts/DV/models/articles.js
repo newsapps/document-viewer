@@ -124,7 +124,7 @@ DV.model.Articles.prototype = {
           }
         }, this))
         .on('dblclick', _.bind(function() {
-          this.zoomToArticle(page, article.slug);
+          this.moveToArticle(page, article.slug, true);
         }, this));
 
     }, this));
@@ -132,7 +132,7 @@ DV.model.Articles.prototype = {
     this.events.pageArticlesLoaded(page);
   },
 
-  zoomToArticle: function(page, slug) {
+  moveToArticle: function(page, slug, zoom) {
     var pageData = this.loadedPages[page];
 
     if (typeof pageData == 'undefined') // Page data hasn't loaded yet
@@ -142,35 +142,35 @@ DV.model.Articles.prototype = {
         zoomRanges = this.viewer.models.document.ZOOM_RANGES,
         currentZoomLevel = this.viewer.models.pages.zoomLevel,
         pages = this.viewer.elements.window,
-        scaleFactor;
-
-
-    var article = _.find(pageData.articles, function(obj) { return obj.slug == slug; });
-
-    var find_min_x = function(v) { return v[0]; },
+        article = _.find(pageData.articles, function(obj) { return obj.slug == slug; }),
+        find_min_x = function(v) { return v[0]; },
         find_min_y = function(v) { return v[1]; },
         find_max_x = function(v) { return v[0]; },
         find_max_y = function(v) { return v[1]; },
-        min_x, min_y, max_x, max_y, width, height;
+        min_x = _.min(article.coords, find_min_x),
+        min_y = _.min(article.coords, find_min_y),
+        max_x = _.max(article.coords, find_max_x),
+        max_y = _.max(article.coords, find_min_y),
+        scaleFactor, width, height;
 
-    for (var i = zoomRanges.length; i-- > 0; ) {
-      scaleFactor = zoomRanges[i] / pageData.size.width;
+    if (zoom) {
+      for (var i = zoomRanges.length; i-- > 0; ) {
+        scaleFactor = zoomRanges[i] / pageData.size.width;
 
-      min_x = _.min(article.coords, find_min_x);
-      min_y = _.min(article.coords, find_min_y);
-      max_x = _.max(article.coords, find_max_x);
-      max_y = _.max(article.coords, find_min_y);
+        width = (max_x[0] - min_x[0]) * scaleFactor;
+        height = (max_y[1] - min_y[1]) * scaleFactor;
 
+        if (width <= pages.width()) {
+          newZoomLevel = zoomRanges[i];
+          break;
+        }
+      }
+      this.viewer.pageSet.zoom({ zoomLevel: newZoomLevel });
+    } else {
+      scaleFactor = currentZoomLevel / pageData.size.width;
       width = (max_x[0] - min_x[0]) * scaleFactor;
       height = (max_y[1] - min_y[1]) * scaleFactor;
-
-      if (width <= pages.width()) {
-        newZoomLevel = zoomRanges[i];
-        break;
-      }
     }
-
-    this.viewer.pageSet.zoom({ zoomLevel: newZoomLevel });
 
     var leftPadding = ($(window).width() - width) / 2;
     var newLeftScroll = (min_x[0] * scaleFactor) - leftPadding;
@@ -201,6 +201,9 @@ DV.model.Articles.prototype = {
           return x.slug === articleSlug;
         });
 
+    if (article.type_rollup == 'Advertisements')
+      return false;
+
     if (article.continuations.length > 1) {
       continuations = article.continuations.sort();
       if (continuations[continuations.indexOf(Number(page)) + 1])
@@ -215,6 +218,7 @@ DV.model.Articles.prototype = {
       .find('.DV-read-full-text')
       .show()
       .click(_.bind(function() {
+        this.savePosition();
         this.viewer.open('ViewArticleText', page, articleSlug);
         return false;
       }, this));
@@ -258,9 +262,16 @@ DV.model.Articles.prototype = {
       .show()
       .click(_.bind(function() {
         this.cleanUp();
-        this.viewer.helpers.autoZoomPage();
-        this.viewer.pageSet.reflowPages();
         this.viewer.open('ViewDocument');
+
+        var width = Math.round(
+          this.viewer.models.pages.baseWidth *
+          this.viewer.models.pages.zoomFactor());
+
+        this.viewer.elements.collection.css({
+          width : width + this.viewer.models.pages.getPadding() });
+
+        this.restorePosition();
         this.markRegionActive(articleSlug);
         this.showReadFullText(page, articleSlug);
       }, this));
@@ -321,6 +332,18 @@ DV.model.Articles.prototype = {
 
   cleanUp: function() {
     $('.DV-options').remove();
+  },
+
+  savePosition: function() {
+    this.position = {
+      top: $('.DV-pages').scrollTop(),
+      left: $('.DV-pages').scrollLeft()
+    };
+  },
+
+  restorePosition: function() {
+    $('.DV-pages').scrollTop(this.position.top);
+    $('.DV-pages').scrollLeft(this.position.left);
   },
 
   init: function() {
