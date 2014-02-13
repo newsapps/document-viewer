@@ -13976,6 +13976,7 @@ DV.model.Articles.prototype = {
 
         if (abortable) {
           this.pendingPages[key].abort();
+          delete(this.pendingPages[key]);
         }
       }, this));
     }
