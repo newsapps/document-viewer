@@ -184,6 +184,9 @@
   right: 0;
   text-align: left;
 }
+.DV-options .dropup {
+  display: inline-block;
+}
 
 /* View Article Text Mode */
 .DV-articleTextContents {

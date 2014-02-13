@@ -47,7 +47,7 @@ _.extend(DV.Schema.events, {
     var pageArticlesLoaded = _.bind(function(pageNum) {
       if (pageNum == page) {
         this.moveToArticle(page, article);
-        this.showReadFullText(page, article);
+        this.showOptions(page, article);
         this.events.off('pageArticlesLoaded', pageArticlesLoaded);
       }
     }, viewer.models.articles);

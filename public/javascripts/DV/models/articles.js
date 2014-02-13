@@ -118,7 +118,7 @@ DV.model.Articles.prototype = {
         .on('mouseup', _.bind(function() {
           if (!drag) {
             this.markRegionActive(article.slug);
-            this.showReadFullText(page, article.slug);
+            this.showOptions(page, article.slug);
             this.viewer.history.navigate(
               'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
           }
@@ -183,17 +183,14 @@ DV.model.Articles.prototype = {
     pages.scrollTop(newTopScroll);
 
     this.markRegionActive(article.slug);
-
-    if (article.legible)
-      this.showReadFullText(page, article.slug);
-
+    this.showOptions(page, article.slug);
     this.viewer.history.navigate(
       'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
 
     return false;
   },
 
-  showReadFullText: function(page, articleSlug) {
+  showOptions: function(page, articleSlug) {
     this.cleanUp();
 
     var continuations, next = false;
@@ -204,7 +201,7 @@ DV.model.Articles.prototype = {
     if (article.type_rollup == 'Advertisements')
       return false;
 
-    if (article.continuations.length > 1) {
+    if (article.continuations && article.continuations.length > 1) {
       continuations = article.continuations.sort();
       if (continuations[continuations.indexOf(Number(page)) + 1])
         next = continuations[continuations.indexOf(Number(page)) + 1];
@@ -214,14 +211,18 @@ DV.model.Articles.prototype = {
 
     var options = $(JST.articleOptions({ next: next }));
 
-    options
-      .find('.DV-read-full-text')
-      .show()
-      .click(_.bind(function() {
-        this.savePosition();
-        this.viewer.open('ViewArticleText', page, articleSlug);
-        return false;
-      }, this));
+    if (article.legible) {
+      options
+        .find('.DV-read-full-text')
+        .show()
+        .click(_.bind(function() {
+          this.savePosition();
+          this.viewer.open('ViewArticleText', page, articleSlug);
+          return false;
+        }, this));
+    } else
+      options.find('.DV-read-full-text').remove();
+
 
     this.viewer.helpers.setupShareLinks(
       options.find('.dropdown-menu'), 'article');
@@ -238,7 +239,7 @@ DV.model.Articles.prototype = {
           this.viewer.helpers.jump(next - 1);
           this.pendingPages[next].done(_.bind(function() {
             this.markRegionActive(articleSlug);
-            this.showReadFullText(next, articleSlug);
+            this.showOptions(next, articleSlug);
           }, this));
         }, this))
         .show();
@@ -273,7 +274,7 @@ DV.model.Articles.prototype = {
 
         this.restorePosition();
         this.markRegionActive(articleSlug);
-        this.showReadFullText(page, articleSlug);
+        this.showOptions(page, articleSlug);
       }, this));
 
     options
