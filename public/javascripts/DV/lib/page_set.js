@@ -35,14 +35,27 @@ DV.PageSet.prototype.buildPages = function(options) {
 DV.PageSet.prototype.getPages = function(){
   var _pages = [];
 
-  this.viewer.elements.sets.each(function(_index,el){
+  this.viewer.elements.sets.each(_.bind(function(_index,el){
+    var currentPage = $(el).hasClass(
+      'DV-page-' + this.viewer.api.currentPage());
 
-    var currentPage = (_index == 0) ? true : false;
-    _pages.push({ label: 'p'+_index, el: el, index: _index, pageNumber: _index+1, currentPage: currentPage });
-
-  });
+    _pages.push({
+      label: 'p'+_index,
+      el: el,
+      index: _index,
+      pageNumber: _index+1,
+      currentPage: currentPage
+    });
+  },this));
 
   return _pages;
+};
+
+DV.PageSet.prototype.getCurrentPage = function() {
+  var pages = this.getPages();
+  return _.find(pages, function(x) {
+    if (x.currentPage) { return x; }
+  });
 };
 
 // basic reflow to ensure zoomlevel is right, pages are in the right place and annotation limits are correct

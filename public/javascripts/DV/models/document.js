@@ -22,6 +22,7 @@ DV.model.Document = function(viewer){
   this.totalPages                = data.totalPages;
   
   this.onPageChangeCallbacks = [];
+  this.onComputeOffsetsCallbacks = [];
 
   var zoom = this.zoomLevel = this.viewer.options.zoom || data.zoomLevel;
   if (zoom == 'auto') this.zoomLevel = data.zoomLevel;
@@ -109,6 +110,8 @@ DV.model.Document.prototype = {
       this.viewer.helpers.setDocHeight(totalDocHeight,diff);
       this.totalDocumentHeight = totalDocHeight;
     }
+
+    _.each(this.onComputeOffsetsCallbacks, function(c) { c(); });
   },
 
   getOffset: function(_index){

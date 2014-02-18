@@ -21,6 +21,14 @@ DV.Api.prototype = {
     this.viewer.models.document.onPageChangeCallbacks.push(callback);
   },
 
+  onComputeOffsets: function(callback) {
+    this.viewer.models.document.onComputeOffsetsCallbacks.push(callback);
+  },
+
+  onPageLoaded: function(callback) {
+    this.viewer.onPageLoadedCallbacks.push(callback);
+  },
+
   // Return the page number for one of the three physical page DOM elements, by id:
   getPageNumberForId : function(id) {
     var page = this.viewer.pageSet.pages[id];

@@ -266,4 +266,7 @@ DV.Page.prototype.drawImage = function(imageURL) {
 
   // Update the status of the image load
   this.el.addClass('DV-loaded').removeClass('DV-loading');
+
+  var el = this.el;
+  _.each(this.viewer.onPageLoadedCallbacks, function(c) { c(el); });
 };

@@ -348,7 +348,18 @@ DV.model.Articles.prototype = {
   },
 
   init: function() {
-    this.viewer.api.onPageChange(_.bind(this.getData, this));
-  }
+    var callback = _.bind(function(el) {
+      var currentPage = this.viewer.pageSet.getCurrentPage();
 
+      if ($(currentPage.el).data().id == $(el).data().id) {
+        this.getData();
+        this.viewer.onPageChangeCallbacks.splice(
+          this.viewer.onPageChangeCallbacks.indexOf(callback), 1);
+      }
+
+      this.viewer.api.onPageChange(_.bind(this.getData, this));
+    }, this);
+
+    this.viewer.api.onPageLoaded(callback);
+  }
 };

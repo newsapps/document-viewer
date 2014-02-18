@@ -33,6 +33,7 @@ DV.DocumentViewer = function(options) {
   this.tracker            = {};
 
   this.onStateChangeCallbacks = [];
+  this.onPageLoadedCallbacks  = [];
 
   this.events     = _.extend(this.events, {
     viewer      : this,

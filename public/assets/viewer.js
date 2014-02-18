@@ -13010,6 +13010,9 @@ DV.Page.prototype.drawImage = function(imageURL) {
 
   // Update the status of the image load
   this.el.addClass('DV-loaded').removeClass('DV-loading');
+
+  var el = this.el;
+  _.each(this.viewer.onPageLoadedCallbacks, function(c) { c(el); });
 };
 
 DV.PageSet = function(viewer){
@@ -13049,14 +13052,27 @@ DV.PageSet.prototype.buildPages = function(options) {
 DV.PageSet.prototype.getPages = function(){
   var _pages = [];
 
-  this.viewer.elements.sets.each(function(_index,el){
+  this.viewer.elements.sets.each(_.bind(function(_index,el){
+    var currentPage = $(el).hasClass(
+      'DV-page-' + this.viewer.api.currentPage());
 
-    var currentPage = (_index == 0) ? true : false;
-    _pages.push({ label: 'p'+_index, el: el, index: _index, pageNumber: _index+1, currentPage: currentPage });
-
-  });
+    _pages.push({
+      label: 'p'+_index,
+      el: el,
+      index: _index,
+      pageNumber: _index+1,
+      currentPage: currentPage
+    });
+  },this));
 
   return _pages;
+};
+
+DV.PageSet.prototype.getCurrentPage = function() {
+  var pages = this.getPages();
+  return _.find(pages, function(x) {
+    if (x.currentPage) { return x; }
+  });
 };
 
 // basic reflow to ensure zoomlevel is right, pages are in the right place and annotation limits are correct
@@ -14032,9 +14048,20 @@ DV.model.Articles.prototype = {
   },
 
   init: function() {
-    this.viewer.api.onPageChange(_.bind(this.getData, this));
-  }
+    var callback = _.bind(function(el) {
+      var currentPage = this.viewer.pageSet.getCurrentPage();
 
+      if ($(currentPage.el).data().id == $(el).data().id) {
+        this.getData();
+        this.viewer.onPageChangeCallbacks.splice(
+          this.viewer.onPageChangeCallbacks.indexOf(callback), 1);
+      }
+
+      this.viewer.api.onPageChange(_.bind(this.getData, this));
+    }, this);
+
+    this.viewer.api.onPageLoaded(callback);
+  }
 };
 
 DV.model.Chapters = function(viewer) {
@@ -14099,6 +14126,7 @@ DV.model.Document = function(viewer){
   this.totalPages                = data.totalPages;
   
   this.onPageChangeCallbacks = [];
+  this.onComputeOffsetsCallbacks = [];
 
   var zoom = this.zoomLevel = this.viewer.options.zoom || data.zoomLevel;
   if (zoom == 'auto') this.zoomLevel = data.zoomLevel;
@@ -14186,6 +14214,8 @@ DV.model.Document.prototype = {
       this.viewer.helpers.setDocHeight(totalDocHeight,diff);
       this.totalDocumentHeight = totalDocHeight;
     }
+
+    _.each(this.onComputeOffsetsCallbacks, function(c) { c(); });
   },
 
   getOffset: function(_index){
@@ -16150,6 +16180,14 @@ DV.Api.prototype = {
     this.viewer.models.document.onPageChangeCallbacks.push(callback);
   },
 
+  onComputeOffsets: function(callback) {
+    this.viewer.models.document.onComputeOffsetsCallbacks.push(callback);
+  },
+
+  onPageLoaded: function(callback) {
+    this.viewer.onPageLoadedCallbacks.push(callback);
+  },
+
   // Return the page number for one of the three physical page DOM elements, by id:
   getPageNumberForId : function(id) {
     var page = this.viewer.pageSet.pages[id];
@@ -16498,6 +16536,7 @@ DV.DocumentViewer = function(options) {
   this.tracker            = {};
 
   this.onStateChangeCallbacks = [];
+  this.onPageLoadedCallbacks  = [];
 
   this.events     = _.extend(this.events, {
     viewer      : this,
