@@ -267,6 +267,13 @@ DV.Page.prototype.drawImage = function(imageURL) {
   // Update the status of the image load
   this.el.addClass('DV-loaded').removeClass('DV-loading');
 
+  // Set the .DV-page element background so the doc viewer doesn't go blank if the user zooms
+  this.el.find('.DV-page').css({
+    'background-image': 'url(' + imageURL + ')',
+    'background-size': '100% auto',
+    'background-repeat': 'none'
+  });
+
   var el = this.el;
   _.each(this.viewer.onPageLoadedCallbacks, function(c) { c(el); });
 };
