@@ -353,8 +353,8 @@ DV.model.Articles.prototype = {
 
       if ($(currentPage.el).data().id == $(el).data().id) {
         this.getData();
-        this.viewer.onPageChangeCallbacks.splice(
-          this.viewer.onPageChangeCallbacks.indexOf(callback), 1);
+        this.viewer.onPageLoadedCallbacks.splice(
+          this.viewer.onPageLoadedCallbacks.indexOf(callback), 1);
       }
 
       this.viewer.api.onPageChange(_.bind(this.getData, this));
