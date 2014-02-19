@@ -35,6 +35,9 @@ DV.model.Document = function(viewer){
 DV.model.Document.prototype = {
 
   setPageIndex : function(index) {
+    if (this.currentPageIndex !== index)
+      this.viewer.elements.sets.find('.DV-page').css('background-image', 'none');
+
     this.currentPageIndex = index;
     this.viewer.elements.currentPage.text(this.currentPage());
     this.viewer.helpers.setActiveChapter(this.viewer.models.chapters.getChapterId(index));
