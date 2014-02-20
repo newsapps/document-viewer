@@ -14843,6 +14843,10 @@ DV.Schema.helpers = {
             boundZoom(doc.ZOOM_RANGES[parseInt(prevLevel, 10)]);
       });
 
+      viewer.$('.DV-zoomBox').delegate('.resize', 'click', function() {
+        viewer.helpers.autoZoomPage();
+      });
+
       // next/previous
       var history         = viewer.history;
       var compiled        = viewer.compiled;
