@@ -348,8 +348,9 @@ DV.model.Articles.prototype = {
   },
 
   init: function() {
-    var callback = _.bind(function(el) {
-      var currentPage = this.viewer.pageSet.getCurrentPage();
+    var callback = _.bind(function(page) {
+      var currentPage = this.viewer.pageSet.getCurrentPage(),
+          el = page.el;
 
       if ($(currentPage.el).data().id == $(el).data().id) {
         this.getData();

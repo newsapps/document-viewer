@@ -13019,7 +13019,37 @@ DV.Page.prototype.drawImage = function(imageURL) {
   });
 
   var el = this.el;
-  _.each(this.viewer.onPageLoadedCallbacks, function(c) { c(el); });
+  _.each(
+    this.viewer.onPageLoadedCallbacks,
+    _.bind(function(c) { c(this); }, this)
+  );
+
+  this.showEditionSectionLabel();
+};
+
+DV.Page.prototype.showEditionSectionLabel = function() {
+  var page = this;
+
+  if (page.pageNumber !== this.index + 1)
+    return false;
+
+  page.el.find('.DV-edition-section-label').remove();
+
+  var section = _.find(this.viewer.schema.data.sections, function(sec) {
+    if (sec.page == page.pageNumber) return sec;
+  });
+
+  if (section) {
+    if (section.title !== '') {
+      var editionLabel = $('<div />');
+      editionLabel
+        .addClass('DV-edition-section-label')
+        .append(
+          '<h3>From ' + section.title +
+          ' regional edition <i class="icon-question-sign"></i></h3>');
+      $(this.el).prepend(editionLabel);
+    }
+  }
 };
 
 DV.PageSet = function(viewer){
@@ -14055,8 +14085,9 @@ DV.model.Articles.prototype = {
   },
 
   init: function() {
-    var callback = _.bind(function(el) {
-      var currentPage = this.viewer.pageSet.getCurrentPage();
+    var callback = _.bind(function(page) {
+      var currentPage = this.viewer.pageSet.getCurrentPage(),
+          el = page.el;
 
       if ($(currentPage.el).data().id == $(el).data().id) {
         this.getData();

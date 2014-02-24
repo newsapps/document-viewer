@@ -188,6 +188,17 @@
   display: inline-block;
 }
 
+.DV-edition-section-label {
+  padding-top: 4px;
+  text-align: center;
+  border-top: 1px solid #c1c1c1;
+}
+  .DV-edition-section-label h3 {
+    font-family: Arial, Helvetica, "sans-serif";
+    font-size: 20px;
+    text-shadow: 1px 1px 0px #fff;
+  }
+
 /* View Article Text Mode */
 .DV-articleTextContents {
   background-color:#FFFFFF;
