@@ -133,6 +133,16 @@ DV.model.Pages.prototype = {
   getPageHeight: function(pageIndex) {
     var realHeight = this.pageHeights[pageIndex];
     return Math.round(realHeight ? realHeight * this.zoomFactor() : this.height);
+  },
+
+  isSectionStart: function(pageIndex) {
+    var section = _.find(this.viewer.schema.data.sections, function(sec) {
+      if (sec.page == (pageIndex + 1)) return sec;
+    });
+    if (section)
+      return true;
+    else
+      return false;
   }
 
 };

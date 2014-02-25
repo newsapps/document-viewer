@@ -77,15 +77,23 @@ DV.model.Document.prototype = {
     var diff             = 0;
     var scrollPos        = this.viewer.elements.window[0].scrollTop;
     var adHeight         = 250;
+    var sectionStart     = false;
 
     for(var i = 0; i < len; i++) {
       if(annotationModel.offsetsAdjustments[i]){
         adjustedOffset   = annotationModel.offsetsAdjustments[i];
       }
 
+      // Adjust the offset if ads are enabled
       if ( this.viewer.options.ads ) {
         if ( i > 0 && i % this.viewer.options.ads.interval === 0 )
           adjustedOffset += adHeight;
+      }
+
+      // Adjust the offset if sections are specified
+      if (this.viewer.schema.data.sections.length > 0) {
+        if (i > 0 && this.viewer.models.pages.isSectionStart(i - 1))
+          adjustedOffset += $('.DV-edition-section-label').outerHeight();
       }
 
       var pageHeight     = this.viewer.models.pages.getPageHeight(i);
