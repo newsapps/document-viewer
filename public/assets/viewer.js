@@ -13968,9 +13968,6 @@ DV.model.Articles.prototype = {
           return x.slug === articleSlug;
         });
 
-    if (article.type_rollup == 'Advertisements')
-      return false;
-
     if (article.continuations && article.continuations.length > 1) {
       continuations = article.continuations.sort();
       if (continuations[continuations.indexOf(Number(page)) + 1])
@@ -13997,9 +13994,19 @@ DV.model.Articles.prototype = {
     this.viewer.helpers.setupShareLinks(
       options.find('.dropdown-menu'), 'article');
 
-    options
-      .find('.DV-share-article')
-      .show();
+    if (article.type_rollup.match(/image/ig))
+      type = 'image';
+    else if (article.type_rollup.match(/article/ig))
+      type = 'article';
+    else if (article.type_rollup.match(/comic/ig))
+      type = 'comic';
+    else if (article.type_rollup.match(/advertisement/ig))
+      type = 'advertisement';
+    else
+      type = 'content';
+
+    options.find('.DV-share-content .content-type').text(type);
+    options.find('.DV-share-content').show();
 
     if (next) {
       options
@@ -14048,7 +14055,7 @@ DV.model.Articles.prototype = {
       }, this));
 
     options
-      .find('.DV-read-full-text, .DV-share-article')
+      .find('.DV-read-full-text, .DV-share-content')
       .remove();
 
     this.viewer.elements.footer.prepend(options);
