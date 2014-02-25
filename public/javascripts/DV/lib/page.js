@@ -298,11 +298,25 @@ DV.Page.prototype.showEditionSectionLabel = function() {
   if (section) {
     if (section.title !== '') {
       var editionLabel = $('<div />');
-      editionLabel
-        .addClass('DV-edition-section-label')
-        .append(
-          '<h3>From ' + section.title +
-          ' regional edition <i class="icon-question-sign"></i></h3>');
+
+      if (section.edition && section.section) {
+        editionLabel
+          .addClass('DV-edition-section-label')
+          .append(
+            '<h3>' + section.section + ' section from ' + section.title +
+            ' regional edition <i class="icon-question-sign"></i></h3>');
+      } else if (section.edition && !section.section) {
+        editionLabel
+          .addClass('DV-edition-section-label')
+          .append(
+            '<h3>From ' + section.title +
+            ' regional edition <i class="icon-question-sign"></i></h3>');
+      } else {
+        editionLabel
+          .addClass('DV-edition-section-label')
+          .append(
+            '<h3>Edition info unavailable <i class="icon-question-sign"></i></h3>');
+      }
       $(this.el).prepend(editionLabel);
     }
   }
