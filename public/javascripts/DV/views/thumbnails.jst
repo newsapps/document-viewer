@@ -1,3 +1,11 @@
+<% if (section && edition) { %>
+  <div class="DV-edition-section-label"><h3><%= section %> section from <%= edition %> regional edition <i class="icon-question-sign"></i></h3></div>
+<% } else if (!section && edition) { %>
+  <div class="DV-edition-section-label"><h3>From <%= edition %> regional edition <i class="icon-question-sign"></i></h3></div>
+<% } else { %>
+  <div class="DV-edition-section-label"><h3>Edition info unavailable <i class="icon-question-sign"></i></h3></div>
+<% } %>
+
 <% for (; page <= endPage; page++) { %>
   <% var url = imageUrl.replace(/\{page\}/, page) ; %>
   <div class="DV-thumbnail" id="DV-thumbnail-<%= page %>" data-pageNumber="<%= page %>">

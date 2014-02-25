@@ -13316,7 +13316,13 @@ DV.Thumbnails.prototype.render = function() {
   this.el = this.viewer.$('.DV-thumbnails');
   this.getCurrentIndex();
   this.getZoom();
-  this.buildThumbnails(1, this.pageCount);
+  if (this.viewer.schema.data.sections.length > 0) {
+    _.each(this.viewer.schema.data.sections, _.bind(function(v, k) {
+      this.buildThumbnails(v.page, v.endPage);
+    }, this));
+  } else {
+    this.buildThumbnails(1, this.pageCount);
+  }
   this.setZoom();
   this.viewer.elements.window.unbind('scroll.thumbnails').bind('scroll.thumbnails', this.lazyloadThumbnails);
   var resizeEvent = 'resize.thumbnails-' + this.resizeId;
@@ -13325,12 +13331,25 @@ DV.Thumbnails.prototype.render = function() {
 
 DV.Thumbnails.prototype.buildThumbnails = function(startPage, endPage) {
   if (startPage == 1) this.el.empty();
+
+  var section_data, section = null, edition = null;
+  if (this.viewer.schema.data.sections.length > 0) {
+      section_data = _.find(this.viewer.schema.data.sections, function(sec) {
+        if (sec.page == startPage) return sec;
+      });
+      section = section_data.section;
+      edition = section_data.edition;
+  }
+
   var thumbnailsHTML = JST.thumbnails({
     page      : startPage,
     endPage   : endPage,
     zoom      : this.zoomLevel,
-    imageUrl  : this.imageUrl
+    imageUrl  : this.imageUrl,
+    section   : section,
+    edition   : edition
   });
+
   this.el.html(this.el.html() + thumbnailsHTML);
   this.highlightCurrentPage();
   _.defer(this.loadThumbnails);
