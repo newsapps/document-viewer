@@ -2,7 +2,7 @@
   <div class="DV-edition-section-label"><h3><%= section %> section from <%= edition %> regional edition <i class="icon-question-sign"></i></h3></div>
 <% } else if (!section && edition) { %>
   <div class="DV-edition-section-label"><h3>From <%= edition %> regional edition <i class="icon-question-sign"></i></h3></div>
-<% } else { %>
+<% } else if (page > 1) { %>
   <div class="DV-edition-section-label"><h3>Edition info unavailable <i class="icon-question-sign"></i></h3></div>
 <% } %>
 

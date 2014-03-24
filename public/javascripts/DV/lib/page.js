@@ -289,6 +289,9 @@ DV.Page.prototype.showEditionSectionLabel = function() {
   if (page.pageNumber !== this.index + 1)
     return false;
 
+  if (page.pageNumber == 1)
+    return false;
+
   page.el.find('.DV-edition-section-label').remove();
 
   var section = _.find(this.viewer.schema.data.sections, function(sec) {
