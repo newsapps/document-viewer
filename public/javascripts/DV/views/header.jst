@@ -10,19 +10,24 @@
     </div>
   </div>
 
-  <div class="DV-controls navbar navbar-inverse">
+  <div class="DV-controls navbar navbar-inverse" style="position: static;">
     <div class="navbar-inner">
-      <div class="brand">
-        <a href="http://www.chicagotribune.com/" alt="Home" title="chicagotribune.com">
-        <img src="/public/images/ct.png" alt="Chicago Tribune">
-        </a>
-      </div>
-      <div class="nav-collapse collapse">
-        <ul class="nav">
-          <li class=""></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+      <div class="container">
 
-</div>
+        <div class="brand">
+            <a href="http://www.chicagotribune.com/" alt="Home" title="chicagotribune.com">
+            <img src="/public/images/ct.png" alt="Chicago Tribune">
+            </a>
+            <a id="archive-home" href="/">Archives</a>
+        </div>
+
+        <div class="nav-collapse collapse navbar-inverse-collapse">
+          <form id="archive_search" class="navbar-search pull-left form-search">
+              <input class="input search-query" id="search-box" type="text" name="search" placeholder="Search the archives" value="">
+          </form>
+        </div><!-- /.nav-collapse -->
+        <p class="issue-pub-date"><%= DV.viewers[id].schema.document.date %></p>
+      </div>
+    </div><!-- /navbar-inner -->
+  </div>
+</div><!-- /DV-header -->
