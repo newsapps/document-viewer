@@ -1,9 +1,9 @@
 <% if (section && edition) { %>
-  <div class="DV-edition-section-label"><h3><%= section %> section from <%= edition %> regional edition <i class="icon-question-sign"></i></h3></div>
+  <div class="DV-edition-section-label"><h3><%= section %> section from <%= edition %> regional edition <a href="/faq"><i class="icon-question-sign"></i></a></h3></div>
 <% } else if (!section && edition) { %>
-  <div class="DV-edition-section-label"><h3>From <%= edition %> regional edition <i class="icon-question-sign"></i></h3></div>
+  <div class="DV-edition-section-label"><h3>From <%= edition %> regional edition <a href="/faq"><i class="icon-question-sign"></i></a></h3></div>
 <% } else if (page > 1) { %>
-  <div class="DV-edition-section-label"><h3>Edition info unavailable <i class="icon-question-sign"></i></h3></div>
+  <div class="DV-edition-section-label"><h3>Edition info unavailable <a href="/faq"><i class="icon-question-sign"></i></a></h3></div>
 <% } %>
 
 <% for (; page <= endPage; page++) { %>

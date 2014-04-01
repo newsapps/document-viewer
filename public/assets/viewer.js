@@ -13051,18 +13051,18 @@ DV.Page.prototype.showEditionSectionLabel = function() {
           .addClass('DV-edition-section-label')
           .append(
             '<h3>' + section.section + ' section from ' + section.title +
-            ' regional edition <i class="icon-question-sign"></i></h3>');
+            ' regional edition <a href="/faq"><i class="icon-question-sign"></i></a></h3>');
       } else if (section.edition && !section.section) {
         editionLabel
           .addClass('DV-edition-section-label')
           .append(
             '<h3>From ' + section.title +
-            ' regional edition <i class="icon-question-sign"></i></h3>');
+            ' regional edition <a href="/faq"><i class="icon-question-sign"></i></a></h3>');
       } else {
         editionLabel
           .addClass('DV-edition-section-label')
           .append(
-            '<h3>Edition info unavailable <i class="icon-question-sign"></i></h3>');
+            '<h3>Edition info unavailable <a href="/faq"><i class="icon-question-sign"></i></a></h3>');
       }
       $(this.el).prepend(editionLabel);
     }
