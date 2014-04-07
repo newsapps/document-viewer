@@ -12818,7 +12818,10 @@ DV.Page.prototype.draw = function(argHash) {
     if ( (this.index + 1) % this.viewer.options.ads.interval === 0 ) {
       if ( !this.el.find('.advert').length ) {
         this.el.append('<div class="advert" data-ad-type="cube"></div>');
-        this.el.find('.advert').ad();
+        if (this.viewer.options.ads.args)
+          this.el.find('.advert').ad(this.viewer.options.ads.args);
+        else
+          this.el.find('.advert').ad();
       }
     }
   }
