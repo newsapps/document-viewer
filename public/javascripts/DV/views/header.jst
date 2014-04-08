@@ -26,7 +26,7 @@
               <input class="input search-query" id="search-box" type="text" name="search" placeholder="Search the archives" value="">
           </form>
         </div><!-- /.nav-collapse -->
-        <p class="issue-pub-date"><%= DV.viewers[id].schema.document.date %></p>
+        <p class="issue-pub-date"><%= new APDate(DV.viewers[id].schema.document.date).ap() %></p>
       </div>
     </div><!-- /navbar-inner -->
   </div>

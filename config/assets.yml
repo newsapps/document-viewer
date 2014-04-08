@@ -10,6 +10,7 @@ javascripts:
     - public/javascripts/DV/vendor/backbone.js
     - public/javascripts/DV/vendor/jquery.placeholder.js
     - public/javascripts/DV/vendor/svg.min.js
+    - public/javascripts/DV/vendor/APDate.js
     - public/javascripts/DV/lib/initializer.js
     - public/javascripts/DV/lib/*.js
     - public/javascripts/DV/schema/*.js
