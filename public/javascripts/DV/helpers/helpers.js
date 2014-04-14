@@ -553,7 +553,7 @@ DV.Schema.helpers = {
 
     showEmbedCode: function(type) {
       var viewer = this.viewer,
-          embed_url = window.location.origin + viewer.history.root;
+          embed_url = window.location.origin + viewer.history.root + '?embed=true';
 
       if (type == 'article')
         embed_url = window.location.href;
