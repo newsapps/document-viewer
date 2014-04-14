@@ -54,80 +54,82 @@ DV.model.Articles.prototype = {
     var scaleFactor  = currentWidth / data.size.width;
     var articles = data.articles;
 
-    var canvas = pageElement.data('canvas');
-    var elementPageNum = pageElement.data('page-num');
-    if (!canvas) {
-      canvas = SVG(pageElement[0]);
-      canvas
-        .size('100%', '100%')
-        .style("z-index", 99999999999)
-        .attr('class', 'PAGECANVASBAM');
-      pageElement.data('canvas', canvas);
-    }
-
-    pageElement.data('page-num', page);
-    canvas.clear();
-    _.each(articles, _.bind(function(article, i) {
-      // make sure the page number hasn't changed on us
-      if (page != pageElement.data('page-num')) {
-        return;
+    if (SVG.supported) {
+      var canvas = pageElement.data('canvas');
+      var elementPageNum = pageElement.data('page-num');
+      if (!canvas) {
+        canvas = SVG(pageElement[0]);
+        canvas
+          .size('100%', '100%')
+          .style("z-index", 99999999999)
+          .attr('class', 'PAGECANVASBAM');
+        pageElement.data('canvas', canvas);
       }
 
-      var body = article.body;
-      if (this.viewer.options.ads)
-        body = '<div class="advert" data-ad-type="cube"></div>' + body;
+      pageElement.data('page-num', page);
+      canvas.clear();
+      _.each(articles, _.bind(function(article, i) {
+        // make sure the page number hasn't changed on us
+        if (page != pageElement.data('page-num')) {
+          return;
+        }
 
-      // Build the highlighter region
-      var highlighter = canvas.group(),
-          scaled_coords = [];
+        var body = article.body;
+        if (this.viewer.options.ads)
+          body = '<div class="advert" data-ad-type="cube"></div>' + body;
 
-      highlighter.attr('class', 'article-' + article.slug);
+        // Build the highlighter region
+        var highlighter = canvas.group(),
+            scaled_coords = [];
 
-      _.each(article.coords, _.bind(function(x) {
-        scaled_coords.push([x[0] * scaleFactor, x[1] * scaleFactor]);
-      }, this));
+        highlighter.attr('class', 'article-' + article.slug);
 
-      highlighter
-        .polyline(scaled_coords)
-        .fill({
-          color: 'orange',
-          opacity: 0.5
-        });
-
-      if (article.slug == this.activeArticleSlug)
-        highlighter.opacity(0.5);
-      else
-        highlighter.opacity(0);
-
-      highlighter.on('mouseover', function() {
-        highlighter.opacity(0.2 + highlighter.opacity());
-      });
-
-      highlighter.on('mouseout', function() {
-        var newOpacity = highlighter.opacity() - 0.2;
-        if (newOpacity < 0)
-          highlighter.opacity(0);
-        else
-          highlighter.opacity(newOpacity);
-      });
-
-      var drag;
-      highlighter
-        .on('mousedown', function() { drag = false; })
-        .on('mousemove', function() { drag = true; })
-        .on('mouseup', _.bind(function() {
-          if (!drag) {
-            this.markRegionActive(article.slug);
-            this.showOptions(page, article.slug);
-            this.viewer.history.navigate(
-              'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
-          }
-        }, this))
-        .on('dblclick', _.bind(function() {
-          this.moveToArticle(page, article.slug, true);
+        _.each(article.coords, _.bind(function(x) {
+          scaled_coords.push([x[0] * scaleFactor, x[1] * scaleFactor]);
         }, this));
 
-    }, this));
+        highlighter
+          .polyline(scaled_coords)
+          .fill({
+            color: 'orange',
+            opacity: 0.5
+          });
+
+        if (article.slug == this.activeArticleSlug)
+          highlighter.opacity(0.5);
+        else
+          highlighter.opacity(0);
+
+        highlighter.on('mouseover', function() {
+          highlighter.opacity(0.2 + highlighter.opacity());
+        });
+
+        highlighter.on('mouseout', function() {
+          var newOpacity = highlighter.opacity() - 0.2;
+          if (newOpacity < 0)
+            highlighter.opacity(0);
+          else
+            highlighter.opacity(newOpacity);
+        });
+
+        var drag;
+        highlighter
+          .on('mousedown', function() { drag = false; })
+          .on('mousemove', function() { drag = true; })
+          .on('mouseup', _.bind(function() {
+            if (!drag) {
+              this.markRegionActive(article.slug);
+              this.showOptions(page, article.slug);
+              this.viewer.history.navigate(
+                'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+            }
+          }, this))
+          .on('dblclick', _.bind(function() {
+            this.moveToArticle(page, article.slug, true);
+          }, this));
+
+      }, this));
+    }
 
     this.events.pageArticlesLoaded(page);
   },
