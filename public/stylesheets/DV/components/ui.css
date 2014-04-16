@@ -98,6 +98,19 @@
 }
 /* End View Article Text Mode */
 
+.DV-header .issue-pub-date {
+  position: absolute;
+  right: 0;
+}
+.DV-controls .brand a {
+  margin-top: 2px;
+}
+.DV-header .brand,
+.DV-header .nav-collapse { float: left; }
+.DV-controls .brand a {
+  float: left;
+}
+
 @media (min-width: 768px) {
   .DV-article-modal.modal {
     width: 868px;
@@ -109,5 +122,11 @@
   .DV-article-modal.modal {
     width: 80%;
     margin-left: -40%;
+  }
+}
+
+@media (max-width: 767px) {
+  .DV-header .issue-pub-date {
+    display: none !important;
   }
 }
