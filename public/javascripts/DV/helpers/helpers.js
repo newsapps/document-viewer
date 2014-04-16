@@ -412,7 +412,7 @@ DV.Schema.helpers = {
     // absolute from the current y offset to the bottom of the viewport.
     positionViewer : function() {
       var offset = this.elements.viewer.position();
-      this.elements.viewer.css({position: 'absolute', top: offset.top, bottom: 0, left: offset.left, right: offset.left});
+      this.elements.viewer.css({position: 'absolute', top: offset.top, bottom: 0, left: 0, right: 0});
     },
 
     unsupportedBrowser : function() {
