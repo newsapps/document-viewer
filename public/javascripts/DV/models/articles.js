@@ -79,21 +79,22 @@ DV.model.Articles.prototype = {
           body = '<div class="advert" data-ad-type="cube"></div>' + body;
 
         // Build the highlighter region
-        var highlighter = canvas.group(),
-            scaled_coords = [];
+        var highlighter = canvas.group();
 
         highlighter.attr('class', 'article-' + article.slug);
 
-        _.each(article.coords, _.bind(function(x) {
-          scaled_coords.push([x[0] * scaleFactor, x[1] * scaleFactor]);
-        }, this));
-
-        highlighter
-          .polyline(scaled_coords)
-          .fill({
-            color: 'orange',
-            opacity: 0.5
-          });
+        _.each(article.coords, function(coords) {
+          var scaled_coords = [];
+          _.each(coords, function(x) {
+            scaled_coords.push([x[0] * scaleFactor, x[1] * scaleFactor]);
+          })
+          highlighter
+            .polyline(scaled_coords)
+            .fill({
+              color: 'orange',
+              opacity: 0.5
+            });
+        });
 
         if (article.slug == this.activeArticleSlug)
           highlighter.opacity(0.5);

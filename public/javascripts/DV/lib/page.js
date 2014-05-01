@@ -317,11 +317,6 @@ DV.Page.prototype.showEditionSectionLabel = function() {
           .append(
             '<h3>From ' + section.title +
             ' regional edition <a href="/faq"><i class="icon-question-sign"></i></a></h3>');
-      } else {
-        editionLabel
-          .addClass('DV-edition-section-label')
-          .append(
-            '<h3>Edition info unavailable <a href="/faq"><i class="icon-question-sign"></i></a></h3>');
       }
       $(this.el).prepend(editionLabel);
     }
