@@ -53,6 +53,7 @@ DV.model.Articles.prototype = {
     var currentWidth = this.viewer.models.document.zoomLevel;
     var scaleFactor  = currentWidth / data.size.width;
     var articles = data.articles;
+    var isTouch = 'ontouchstart' in window;
 
     if (SVG.supported) {
       var canvas = pageElement.data('canvas');
@@ -101,32 +102,52 @@ DV.model.Articles.prototype = {
         else
           highlighter.opacity(0);
 
-        highlighter.on('mouseover', function() {
-          highlighter.opacity(0.2 + highlighter.opacity());
-        });
+        // Only setup mouse hover events if we're not a touch device
+        if (!isTouch) {
+          highlighter.on('mouseover', function() {
+            highlighter.opacity(0.2 + highlighter.opacity());
+          });
 
-        highlighter.on('mouseout', function() {
-          var newOpacity = highlighter.opacity() - 0.2;
-          if (newOpacity < 0)
-            highlighter.opacity(0);
-          else
-            highlighter.opacity(newOpacity);
-        });
+          highlighter.on('mouseout', function() {
+            var newOpacity = highlighter.opacity() - 0.2;
+            if (newOpacity < 0)
+              highlighter.opacity(0);
+            else
+              highlighter.opacity(newOpacity);
+          });
+        }
 
-        var drag;
+        // here we'll decide which events to use for interaction: touch or mouse
+        if (isTouch) {
+          var down = 'touchstart',
+              move = 'touchmove',
+              up   = 'touchend';
+        } else {
+          var down = 'mousedown',
+              move = 'mousemove',
+              up   = 'mouseup';
+        }
+
+        var drag,
+            clickTimeout = 0,
+            clickCount = 0;
         highlighter
-          .on('mousedown', function() { drag = false; })
-          .on('mousemove', function() { drag = true; })
-          .on('mouseup', _.bind(function() {
+          .on(down, function() { drag = false; })
+          .on(move, function() { drag = true; })
+          .on(up, _.bind(function() {
             if (!drag) {
-              this.markRegionActive(article.slug);
-              this.showOptions(page, article.slug);
-              this.viewer.history.navigate(
-                'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+              if (clickCount > 0) {
+                this.moveToArticle(page, article.slug, true);
+                clearTimeout(clickTimeout);
+              } else {
+                this.markRegionActive(article.slug);
+                this.showOptions(page, article.slug);
+                this.viewer.history.navigate(
+                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+              }
+              clickCount += 1;
+              clickTimeout = setTimeout(function() {clickCount = 0;}, 500);
             }
-          }, this))
-          .on('dblclick', _.bind(function() {
-            this.moveToArticle(page, article.slug, true);
           }, this));
 
       }, this));
@@ -150,10 +171,11 @@ DV.model.Articles.prototype = {
         find_min_y = function(v) { return v[1]; },
         find_max_x = function(v) { return v[0]; },
         find_max_y = function(v) { return v[1]; },
-        min_x = _.min(article.coords, find_min_x),
-        min_y = _.min(article.coords, find_min_y),
-        max_x = _.max(article.coords, find_max_x),
-        max_y = _.max(article.coords, find_min_y),
+        flat_coords = _.flatten(article.coords, true),
+        min_x = _.min(flat_coords, find_min_x),
+        min_y = _.min(flat_coords, find_min_y),
+        max_x = _.max(flat_coords, find_max_x),
+        max_y = _.max(flat_coords, find_min_y),
         scaleFactor, width, height;
 
     if (zoom) {

@@ -4,7 +4,32 @@ DV.Schema.events = {
   zoom: function(level){
     var viewer = this.viewer;
     var continuation = function() {
+      // when we zoom, we want to zoom in on the center of the viewport
+      // We have to do some tricky stuff to make this look right
+      var doc = viewer.models.document,
+          win = viewer.elements.window,
+          pages = viewer.models.pages,
+          zoomPageIndex = doc.currentPageIndex,
+          centerYPct = (
+            (win.scrollTop() + (win.height() / 2) - doc.offsets[zoomPageIndex])
+            / pages.getPageHeight(zoomPageIndex)),
+          centerXPct = viewer.elements.collection.width() > win.width() ? (
+            (win.scrollLeft() + (win.width() / 2) - doc.pageWidthPadding)
+            / pages.width) : 0.5;
+
       viewer.pageSet.zoom({ zoomLevel: level });
+
+      // set scroll position so content doesn't appear to jump around
+      var scrollTop = (
+            (centerYPct * pages.getPageHeight(zoomPageIndex))
+            + doc.offsets[zoomPageIndex] - (win.height() / 2)),
+          scrollLeft = (
+            (centerXPct * pages.width)
+            + doc.pageWidthPadding - (win.width() / 2));
+
+      win.scrollTop(scrollTop);
+      if (scrollLeft > 0) win.scrollLeft(scrollLeft);
+
       var ranges = viewer.models.document.ZOOM_RANGES;
       viewer.dragReporter.sensitivity = ranges[ranges.length-1] == level ? 1.5 : 1;
       viewer.notifyChangedState();

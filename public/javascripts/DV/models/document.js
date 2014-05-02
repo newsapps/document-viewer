@@ -122,6 +122,7 @@ DV.model.Document.prototype = {
       this.totalDocumentHeight = totalDocHeight;
     }
 
+
     _.each(this.onComputeOffsetsCallbacks, function(c) { c(); });
   },
 

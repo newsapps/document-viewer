@@ -13608,7 +13608,7 @@ DV.Schema = function() {
   this.text         = {};
   this.data         = {
     zoomLevel               : 700,
-    pageWidthPadding        : 20,
+    pageWidthPadding        : 40,
     additionalPaddingOnPage : 30,
     state                   : { page: { previous: 0, current: 0, next: 1 } }
   };
@@ -13948,6 +13948,7 @@ DV.model.Articles.prototype = {
     var currentWidth = this.viewer.models.document.zoomLevel;
     var scaleFactor  = currentWidth / data.size.width;
     var articles = data.articles;
+    var isTouch = 'ontouchstart' in window;
 
     if (SVG.supported) {
       var canvas = pageElement.data('canvas');
@@ -13996,32 +13997,52 @@ DV.model.Articles.prototype = {
         else
           highlighter.opacity(0);
 
-        highlighter.on('mouseover', function() {
-          highlighter.opacity(0.2 + highlighter.opacity());
-        });
+        // Only setup mouse hover events if we're not a touch device
+        if (!isTouch) {
+          highlighter.on('mouseover', function() {
+            highlighter.opacity(0.2 + highlighter.opacity());
+          });
 
-        highlighter.on('mouseout', function() {
-          var newOpacity = highlighter.opacity() - 0.2;
-          if (newOpacity < 0)
-            highlighter.opacity(0);
-          else
-            highlighter.opacity(newOpacity);
-        });
+          highlighter.on('mouseout', function() {
+            var newOpacity = highlighter.opacity() - 0.2;
+            if (newOpacity < 0)
+              highlighter.opacity(0);
+            else
+              highlighter.opacity(newOpacity);
+          });
+        }
 
-        var drag;
+        // here we'll decide which events to use for interaction: touch or mouse
+        if (isTouch) {
+          var down = 'touchstart',
+              move = 'touchmove',
+              up   = 'touchend';
+        } else {
+          var down = 'mousedown',
+              move = 'mousemove',
+              up   = 'mouseup';
+        }
+
+        var drag,
+            clickTimeout = 0,
+            clickCount = 0;
         highlighter
-          .on('mousedown', function() { drag = false; })
-          .on('mousemove', function() { drag = true; })
-          .on('mouseup', _.bind(function() {
+          .on(down, function() { drag = false; })
+          .on(move, function() { drag = true; })
+          .on(up, _.bind(function() {
             if (!drag) {
-              this.markRegionActive(article.slug);
-              this.showOptions(page, article.slug);
-              this.viewer.history.navigate(
-                'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+              if (clickCount > 0) {
+                this.moveToArticle(page, article.slug, true);
+                clearTimeout(clickTimeout);
+              } else {
+                this.markRegionActive(article.slug);
+                this.showOptions(page, article.slug);
+                this.viewer.history.navigate(
+                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+              }
+              clickCount += 1;
+              clickTimeout = setTimeout(function() {clickCount = 0;}, 500);
             }
-          }, this))
-          .on('dblclick', _.bind(function() {
-            this.moveToArticle(page, article.slug, true);
           }, this));
 
       }, this));
@@ -14045,10 +14066,11 @@ DV.model.Articles.prototype = {
         find_min_y = function(v) { return v[1]; },
         find_max_x = function(v) { return v[0]; },
         find_max_y = function(v) { return v[1]; },
-        min_x = _.min(article.coords, find_min_x),
-        min_y = _.min(article.coords, find_min_y),
-        max_x = _.max(article.coords, find_max_x),
-        max_y = _.max(article.coords, find_min_y),
+        flat_coords = _.flatten(article.coords, true),
+        min_x = _.min(flat_coords, find_min_x),
+        min_y = _.min(flat_coords, find_min_y),
+        max_x = _.max(flat_coords, find_max_x),
+        max_y = _.max(flat_coords, find_min_y),
         scaleFactor, width, height;
 
     if (zoom) {
@@ -14431,6 +14453,7 @@ DV.model.Document.prototype = {
       this.totalDocumentHeight = totalDocHeight;
     }
 
+
     _.each(this.onComputeOffsetsCallbacks, function(c) { c(); });
   },
 
@@ -14622,7 +14645,32 @@ DV.Schema.events = {
   zoom: function(level){
     var viewer = this.viewer;
     var continuation = function() {
+      // when we zoom, we want to zoom in on the center of the viewport
+      // We have to do some tricky stuff to make this look right
+      var doc = viewer.models.document,
+          win = viewer.elements.window,
+          pages = viewer.models.pages,
+          zoomPageIndex = doc.currentPageIndex,
+          centerYPct = (
+            (win.scrollTop() + (win.height() / 2) - doc.offsets[zoomPageIndex])
+            / pages.getPageHeight(zoomPageIndex)),
+          centerXPct = viewer.elements.collection.width() > win.width() ? (
+            (win.scrollLeft() + (win.width() / 2) - doc.pageWidthPadding)
+            / pages.width) : 0.5;
+
       viewer.pageSet.zoom({ zoomLevel: level });
+
+      // set scroll position so content doesn't appear to jump around
+      var scrollTop = (
+            (centerYPct * pages.getPageHeight(zoomPageIndex))
+            + doc.offsets[zoomPageIndex] - (win.height() / 2)),
+          scrollLeft = (
+            (centerXPct * pages.width)
+            + doc.pageWidthPadding - (win.width() / 2));
+
+      win.scrollTop(scrollTop);
+      if (scrollLeft > 0) win.scrollLeft(scrollLeft);
+
       var ranges = viewer.models.document.ZOOM_RANGES;
       viewer.dragReporter.sensitivity = ranges[ranges.length-1] == level ? 1.5 : 1;
       viewer.notifyChangedState();
@@ -14755,6 +14803,7 @@ DV.Schema.events = {
     }
   }
 };
+
 DV.Schema.events.ViewAnnotation = {
   next: function(e){
     var viewer              = this.viewer;
@@ -15403,7 +15452,7 @@ DV.Schema.helpers = {
     jump: function(pageIndex, modifier, forceRedraw){
       modifier = (modifier) ? parseInt(modifier, 10) : 0;
       var position = this.models.document.getOffset(parseInt(pageIndex, 10)) + modifier;
-      this.elements.window[0].scrollTop = position;
+      //this.elements.window[0].scrollTop = position;
       this.models.document.setPageIndex(pageIndex);
       if (forceRedraw) this.viewer.pageSet.redraw(true);
       if (this.viewer.state === 'ViewThumbnails') {
