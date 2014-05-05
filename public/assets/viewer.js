@@ -13946,7 +13946,7 @@ DV.model.Articles.prototype = {
   render: function(data, page) {
     var pageElement  = $(this.getPageElement(page));
     var currentWidth = this.viewer.models.document.zoomLevel;
-    var scaleFactor  = currentWidth / data.size.width;
+    var scaleFactor  = 1; //currentWidth / data.size.width;
     var articles = data.articles;
     var isTouch = 'ontouchstart' in window;
 
@@ -13958,7 +13958,8 @@ DV.model.Articles.prototype = {
         canvas
           .size('100%', '100%')
           .style("z-index", 99999999999)
-          .attr('class', 'PAGECANVASBAM');
+          .attr('class', 'PAGECANVASBAM')
+          .attr('viewBox', '0 0 ' + data.size.width + ' ' + data.size.height);
         pageElement.data('canvas', canvas);
       }
 
@@ -14222,6 +14223,7 @@ DV.model.Articles.prototype = {
   },
 
   drawArticlesForPage: function(page) {
+    console.log('drawArticlesForPage: ' + page);
     if (typeof this.loadedPages[page] !== 'undefined')
         return this.render(this.loadedPages[page], page);
 
