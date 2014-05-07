@@ -15549,6 +15549,8 @@ DV.Schema.helpers = {
       } else {
         zoom = this.viewer.options.zoom;
       }
+ 
+      console.log(zoom);
 
       // Setup ranges for auto-width zooming
       var ranges = [], zoom2, zoom3;
@@ -15585,7 +15587,7 @@ DV.Schema.helpers = {
         ranges = this.viewer.models.document.ZOOM_RANGES;
       }
       this.viewer.models.document.ZOOM_RANGES = ranges;
-      this.events.zoom(zoom);
+      this.viewer.pageSet.zoom({ zoomLevel: zoom });
     },
 
     handleInitialState: function(){

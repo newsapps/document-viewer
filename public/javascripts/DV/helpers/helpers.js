@@ -498,7 +498,7 @@ DV.Schema.helpers = {
         ranges = this.viewer.models.document.ZOOM_RANGES;
       }
       this.viewer.models.document.ZOOM_RANGES = ranges;
-      this.events.zoom(zoom);
+      this.viewer.pageSet.zoom({ zoomLevel: zoom });
     },
 
     handleInitialState: function(){
