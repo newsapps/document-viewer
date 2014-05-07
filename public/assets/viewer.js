@@ -14229,7 +14229,6 @@ DV.model.Articles.prototype = {
   },
 
   drawArticlesForPage: function(page) {
-    console.log('drawArticlesForPage: ' + page);
     if (typeof this.loadedPages[page] !== 'undefined')
         return this.render(this.loadedPages[page], page);
 
