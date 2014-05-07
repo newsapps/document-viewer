@@ -58,6 +58,12 @@ DV.model.Articles.prototype = {
     if (SVG.supported) {
       var canvas = pageElement.data('canvas');
       var elementPageNum = pageElement.data('page-num');
+
+      // If we already have a canvas and it's already setup for this page
+      // we don't have to draw anything
+      if (canvas && elementPageNum == page)
+        return;
+
       if (!canvas) {
         canvas = SVG(pageElement[0]);
         canvas
@@ -328,6 +334,7 @@ DV.model.Articles.prototype = {
   },
 
   drawArticlesForPage: function(page) {
+    console.log('drawArticlesForPage: ' + page);
     if (typeof this.loadedPages[page] !== 'undefined')
         return this.render(this.loadedPages[page], page);
 
