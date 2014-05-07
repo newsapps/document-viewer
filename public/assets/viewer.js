@@ -15549,8 +15549,6 @@ DV.Schema.helpers = {
       } else {
         zoom = this.viewer.options.zoom;
       }
- 
-      console.log(zoom);
 
       // Setup ranges for auto-width zooming
       var ranges = [], zoom2, zoom3;
