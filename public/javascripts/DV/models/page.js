@@ -30,7 +30,7 @@ DV.model.Pages = function(viewer) {
   this.DEFAULT_PADDING = 100;
 
   // Embed reduces padding.
-  this.REDUCED_PADDING = 44;
+  this.REDUCED_PADDING = 38;
 
   // Mini padding, when < 500 px wide.
   this.MINI_PADDING    = 18;
