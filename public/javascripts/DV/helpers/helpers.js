@@ -104,15 +104,6 @@ DV.Schema.helpers = {
         }
       });
 
-      // Handle iPad / iPhone scroll events...
-      _.bindAll(this, 'touchStart', 'touchMove', 'touchEnd');
-      this.elements.window[0].ontouchstart  = this.touchStart;
-      this.elements.window[0].ontouchmove   = this.touchMove;
-      this.elements.window[0].ontouchend    = this.touchEnd;
-      this.elements.well[0].ontouchstart    = this.touchStart;
-      this.elements.well[0].ontouchmove     = this.touchMove;
-      this.elements.well[0].ontouchend      = this.touchEnd;
-
       viewer.$('.DV-descriptionToggle').live('click',function(e){
         e.preventDefault();
         e.stopPropagation();
@@ -219,41 +210,6 @@ DV.Schema.helpers = {
         // restart draw timer
         this.startCheckTimer();
       }
-    },
-
-    touchStart : function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      var touch = e.changedTouches[0];
-      this._moved  = false;
-      this._touchX = touch.pageX;
-      this._touchY = touch.pageY;
-    },
-
-    touchMove : function(e) {
-      var el    = e.currentTarget;
-      var touch = e.changedTouches[0];
-      var xDiff = this._touchX - touch.pageX;
-      var yDiff = this._touchY - touch.pageY;
-      el.scrollLeft += xDiff;
-      el.scrollTop  += yDiff;
-      this._touchX  -= xDiff;
-      this._touchY  -= yDiff;
-      if (yDiff != 0 || xDiff != 0) this._moved = true;
-    },
-
-    touchEnd : function(e) {
-      if (!this._moved) {
-        var touch     = e.changedTouches[0];
-        var target    = touch.target;
-        var fakeClick = document.createEvent('MouseEvent');
-        while (target.nodeType !== 1) target = target.parentNode;
-        fakeClick.initMouseEvent('click', true, true, touch.view, 1,
-          touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-          false, false, false, false, 0, null);
-        target.dispatchEvent(fakeClick);
-      }
-      this._moved = false;
     },
 
     // Click to open a page's permalink.
