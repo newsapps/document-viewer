@@ -66,6 +66,22 @@ DV.model.Document.prototype = {
       this.viewer.models.pages.resize(this.zoomLevel);
       this.viewer.models.annotations.renderAnnotations();
       this.computeOffsets();
+
+      // Make sure the zoom button states are updated
+      // We should grey out the buttons if we're zoomed in or out all the way
+      if (this.ZOOM_RANGES.indexOf(this.zoomLevel) == 0) {
+        // zoomed out all the way, hide zoom out button
+        this.viewer.$('.DV-zoomBox .dec').attr('disabled', true);
+        this.viewer.$('.DV-zoomBox .inc').attr('disabled', false);
+      } else if (this.ZOOM_RANGES.indexOf(this.zoomLevel) >= this.ZOOM_RANGES.length - 1) {
+        // zoomed in all the way, hide zoom in button
+        this.viewer.$('.DV-zoomBox .inc').attr('disabled', true);
+        this.viewer.$('.DV-zoomBox .dec').attr('disabled', false);
+      } else {
+        // make sure zoom buttons are all active
+        this.viewer.$('.DV-zoomBox .inc').attr('disabled', false);
+        this.viewer.$('.DV-zoomBox .dec').attr('disabled', false);
+      }
     }
   },
 
