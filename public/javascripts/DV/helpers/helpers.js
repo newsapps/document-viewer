@@ -489,16 +489,26 @@ DV.Schema.helpers = {
       var socialServices = _.defaults({
         'Facebook': 'http://www.facebook.com/sharer/sharer.php?u=<%= url %>',
         'Twitter': 'https://twitter.com/share?url=<%= url %>&text=<%= text %>',
-        'Tumblr': 'http://www.tumblr.com/share'
+        'Tumblr': 'http://www.tumblr.com/share/link?url=<%= url %>&title=<%= text %>'
       }, viewer.options.socialServices);
 
       _.each(socialServices, function(v, i) {
         var tmpl = _.template('<li><a target="_blank" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
 
-        var shareLi = _.template(tmpl, {
-          url: encodeURIComponent(window.location.origin + viewer.history.root),
-          text: encodeURIComponent(viewer.schema.document.description + ' ' + viewer.schema.document.title)
-        });
+        if (type == 'article') {
+          article = viewer.models.articles.activeArticle;
+          var shareItemData = {
+            url: encodeURIComponent(window.location.origin + viewer.history.root + 'page/' + article.start_page + '/article/' + article.slug),
+            text: encodeURIComponent(article.title + ' from the ' + viewer.schema.document.title)
+          }
+
+        } else {
+          var shareItemData = {
+            url: encodeURIComponent(window.location.origin + viewer.history.root),
+            text: encodeURIComponent(viewer.schema.document.title)
+          }
+        }
+        var shareLi = _.template(tmpl, shareItemData);
 
         dropdown.append(shareLi);
       });

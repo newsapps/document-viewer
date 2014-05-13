@@ -147,6 +147,7 @@ DV.model.Articles.prototype = {
                 this.moveToArticle(page, article.slug, true);
                 clearTimeout(clickTimeout);
               } else {
+                this.activeArticle = article;
                 this.markRegionActive(article.slug);
                 this.showOptions(page, article.slug);
                 this.viewer.history.navigate(
