@@ -73,8 +73,7 @@ DV.Schema.states = {
   },
 
   ViewArticleText: function(name, page, slug) {
-    var pageData, article,
-        options = $(JST.articleOptions({ next: false }));
+    var pageData, article;
 
     pageData = this.models.articles.loadedPages[page],
     article = _.find(pageData.articles, function(obj) {

@@ -14136,6 +14136,8 @@ DV.model.Articles.prototype = {
         next = continuations[0];
     }
 
+    this.showArticleShareLinks(article);
+
     if (article.legible)
       this.viewer.$('.DV-read-article')
         .show()
@@ -14144,6 +14146,24 @@ DV.model.Articles.prototype = {
           this.viewer.open('ViewArticleText', page, articleSlug);
           return false;
         }, this));
+
+    if (next) {
+      this.viewer.$('.DV-jump-to-continuation')
+        .css('display', 'inline-block')
+        .click(_.bind(function() {
+          this.cleanUp();
+          this.viewer.helpers.jump(next - 1);
+          this.pendingPages[next].done(_.bind(function() {
+            this.markRegionActive(articleSlug);
+            this.showOptions(next, articleSlug);
+          }, this));
+        }, this))
+        .show();
+    }
+  },
+
+  showArticleShareLinks: function(article) {
+    var type;
 
     // setup share links
     this.viewer.$('.DV-shareTools').hide();
@@ -14164,27 +14184,21 @@ DV.model.Articles.prototype = {
 
     this.viewer.$('#DV-selection-shareTools .content-type').text(type);
     this.viewer.$('#DV-selection-shareTools').css('display', 'inline-block');
-
-    if (next) {
-      this.viewer.$('.DV-jump-to-continuation')
-        .css('display', 'inline-block')
-        .click(_.bind(function() {
-          this.cleanUp();
-          this.viewer.helpers.jump(next - 1);
-          this.pendingPages[next].done(_.bind(function() {
-            this.markRegionActive(articleSlug);
-            this.showOptions(next, articleSlug);
-          }, this));
-        }, this))
-        .show();
-    }
   },
 
   showBackToPaper: function(page, articleSlug) {
     this.cleanUp();
 
+    var article = _.find(this.loadedPages[page].articles, function(x) {
+      return x.slug === articleSlug;
+    });
+
     this.viewer.$('.DV-back-to-search').hide();
     this.viewer.$('.DV-read-article').hide();
+
+    // setup share links
+    this.showArticleShareLinks(article);
+
     this.viewer
       .$('.DV-back-to-paper')
       .show()
@@ -16352,8 +16366,7 @@ DV.Schema.states = {
   },
 
   ViewArticleText: function(name, page, slug) {
-    var pageData, article,
-        options = $(JST.articleOptions({ next: false }));
+    var pageData, article;
 
     pageData = this.models.articles.loadedPages[page],
     article = _.find(pageData.articles, function(obj) {

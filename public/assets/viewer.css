@@ -261,12 +261,6 @@
   }
 }
 
-@media (max-width: 767px) {
-  .DV-header .issue-pub-date {
-    display: none !important;
-  }
-}
-
 .DV-set .advert {
   text-align: center;
 }
@@ -1242,7 +1236,6 @@
   color: #eee;
   text-shadow: none;
   margin-top: 10px;
-  margin-right: 45px;
 }
 
 .DV-topNavLeft, .DV-topNavRight { line-height:38px; }
