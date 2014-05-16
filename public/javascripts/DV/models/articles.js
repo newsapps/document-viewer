@@ -186,6 +186,8 @@ DV.model.Articles.prototype = {
         max_y = _.max(flat_coords, find_min_y),
         scaleFactor, width, height;
 
+    this.activeArticle = article;
+
     if (zoom) {
       for (var i = zoomRanges.length; i-- > 0; ) {
         scaleFactor = zoomRanges[i] / pageData.size.width;
@@ -227,9 +229,9 @@ DV.model.Articles.prototype = {
     this.cleanUp();
 
     var continuations, next = false;
-        article = _.find(this.loadedPages[page].articles, function(x) {
-          return x.slug === articleSlug;
-        });
+    var article = _.find(this.loadedPages[page].articles, function(x) {
+      return x.slug === articleSlug;
+    });
 
     if (article.continuations && article.continuations.length > 1) {
       continuations = article.continuations.sort();
@@ -239,23 +241,20 @@ DV.model.Articles.prototype = {
         next = continuations[0];
     }
 
-    var options = $(JST.articleOptions({ next: next }));
-
-    if (article.legible) {
-      options
-        .find('.DV-read-full-text')
+    if (article.legible)
+      this.viewer.$('.DV-read-article')
         .show()
         .click(_.bind(function() {
           this.savePosition();
           this.viewer.open('ViewArticleText', page, articleSlug);
           return false;
         }, this));
-    } else
-      options.find('.DV-read-full-text').remove();
 
-
+    // setup share links
+    this.viewer.$('.DV-shareTools').hide();
+    this.viewer.$('#DV-selection-shareTools .dropdown-menu').empty();
     this.viewer.helpers.setupShareLinks(
-      options.find('.dropdown-menu'), 'article');
+      '#DV-selection-shareTools .dropdown-menu', 'article');
 
     if (article.type_rollup.match(/image/ig))
       type = 'image';
@@ -268,12 +267,12 @@ DV.model.Articles.prototype = {
     else
       type = 'content';
 
-    options.find('.DV-share-content .content-type').text(type);
-    options.find('.DV-share-content').show();
+    this.viewer.$('#DV-selection-shareTools .content-type').text(type);
+    this.viewer.$('#DV-selection-shareTools').css('display', 'inline-block');
 
     if (next) {
-      options
-        .find('.DV-jump-to-continuation')
+      this.viewer.$('.DV-jump-to-continuation')
+        .css('display', 'inline-block')
         .click(_.bind(function() {
           this.cleanUp();
           this.viewer.helpers.jump(next - 1);
@@ -284,24 +283,18 @@ DV.model.Articles.prototype = {
         }, this))
         .show();
     }
-
-    options
-      .find('.DV-back-to-paper')
-      .remove();
-
-    this.viewer.elements.footer.prepend(options);
-    options.show();
   },
 
   showBackToPaper: function(page, articleSlug) {
     this.cleanUp();
 
-    var options = $(JST.articleOptions({ next: false }));
-
-    options
-      .find('.DV-back-to-paper')
+    this.viewer.$('.DV-back-to-search').hide();
+    this.viewer.$('.DV-read-article').hide();
+    this.viewer
+      .$('.DV-back-to-paper')
       .show()
-      .click(_.bind(function() {
+      .click(_.bind(function(ev) {
+        ev.preventDefault();
         this.cleanUp();
         this.viewer.open('ViewDocument');
 
@@ -316,13 +309,6 @@ DV.model.Articles.prototype = {
         this.markRegionActive(articleSlug);
         this.showOptions(page, articleSlug);
       }, this));
-
-    options
-      .find('.DV-read-full-text, .DV-share-content')
-      .remove();
-
-    this.viewer.elements.footer.prepend(options);
-    options.show();
   },
 
   getData: function() {
@@ -371,7 +357,18 @@ DV.model.Articles.prototype = {
   },
 
   cleanUp: function() {
-    $('.DV-options').remove();
+    this.viewer.$('.DV-read-article')
+      .hide()
+      .off();
+    this.viewer.$('.DV-shareTools').show();
+    this.viewer.$('#DV-selection-shareTools').hide();
+    this.viewer.$('.DV-back-to-paper')
+      .hide()
+      .off();
+    this.viewer.$('.DV-jump-to-continuation')
+      .hide()
+      .off();
+    this.viewer.$('.DV-back-to-search').show();
   },
 
   savePosition: function() {

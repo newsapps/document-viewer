@@ -247,19 +247,6 @@
 }
 /* End View Article Text Mode */
 
-.DV-header .issue-pub-date {
-  position: absolute;
-  right: 0;
-}
-.DV-controls .brand a {
-  margin-top: 2px;
-}
-.DV-header .brand,
-.DV-header .nav-collapse { float: left; }
-.DV-controls .brand a {
-  float: left;
-}
-
 @media (min-width: 768px) {
   .DV-article-modal.modal {
     width: 868px;
@@ -1158,10 +1145,8 @@
   margin: 0 auto;
 }
 .DV-footer .DV-navControls {
-  right: 0;
-  top: 0;
-  margin: 0 auto;
-  text-align: center;
+  float:right;
+  margin-right:6px;
 }
 .DV-footer .DV-trigger {
   position: relative;
@@ -1191,16 +1176,18 @@
   margin: 4px 1px;
 }
 
+.DV-jump-to-continuation {
+  display:none;
+}
 
 .DV-footer .DV-pageNumberContainer {
   position: absolute;
   left: 0;
   top: 4px;
 }
-.DV-footer .DV-shareTools {
-  position: absolute;
-  right: 10px;
-  top: 0;
+#DV-selection-shareTools {
+  display:none;
+  margin-left:0;
 }
 .DV-footer .DV-shareTools .dropdown-menu {
   left: auto;
@@ -1240,30 +1227,40 @@
 .DV-controls.navbar {
     margin-bottom: 0;
 }
-.DV-controls .brand a {
-  color: #757575;
-  font-size: 18px;
+
+.DV-controls .center {
+  line-height:38px;
+  text-align:center;
 }
-.DV-controls .brand {
-  margin-top: 2px;
-  margin-left: -6px;
-  padding: 4px;
-}
-.DV-controls .brand img {
+.DV-controls .center img {
+  margin-right:12px;
+  margin-top: -2px;
   height:18px;
-  margin-right: 35px;
-  margin-bottom: 4px;
-}
-.DV-controls #archive_search {
-  margin-left: 10px;
 }
 
-.DV-controls p.issue-pub-date {
+.DV-controls .issue-pub-date {
   color: #eee;
   text-shadow: none;
   margin-top: 10px;
   margin-right: 45px;
-  text-align: right;
+}
+
+.DV-topNavLeft, .DV-topNavRight { line-height:38px; }
+.DV-controls a, .DV-controls a:visited {
+  font-family:Arial,Helvetica,sans-serif;
+  color: #eee;
+  font-weight:normal;
+}
+.DV-topNavLeft {
+    position:absolute;
+    left:10px;
+}
+.DV-topNavRight {
+    position:absolute;
+    right:10px;
+}
+.DV-back-to-paper, .DV-read-article {
+  display:none;
 }
 
 .DV-header{
@@ -1907,39 +1904,16 @@ span.DV-highlighted{
   margin: 46px;
 }
 .DV-zoomControls{
-  font-family:Arial,Helvetica,sans-serif;
-  font-size:11px;
-  float: right;
-  margin: 28px 14px 0 0;
-  position: relative;
-  z-index: 99999;
+  display:inline-block;
 }
   .DV-narrowControls .DV-zoomControls {
     margin-right: 15px;
   }
 
-.DV-zoomBox{
-  float: left;
-  position:relative;
-}
-  .DV-narrowControls .DV-zoomBox {
-  }
   .DV-zoomBox .inc,
   .DV-zoomBox .dec {
     cursor: pointer;
   }
-
-.DV-zoomBox .ui-slider-handle{
-  height:12px;
-  width:12px;
-  position:absolute;
-  left:0;
-  top:0;
-  margin-top:5px;
-  margin-left:-5px;
-  background: transparent url(../images/DV/embed/slider.png?1369248142) no-repeat 0 0;
-  outline: none;
-}
 
 .DV-zoomControls .DV-trigger{
   font-size:11px;
@@ -2433,7 +2407,6 @@ span.DV-highlighted{
     margin-top: 0;
     border: 0;
     background: url(../images/DV/embed/headerbg.png?1369248142);
-    text-shadow: 0px 1px 0px #ddd;
     color: #000;
   }
     .DV-searchInput {
