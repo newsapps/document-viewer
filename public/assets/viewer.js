@@ -14123,10 +14123,9 @@ DV.model.Articles.prototype = {
   showOptions: function(page, articleSlug) {
     this.cleanUp();
 
-    var continuations, next = false;
-    var article = _.find(this.loadedPages[page].articles, function(x) {
-      return x.slug === articleSlug;
-    });
+    var continuations,
+        next = false,
+        article = this.getArticle(page, articleSlug);
 
     if (article.continuations && article.continuations.length > 1) {
       continuations = article.continuations.sort();
@@ -14186,12 +14185,16 @@ DV.model.Articles.prototype = {
     this.viewer.$('#DV-selection-shareTools').css('display', 'inline-block');
   },
 
+  getArticle: function(page, articleSlug) {
+    return _.find(this.loadedPages[page].articles, function(x) {
+      return x.slug === articleSlug;
+    });
+  },
+
   showBackToPaper: function(page, articleSlug) {
     this.cleanUp();
 
-    var article = _.find(this.loadedPages[page].articles, function(x) {
-      return x.slug === articleSlug;
-    });
+    var article = this.getArticle(page, articleSlug);
 
     this.viewer.$('.DV-back-to-search').hide();
     this.viewer.$('.DV-read-article').hide();
