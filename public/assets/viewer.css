@@ -11,7 +11,7 @@
 /* Hides from IE-mac \*/
 * html .DV-docViewer .DV-clearfix {height: 1%;}
 .DV-docViewer .DV-clearfix {display: block;}
-/* End hide from IE-mac */  
+/* End hide from IE-mac */
 
 .DV-docViewer a,
 .DV-docViewer a:visited{
@@ -20,7 +20,7 @@
 }
 
 .DV-docViewer{
- overflow:hidden;  
+ overflow:hidden;
 }
 
 .DV-docViewer{
@@ -327,7 +327,7 @@
     border:3px solid rgb(95, 175, 235);
     border:3px solid rgba(107, 194, 248, 0.5);
   }
-  .DV-accessRedact .DV-annotationRegion, 
+  .DV-accessRedact .DV-annotationRegion,
   .DV-accessRedact.DV-annotationRegion {
     background: #000;
     border: 0;
@@ -335,7 +335,7 @@
     filter: none;
     -ms-filter: none;
   }
-    .DV-redRedactions .DV-accessRedact .DV-annotationRegion, 
+    .DV-redRedactions .DV-accessRedact .DV-annotationRegion,
     .DV-redRedactions .DV-accessRedact.DV-annotationRegion {
       background: #800;
     }
@@ -1219,10 +1219,11 @@
     margin-bottom: 0;
 }
 
-.DV-controls .center {
+.DV-controls .center, .DV-footer .DV-navControls .center {
   line-height:38px;
   text-align:center;
-}
+/*  background: green;
+*/}
 .DV-controls .center img {
   margin-right:12px;
   margin-top: -2px;
@@ -1714,7 +1715,7 @@
   .DV-hideSidebar .DV-searchBar {
     right: 15px;
   }
-  
+
 .DV-hideFooter .DV-footer {
   display: none;
 }
@@ -2504,3 +2505,37 @@ span.DV-highlighted{
   .DV-views .DV-last span {
     -webkit-border-top-right-radius: 5px; -moz-border-radius-topright: 5px;
   }
+
+/* SVG files for mobile */
+
+@media screen and (max-width: 768px) {
+
+.pagesSVG, .shareSVG, .dec, .resize, .inc {
+/*  background-image: url(/public/images/share.svg);
+  background-size: 30px 30px;
+  height: 30px;
+  width: 30px;
+  color: black;
+  background-color: green;
+  background-size: auto auto;*/
+  float: left;
+  top: 20px;  border-radius: 5px;
+  margin: 0px 10px;
+  padding: 5px 5px 3px 5px;
+  height: 40px;
+}
+
+.shareSVG, .DV-shareTools {
+  float: right;
+}
+
+.pagesSVG:hover, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover {
+  background-color: #eee;
+  height: 38px;
+}
+
+.DV-footer .DV-navControls {
+  float: none;
+}
+
+
