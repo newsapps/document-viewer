@@ -2511,18 +2511,12 @@ span.DV-highlighted{
 @media screen and (max-width: 768px) {
 
 .pagesSVG, .shareSVG, .dec, .resize, .inc {
-/*  background-image: url(/public/images/share.svg);
-  background-size: 30px 30px;
-  height: 30px;
-  width: 30px;
-  color: black;
-  background-color: green;
-  background-size: auto auto;*/
   float: left;
   top: 20px;  border-radius: 5px;
   margin: 0px 10px;
   padding: 5px 5px 3px 5px;
   height: 40px;
+  fill: #333333;
 }
 
 .shareSVG, .DV-shareTools {
@@ -2530,8 +2524,13 @@ span.DV-highlighted{
 }
 
 .pagesSVG:hover, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover {
-  background-color: #eee;
+  background-color: #bbb;
   height: 38px;
+  fill: #00518D;
+}
+
+.dec:disabled {
+  background-color: #eee;
 }
 
 .DV-footer .DV-navControls {
