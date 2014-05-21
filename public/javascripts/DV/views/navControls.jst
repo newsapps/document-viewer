@@ -18,7 +18,7 @@
 
     <span class="DV-thumbnailsView">
       <span class="visible-phone">
-        <div class="pagesSVG DV-trigger">
+        <div class="pagesSVG DV-trigger" role="button">
           <svg width="40" height="40" viewBox="-192 -384 2048 2048" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 -1) translate(0 -1280)"><path d="M768 512v-384q0 -52 -38 -90t-90 -38h-512q-52 0 -90 38t-38 90v384q0 52 38 90t90 38h512q52 0 90 -38t38 -90zM768 1280v-384q0 -52 -38 -90t-90 -38h-512q-52 0 -90 38t-38 90v384q0 52 38 90t90 38h512q52 0 90 -38t38 -90zM1664 512v-384q0 -52 -38 -90t-90 -38 h-512q-52 0 -90 38t-38 90v384q0 52 38 90t90 38h512q52 0 90 -38t38 -90zM1664 1280v-384q0 -52 -38 -90t-90 -38h-512q-52 0 -90 38t-38 90v384q0 52 38 90t90 38h512q52 0 90 -38t38 -90z" /></g></svg>
         </div>
       </span>
@@ -32,18 +32,32 @@
 
     <span class="DV-zoomControls DV-zoomBox"></span>
 
-    <span class="DV-shareTools">
-      <span class="visible-phone">
-        <div class="shareSVG DV-trigger">
-          <svg width="2048" height="2048" viewBox="-256 -384 2048 2048" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 -1) translate(0 -1280)"><path d="M1005 435l352 352q19 19 19 45t-19 45l-352 352q-30 31 -69 14q-40 -17 -40 -59v-160q-119 0 -216 -19.5t-162.5 -51t-114 -79t-76.5 -95.5t-44.5 -109t-21.5 -111.5t-5 -110.5q0 -181 167 -404q10 -12 25 -12q7 0 13 3q22 9 19 33q-44 354 62 473q46 52 130 75.5 t224 23.5v-160q0 -42 40 -59q12 -5 24 -5q26 0 45 19zM1536 1120v-960q0 -119 -84.5 -203.5t-203.5 -84.5h-960q-119 0 -203.5 84.5t-84.5 203.5v960q0 119 84.5 203.5t203.5 84.5h960q119 0 203.5 -84.5t84.5 -203.5z"/></g></svg>
-        </div>
+
+
+      <div class="DV-shareTools dropup">
+        <span class="DV-trigger shareSVG" data-toggle="dropdown">
+
+          <svg width="40" height="40" viewBox="-256 -384 2048 2048" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 -1) translate(0 -1280)"><path d="M1005 435l352 352q19 19 19 45t-19 45l-352 352q-30 31 -69 14q-40 -17 -40 -59v-160q-119 0 -216 -19.5t-162.5 -51t-114 -79t-76.5 -95.5t-44.5 -109t-21.5 -111.5t-5 -110.5q0 -181 167 -404q10 -12 25 -12q7 0 13 3q22 9 19 33q-44 354 62 473q46 52 130 75.5 t224 23.5v-160q0 -42 40 -59q12 -5 24 -5q26 0 45 19zM1536 1120v-960q0 -119 -84.5 -203.5t-203.5 -84.5h-960q-119 0 -203.5 84.5t-84.5 203.5v960q0 119 84.5 203.5t203.5 84.5h960q119 0 203.5 -84.5t84.5 -203.5z"/></g></svg>
+
+          <span class="hidden-phone">Share issue <span class="caret"></span>
+
+        </span>
         <ul class="dropdown-menu"></ul>
-      </span>
-    </span>
+      </div>
+
+      <div id="DV-selection-shareTools" class="DV-shareTools dropup">
+        <span class="DV-trigger shareSVG" data-toggle="dropdown">
+
+          <svg width="40" height="40" viewBox="-256 -384 2048 2048" xmlns="http://www.w3.org/2000/svg"><g transform="scale(1 -1) translate(0 -1280)"><path d="M1005 435l352 352q19 19 19 45t-19 45l-352 352q-30 31 -69 14q-40 -17 -40 -59v-160q-119 0 -216 -19.5t-162.5 -51t-114 -79t-76.5 -95.5t-44.5 -109t-21.5 -111.5t-5 -110.5q0 -181 167 -404q10 -12 25 -12q7 0 13 3q22 9 19 33q-44 354 62 473q46 52 130 75.5 t224 23.5v-160q0 -42 40 -59q12 -5 24 -5q26 0 45 19zM1536 1120v-960q0 -119 -84.5 -203.5t-203.5 -84.5h-960q-119 0 -203.5 84.5t-84.5 203.5v960q0 119 84.5 203.5t203.5 84.5h960q119 0 203.5 -84.5t84.5 -203.5z"/></g></svg>
+
+          <span class="hidden-phone">Share <span class="content-type">article</span></span>
+        </span>
+        <ul class="dropdown-menu"></ul>
+      </div>
 
 
 
-    <span class="">
+    <span class="hidden-phone">
       <div class="DV-shareTools btn-group dropup">
         <button class="DV-trigger btn btn-large" data-toggle="dropdown">
           <i class="icon-share"></i> Share issue <span class="caret"></span>
