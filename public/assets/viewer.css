@@ -1118,7 +1118,7 @@
 .DV-footer {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 56px;
+  height: 50px;
   border-top: 1px solid #B0B0B0;
   z-index: 20000;
   text-shadow: 0px 1px 0px #ddd;
@@ -1177,7 +1177,7 @@
 .DV-footer .DV-pageNumberContainer {
   position: absolute;
   left: 0;
-  top: 12px;
+  top: 10px;
 }
 #DV-selection-shareTools {
   display:none;
@@ -2507,7 +2507,9 @@ span.DV-highlighted{
   }
 
 .pagesSVG, .shareSVG, .dec, .resize, .inc {
-  float: left;
+  height: 40px;
+/*  width: 40px;
+*/  float: left;
   border: none;
   padding: 5px 5px 3px 5px;
   margin: 0px 10px;
@@ -2515,16 +2517,17 @@ span.DV-highlighted{
   fill: #333333;
   border-radius: 5px;
 }
+
 .shareSVG {
-  margin-top: -49px;
+  margin-top: -32px;
 }
 
 .btn-text {
   display: inline-block;
-  padding: 0px 5px 0px 2px;
+  padding: 0px 3px 0px 2px;
   vertical-align: top;
-  height: 40px;
-  line-height: 40px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   text-transform: uppercase;
   font-family: arial, sans-serif;
@@ -2536,12 +2539,16 @@ span.DV-highlighted{
   margin-left: 5px;
 }
 
-.pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus,
+
 .pagesSVG:hover, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover {
   background-color: #bbb;
-  height: 48px;
+  height: 40px;
   border: none;
   fill: #00518D;
+  outline: none;
+}
+
+.pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
   outline: none;
 }
 
@@ -2550,39 +2557,61 @@ span.DV-highlighted{
 }
 
 .shareSVG:focus, .shareSVG:hover {
-  margin-top: -51px;
+  margin-top: -31px;
 }
 
 /* SVG files for mobile */
 
 @media screen and (max-width: 768px) {
 
-.pagesSVG, .shareSVG, .dec, .resize, .inc {
-  float: left;
-  border: none;
-  padding: 5px 5px 3px 5px;
-  margin: 0px 10px;
-  background: #c5c5c5;
-  fill: #333333;
-  border-radius: 5px;
+  .pagesSVG, .shareSVG, .dec, .resize, .inc {
+    float: left;
+    border: none;
+    padding: 5px 5px 3px 5px;
+    margin: 0px 10px;
+    background: #555555;
+    fill: #333333;
+    border-radius: 5px;
+  }
+
+  .shareSVG, .DV-shareTools {
+    float: right;
+  }
+
+  .pagesSVG:focus, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover,
+  .pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
+    outline: none;
+  }
+
+  .shareSVG:focus, .shareSVG:hover {
+    margin-top: 0px;
+  }
+
+  .DV-footer .DV-navControls {
+    float: none;
+  }
 }
 
-.shareSVG, .DV-shareTools {
-  float: right;
+@media screen and (max-width: 500px) {
+
+  .DV-footer {
+    height: 48px;
+  }
+
+  .pagesSVG, .shareSVG, .dec, .resize, .inc {
+    float: left;
+    border: none;
+    padding: 5px 5px 3px 5px;
+    margin: 0px 5px;
+    background: #c5c5c5;
+    fill: #333333;
+    border-radius: 5px;
+  }
+
+  .pagesSVG:focus, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover,
+  .pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
+    outline: none;
+    height: 40px;
+  }
+
 }
-
-.pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
-  outline: none;
-}
-
-.shareSVG:focus, .shareSVG:hover {
-  margin-top: 0px;
-}
-
-.DV-footer .DV-navControls {
-  float: none;
-}
-
-.hidee {display: block;}
-
-
