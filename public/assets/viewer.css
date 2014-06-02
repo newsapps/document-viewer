@@ -6,6 +6,22 @@
     visibility: hidden;
 }
 
+.ie-alert {
+  background-color: #dadada;
+  margin: -12px 0px 0px 0px;
+  height: 36px;
+  border-bottom: 1px solid #aaa;
+  color: #333;
+  -webkit-box-shadow: 0px 1px 10px rgba(200,200,200, 0.75);
+  -moz-box-shadow:    0px 1px 10px rgba(200,200,200, 0.75);
+  box-shadow:         0px 1px 10px rgba(200,200,200, 0.75);
+}
+
+#linkhook {
+  font-size: .9em;
+  color: #004276;
+}
+
 .DV-docViewer .DV-clearfix {display: inline-block;}
 
 /* Hides from IE-mac \*/
