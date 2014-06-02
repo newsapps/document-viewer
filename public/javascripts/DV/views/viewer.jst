@@ -1,11 +1,26 @@
-<!--[if lte IE 8]><div class="DV-docViewer DV-clearfix DV-viewDocument DV-ie <% if (autoZoom) { %>DV-autoZoom<% } %> <% if (mini) { %>DV-mini<% } %> <% if (!options.sidebar) { %>DV-hideSidebar<% } else { %>DV-hideFooter<% } %>"><![endif]-->
+<!--[if lte IE 8]>
+
+
+  <div class="DV-docViewer DV-clearfix DV-viewDocument DV-ie
+  <% if (autoZoom) { %>DV-autoZoom<% } %>
+  <% if (mini) { %>DV-mini<% } %>
+  <% if (!options.sidebar) { %>DV-hideSidebar<% } else { %>DV-hideFooter<% } %>">
+
+<![endif]-->
+
 <!--[if (!IE)|(gte IE 9)]><!--><div class="DV-docViewer DV-clearfix DV-viewDocument <% if (autoZoom) { %>DV-autoZoom<% } %> <% if (mini) { %>DV-mini<% } %> <% if (!options.sidebar) { %>DV-hideSidebar<% } else { %>DV-hideFooter<% } %>"><!-- <![endif]-->
-  
+
   <div class="DV-docViewerWrapper">
-  
+
     <%= header %>
     <div class="DV-docViewer-Container">
-      
+
+      <!--[if lte IE 8]>
+
+        <h1>Go upgrade your ztuff!</h1>
+
+      <![endif]-->
+
       <div class="DV-searchBarWrapper">
         <div class="DV-searchBar">
           <span class="DV-trigger DV-closeSearch">CLOSE</span>
@@ -20,7 +35,7 @@
           </div>
         </div>
       </div>
-    
+
       <div class="DV-pages <% if (!options.sidebar) { %>DV-hide-sidebar<% } %>">
         <div class="DV-paper">
           <div class="DV-thumbnails"></div>
@@ -30,7 +45,7 @@
             </div>
             <div class="DV-text">
               <div class="DV-textSearch DV-clearfix">
-          
+
               </div>
               <div class="DV-textPage">
                 <span class="DV-textCurrentPage"></span>
@@ -42,17 +57,17 @@
           </div>
         </div>
       </div>
-    
+
       <div width="265px" class="DV-sidebar <% if (!options.sidebar) { %>DV-hide<% } %>" style="display:none;">
         <div class="DV-well">
-    
+
           <div class="DV-sidebarSpacer"></div>
-          
+
           <% if (options.sidebar) { %>
             <div class="DV-navControlsContainer">
             </div>
           <% } %>
-              
+
           <div class="DV-navigation">
             <%= descriptionContainer %>
             <div class="DV-contentsHeader">Contents</div>
@@ -79,13 +94,13 @@
         </div>
       </div>
     </div>
-    
+
     <%= footer %>
-    
+
   </div>
-  
+
   <div class="DV-printMessage">
-    To print the document, click the "Original Document" link to open the original 
+    To print the document, click the "Original Document" link to open the original
     PDF. At this time it is not possible to print the document with annotations.
   </div>
 
