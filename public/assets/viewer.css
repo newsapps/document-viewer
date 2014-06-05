@@ -2522,16 +2522,19 @@ span.DV-highlighted{
     -webkit-border-top-right-radius: 5px; -moz-border-radius-topright: 5px;
   }
 
-.pagesSVG, .shareSVG, .dec, .resize, .inc {
+.pagesSVG, .shareSVG, .dec, .resize, .inc, .storyJump {
   height: 40px;
-/*  width: 40px;
-*/  float: left;
+  float: left;
   border: none;
   padding: 5px 5px 3px 5px;
   margin: 0px 10px;
   background: #c5c5c5;
   fill: #333333;
   border-radius: 5px;
+}
+.storyJump {
+  background: #00518d;
+  color: #dadada;
 }
 
 .shareSVG {
@@ -2556,7 +2559,7 @@ span.DV-highlighted{
 }
 
 
-.pagesSVG:hover, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover {
+.pagesSVG:hover, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover, .storyJump:hover {
   background-color: #bbb;
   height: 40px;
   border: none;
@@ -2564,7 +2567,11 @@ span.DV-highlighted{
   outline: none;
 }
 
-.pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
+.storyJump:hover {
+  background-color: #777;
+}
+
+.pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus, .storyJump:focus {
   outline: none;
 }
 
@@ -2585,8 +2592,8 @@ span.DV-highlighted{
     border: none;
     padding: 5px 5px 3px 5px;
     margin: 0px 10px;
-    background: #555555;
-    fill: #333333;
+/*    background: #555555;
+*/    fill: #333333;
     border-radius: 5px;
   }
 
