@@ -1,3 +1,8 @@
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; /* Disable selection/copy in UIWebView */
+}
+
 .DV-docViewer .DV-clearfix:after {
     content: ".";
     display: block;
