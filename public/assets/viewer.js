@@ -15636,8 +15636,9 @@ DV.Schema.helpers = {
         dropdown.append(shareLi);
       });
 
-      dropdown.delegate('.DV-show-embed-code', 'click', _.bind(this.showEmbedCode, this, type));
-      dropdown.append('<li><a class="DV-show-embed-code" href="#">Embed</a></li>');
+      $('<li><a class="DV-show-embed-code" href="#">Embed</a></li>')
+        .on('click', _.bind(this.showEmbedCode, this, type));
+        .appendTo(dropdown);
     },
 
     showEmbedCode: function(type) {
