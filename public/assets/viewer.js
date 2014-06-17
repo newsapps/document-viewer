@@ -15641,6 +15641,7 @@ DV.Schema.helpers = {
         .appendTo(dropdown);
     },
 
+
     showEmbedCode: function(type) {
       var viewer = this.viewer,
           embed_url = window.location.origin + viewer.history.root + '?embed=true';
