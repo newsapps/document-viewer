@@ -15637,7 +15637,7 @@ DV.Schema.helpers = {
       });
 
       $('<li><a class="DV-show-embed-code" href="#">Embed</a></li>')
-        .on('click', _.bind(this.showEmbedCode, this, type));
+        .on('click', _.bind(this.showEmbedCode, this, type))
         .appendTo(dropdown);
     },
 
