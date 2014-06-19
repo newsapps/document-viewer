@@ -2537,9 +2537,24 @@ span.DV-highlighted{
   fill: #333333;
   border-radius: 5px;
 }
+
 .storyJump {
   background: #00518d;
   color: #dadada;
+  fill: #dadada;
+}
+
+.storyJump .btn-text {
+  margin-top: -3px;
+}
+
+.storyJump .btn-text:hover, .storyJump .btn-text:hover {
+  fill: #dadada;
+}
+
+.storyArrow {
+  margin-top: 4px;
+  fill: #dadada;
 }
 
 .shareSVG {
@@ -2548,7 +2563,8 @@ span.DV-highlighted{
 
 .btn-text {
   display: inline-block;
-  padding: 0px 3px 0px 2px;
+  padding: 0px 3px 0px 6px;
+  margin-right: -4px;
   vertical-align: top;
   height: 30px;
   line-height: 30px;
