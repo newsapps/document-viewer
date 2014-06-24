@@ -1492,6 +1492,7 @@
       } else {
         return this.location.assign(url);
       }
+      this.trigger('route', fragment);
       if (options.trigger) this.loadUrl(fragment);
     },
 

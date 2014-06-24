@@ -151,7 +151,7 @@ DV.model.Articles.prototype = {
                 this.markRegionActive(article.slug);
                 this.showOptions(page, article.slug);
                 this.viewer.history.navigate(
-                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+                  'page/' + article.start_page + '/article/' + article.slug, {trigger: true});
               }
               clickCount += 1;
               clickTimeout = setTimeout(function() {clickCount = 0;}, 500);
@@ -220,7 +220,7 @@ DV.model.Articles.prototype = {
     this.markRegionActive(article.slug);
     this.showOptions(page, article.slug);
     this.viewer.history.navigate(
-      'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+      'page/' + article.start_page + '/article/' + article.slug, {trigger: true});
 
     return false;
   },

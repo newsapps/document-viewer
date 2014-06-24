@@ -42,6 +42,7 @@ _.extend(DV.Schema.events, {
 
   // #page/[pageNumber]/article/[articleId]
   handleHashChangeViewArticle: function(page, article) {
+    console.log("hash change view article called");
     var viewer = this.viewer;
 
     var pageArticlesLoaded = _.bind(function(pageNum) {
@@ -53,6 +54,14 @@ _.extend(DV.Schema.events, {
     }, viewer.models.articles);
 
     viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);
+
+    // Add page change handler for Google Analytics
+    //if (this.viewer.options.google_analytics) {
+      //ga('send', 'event', 'article', 'view', article);
+    //}
+    //if (this.viewer.options.omniture) {
+      // HELLO WORLD
+    //} 
 
     this.handleHashChangeViewDocumentPage(page);
   },
@@ -72,6 +81,7 @@ _.extend(DV.Schema.events, {
 
   // #text/p[pageID]
   handleHashChangeViewText: function(page){
+    console.log("hash change view article called");
     var pageIndex = parseInt(page,10) - 1;
     if(this.viewer.state === 'ViewText'){
       this.events.loadText(pageIndex);

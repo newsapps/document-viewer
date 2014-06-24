@@ -12314,6 +12314,7 @@ c.callback&&c.callback.apply(a[0],arguments);a.dequeue()})})}})(jQuery);
       } else {
         return this.location.assign(url);
       }
+      this.trigger('route', fragment);
       if (options.trigger) this.loadUrl(fragment);
     },
 
@@ -14051,7 +14052,7 @@ DV.model.Articles.prototype = {
                 this.markRegionActive(article.slug);
                 this.showOptions(page, article.slug);
                 this.viewer.history.navigate(
-                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+                  'page/' + article.start_page + '/article/' + article.slug, {trigger: true});
               }
               clickCount += 1;
               clickTimeout = setTimeout(function() {clickCount = 0;}, 500);
@@ -14120,7 +14121,7 @@ DV.model.Articles.prototype = {
     this.markRegionActive(article.slug);
     this.showOptions(page, article.slug);
     this.viewer.history.navigate(
-      'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+      'page/' + article.start_page + '/article/' + article.slug, {trigger: true});
 
     return false;
   },
@@ -15003,6 +15004,7 @@ _.extend(DV.Schema.events, {
 
   // #page/[pageNumber]/article/[articleId]
   handleHashChangeViewArticle: function(page, article) {
+    console.log("hash change view article called");
     var viewer = this.viewer;
 
     var pageArticlesLoaded = _.bind(function(pageNum) {
@@ -15014,6 +15016,14 @@ _.extend(DV.Schema.events, {
     }, viewer.models.articles);
 
     viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);
+
+    // Add page change handler for Google Analytics
+    //if (this.viewer.options.google_analytics) {
+      //ga('send', 'event', 'article', 'view', article);
+    //}
+    //if (this.viewer.options.omniture) {
+      // HELLO WORLD
+    //} 
 
     this.handleHashChangeViewDocumentPage(page);
   },
@@ -15033,6 +15043,7 @@ _.extend(DV.Schema.events, {
 
   // #text/p[pageID]
   handleHashChangeViewText: function(page){
+    console.log("hash change view article called");
     var pageIndex = parseInt(page,10) - 1;
     if(this.viewer.state === 'ViewText'){
       this.events.loadText(pageIndex);
@@ -15603,6 +15614,21 @@ DV.Schema.helpers = {
           }
         });
       }
+
+      // Add page change handler for Google Analytics
+      if (this.viewer.options.google_analytics) {
+        var viewer = this.viewer;
+        viewer.api.onPageChange(function() {
+          ga('send', 'event', 'page', 'view', 'page', viewer.api.currentPage());
+        });
+      }
+      if (this.viewer.options.omniture) {
+        var viewer = this.viewer;
+        viewer.api.onPageChange(function() {
+          console.log("@TODO: Tell register pageview in Omniture for page: ",
+                       viewer.api.currentPage());
+        });
+      } 
     },
 
     setupShareLinks: function(menu, type) {

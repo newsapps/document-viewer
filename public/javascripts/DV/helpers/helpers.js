@@ -480,6 +480,21 @@ DV.Schema.helpers = {
           }
         });
       }
+
+      // Add page change handler for Google Analytics
+      if (this.viewer.options.google_analytics) {
+        var viewer = this.viewer;
+        viewer.api.onPageChange(function() {
+          ga('send', 'event', 'page', 'view', 'page', viewer.api.currentPage());
+        });
+      }
+      if (this.viewer.options.omniture) {
+        var viewer = this.viewer;
+        viewer.api.onPageChange(function() {
+          console.log("@TODO: Tell register pageview in Omniture for page: ",
+                       viewer.api.currentPage());
+        });
+      } 
     },
 
     setupShareLinks: function(menu, type) {
