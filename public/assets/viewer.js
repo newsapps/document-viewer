@@ -14051,8 +14051,9 @@ DV.model.Articles.prototype = {
                 this.activeArticle = article;
                 this.markRegionActive(article.slug);
                 this.showOptions(page, article.slug);
+                this.triggerAnalytics(article.slug);
                 this.viewer.history.navigate(
-                  'page/' + article.start_page + '/article/' + article.slug, {trigger: true});
+                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
               }
               clickCount += 1;
               clickTimeout = setTimeout(function() {clickCount = 0;}, 500);
@@ -14063,6 +14064,14 @@ DV.model.Articles.prototype = {
     }
 
     this.events.pageArticlesLoaded(page);
+  },
+
+  triggerAnalytics: function(slug) {
+      if (this.viewer.options.google_analytics)
+        ga('send', 'event', 'article', 'click', 'article', slug);
+
+      if (this.viewer.options.omniture)
+        console.log('@todo omniture article view event:', slug);   
   },
 
   moveToArticle: function(page, slug, zoom) {
@@ -14121,7 +14130,7 @@ DV.model.Articles.prototype = {
     this.markRegionActive(article.slug);
     this.showOptions(page, article.slug);
     this.viewer.history.navigate(
-      'page/' + article.start_page + '/article/' + article.slug, {trigger: true});
+      'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
 
     return false;
   },
@@ -14149,7 +14158,6 @@ DV.model.Articles.prototype = {
         .click(_.bind(function() {
           this.savePosition();
           this.viewer.open('ViewArticleText', page, articleSlug);
-          return false;
         }, this));
 
     if (next) {
@@ -15004,7 +15012,6 @@ _.extend(DV.Schema.events, {
 
   // #page/[pageNumber]/article/[articleId]
   handleHashChangeViewArticle: function(page, article) {
-    console.log("hash change view article called");
     var viewer = this.viewer;
 
     var pageArticlesLoaded = _.bind(function(pageNum) {
@@ -15016,14 +15023,6 @@ _.extend(DV.Schema.events, {
     }, viewer.models.articles);
 
     viewer.models.articles.events.on('pageArticlesLoaded', pageArticlesLoaded);
-
-    // Add page change handler for Google Analytics
-    //if (this.viewer.options.google_analytics) {
-      //ga('send', 'event', 'article', 'view', article);
-    //}
-    //if (this.viewer.options.omniture) {
-      // HELLO WORLD
-    //} 
 
     this.handleHashChangeViewDocumentPage(page);
   },
@@ -15043,7 +15042,6 @@ _.extend(DV.Schema.events, {
 
   // #text/p[pageID]
   handleHashChangeViewText: function(page){
-    console.log("hash change view article called");
     var pageIndex = parseInt(page,10) - 1;
     if(this.viewer.state === 'ViewText'){
       this.events.loadText(pageIndex);
