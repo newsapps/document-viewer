@@ -15602,33 +15602,6 @@ DV.Schema.helpers = {
           this.jump(opts.page - 1);
         }
       }
-
-      // If ads are enabled, ad on page change callback to
-      // refresh when appropriate
-      if (this.viewer.options.ads) {
-        var viewer = this.viewer;
-        viewer.api.onPageChange(function() {
-          if ( viewer.api.currentPage() > viewer.options.ads.interval &&
-               viewer.api.currentPage() % viewer.options.ads.interval === 0 ) {
-            viewer.pageSet.pages['p2'].el.find('.advert').ad('refresh');
-          }
-        });
-      }
-
-      // Add page change handler for Google Analytics
-      if (this.viewer.options.google_analytics) {
-        var viewer = this.viewer;
-        viewer.api.onPageChange(function() {
-          ga('send', 'event', 'page', 'view', 'page', viewer.api.currentPage());
-        });
-      }
-      if (this.viewer.options.omniture) {
-        var viewer = this.viewer;
-        viewer.api.onPageChange(function() {
-          console.log("@TODO: Tell register pageview in Omniture for page: ",
-                       viewer.api.currentPage());
-        });
-      } 
     },
 
     setupShareLinks: function(menu, type) {

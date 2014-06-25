@@ -468,18 +468,6 @@ DV.Schema.helpers = {
           this.jump(opts.page - 1);
         }
       }
-
-      // If ads are enabled, ad on page change callback to
-      // refresh when appropriate
-      if (this.viewer.options.ads) {
-        var viewer = this.viewer;
-        viewer.api.onPageChange(function() {
-          if ( viewer.api.currentPage() > viewer.options.ads.interval &&
-               viewer.api.currentPage() % viewer.options.ads.interval === 0 ) {
-            viewer.pageSet.pages['p2'].el.find('.advert').ad('refresh');
-          }
-        });
-      }
     },
 
     setupShareLinks: function(menu, type) {
