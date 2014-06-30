@@ -60,3 +60,42 @@
   padding: 0 36px;
   position: relative;
 }
+
+/*taken from viewer.css junk*/
+
+.DV-controls .center, .DV-footer .DV-navControls .center {
+  line-height:38px;
+  text-align:center;
+}
+
+.DV-controls .center img {
+  margin-right:12px;
+  margin-top: -2px;
+  height:18px;
+}
+
+.DV-controls .issue-pub-date,
+.DV-controls p.issue-pub-date {
+  color: #eee;
+  text-shadow: none;
+  margin-top: 10px;
+}
+
+.DV-topNavLeft, .DV-topNavRight { line-height:38px; }
+.DV-controls a, .DV-controls a:visited {
+  font-family:Arial,Helvetica,sans-serif;
+  color: #eee;
+  font-weight:normal;
+}
+.DV-topNavLeft {
+    position:absolute;
+    left:10px;
+}
+.DV-topNavRight {
+    position:absolute;
+    right:10px;
+}
+
+.DV-back-to-paper, .DV-read-article {
+  display:none;
+}

@@ -883,6 +883,7 @@
   display: block;
 }
 
+
 /* ========== */
 /* = Header = */
 /* ========== */
@@ -1136,15 +1137,15 @@
 .DV-footer {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 33px;
-  border-top: 1px solid #B0B0B0;
+  height: 50px;
+  border-top: 1px solid #aaa;
   z-index: 20000;
-  text-shadow: 0px 1px 0px #ddd;
-  color: #333;
-  /*overflow: hidden;*/
-  background: url("data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAlCAYAAACDKIOpAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADtJREFUeNpiuHv37nemjx8/cjAxAAGE+P//P5RAcMGsf//+QblgFppihASaAWhiCC5OQ9F0YBI/AAIMAImPWEFTMQEnAAAAAElFTkSuQmCC");
+/*  text-shadow: 0px 1px 0px #ddd;
+*/  color: #333;
+  background-color: #c5c5c5;
   box-shadow: 0 0 25px rgba(0,0,0,.05); -webkit-box-shadow: 0 0 25px rgba(0,0,0,.05); -moz-box-shadow: 0 0 25px rgba(0,0,0,.05);
 }
+
 .DV-footer.DV-hide {
   display: none;
 }
@@ -1157,9 +1158,10 @@
   margin: 0 auto;
 }
 .DV-footer .DV-navControls {
+  float: right;
+  margin-right: 6px;
   right: 0;
   top: 0;
-  margin: 0 auto;
   text-align: center;
 }
 .DV-footer .DV-trigger {
@@ -1194,10 +1196,10 @@
 .DV-footer .DV-pageNumberContainer {
   position: absolute;
   left: 0;
-  top: 4px;
+  top: 10px;
 }
 .DV-footer .DV-shareTools {
-  position: absolute;
+/*  position: absolute;*/
   right: 10px;
   top: 0;
 }
@@ -1297,6 +1299,45 @@
   margin: -2px 12px 0;
   padding: 0 36px;
   position: relative;
+}
+
+/*taken from viewer.css junk*/
+
+.DV-controls .center, .DV-footer .DV-navControls .center {
+  line-height:38px;
+  text-align:center;
+}
+
+.DV-controls .center img {
+  margin-right:12px;
+  margin-top: -2px;
+  height:18px;
+}
+
+.DV-controls .issue-pub-date,
+.DV-controls p.issue-pub-date {
+  color: #eee;
+  text-shadow: none;
+  margin-top: 10px;
+}
+
+.DV-topNavLeft, .DV-topNavRight { line-height:38px; }
+.DV-controls a, .DV-controls a:visited {
+  font-family:Arial,Helvetica,sans-serif;
+  color: #eee;
+  font-weight:normal;
+}
+.DV-topNavLeft {
+    position:absolute;
+    left:10px;
+}
+.DV-topNavRight {
+    position:absolute;
+    right:10px;
+}
+
+.DV-back-to-paper, .DV-read-article {
+  display:none;
 }
 
 .DV-controls {
@@ -1628,6 +1669,85 @@
 .DV-ie .DV-pageNumberContainer input{
   margin-top:-5px;
 }
+
+
+/* pasted from viewer.css */
+.pagesSVG, .shareSVG, .dec, .resize, .inc, .storyJump {
+  height: 40px;
+  float: left;
+  border: none;
+  padding: 5px 5px 3px 5px;
+  margin: 0px 10px;
+  background: #c5c5c5;
+  fill: #333333;
+  border-radius: 5px;
+}
+
+.storyJump {
+  background: #00518d;
+  color: #dadada;
+  fill: #dadada;
+}
+
+.storyJump .btn-text {
+  margin-top: -3px;
+}
+
+.storyJump .btn-text:hover, .storyJump .btn-text:hover {
+  fill: #dadada;
+}
+
+.storyArrow {
+  margin-top: 4px;
+  fill: #dadada;
+}
+
+/*.shareSVG {
+  margin-top: -32px;
+}*/
+
+.btn-text {
+  display: inline-block;
+  padding: 0px 3px 0px 6px;
+  margin-right: -4px;
+  vertical-align: top;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: arial, sans-serif;
+}
+
+.btn-caret {
+  line-height: 40px;
+  padding-top: 17px;
+  margin-left: 5px;
+}
+
+
+.pagesSVG:hover, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover, .storyJump:hover {
+  background-color: #bbb;
+  height: 40px;
+  border: none;
+  fill: #00518D;
+  outline: none;
+}
+
+.storyJump:hover {
+  background-color: #777;
+}
+
+.pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus, .storyJump:focus {
+  outline: none;
+}
+
+.resize:disabled, .dec:disabled, .inc:disabled {
+  fill: #dddddd;
+}
+
+/*.shareSVG:focus, .shareSVG:hover {
+  margin-top: -31px;
+}*/
 
 .DV-searchPagination{
   text-align:center;
@@ -1980,13 +2100,13 @@ span.DV-highlighted{
   clear: both;
 }
 .DV-unsupported .DV-safari {
-  background: url(../images/DV/browsers/safari.gif?1369248142);
+  background: url(../images/DV/browsers/safari.gif?1398189374);
 }
 .DV-unsupported .DV-chrome {
-  background: url(../images/DV/browsers/chrome.gif?1369248142);
+  background: url(../images/DV/browsers/chrome.gif?1398189374);
 }
 .DV-unsupported .DV-firefox {
-  background: url(../images/DV/browsers/firefox.gif?1369248142);
+  background: url(../images/DV/browsers/firefox.gif?1398189374);
 }
 .DV-unsupported .DV-after {
   margin-top: 20px;

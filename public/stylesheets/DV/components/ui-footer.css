@@ -1,15 +1,15 @@
 .DV-footer {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 33px;
-  border-top: 1px solid #B0B0B0;
+  height: 50px;
+  border-top: 1px solid #aaa;
   z-index: 20000;
-  text-shadow: 0px 1px 0px #ddd;
-  color: #333;
-  /*overflow: hidden;*/
-  background: url(../../../images/DV/embed/headerbg.png);
+/*  text-shadow: 0px 1px 0px #ddd;
+*/  color: #333;
+  background-color: #c5c5c5;
   box-shadow: 0 0 25px rgba(0,0,0,.05); -webkit-box-shadow: 0 0 25px rgba(0,0,0,.05); -moz-box-shadow: 0 0 25px rgba(0,0,0,.05);
 }
+
 .DV-footer.DV-hide {
   display: none;
 }
@@ -22,9 +22,10 @@
   margin: 0 auto;
 }
 .DV-footer .DV-navControls {
+  float: right;
+  margin-right: 6px;
   right: 0;
   top: 0;
-  margin: 0 auto;
   text-align: center;
 }
 .DV-footer .DV-trigger {
@@ -59,10 +60,10 @@
 .DV-footer .DV-pageNumberContainer {
   position: absolute;
   left: 0;
-  top: 4px;
+  top: 10px;
 }
 .DV-footer .DV-shareTools {
-  position: absolute;
+/*  position: absolute;*/
   right: 10px;
   top: 0;
 }
