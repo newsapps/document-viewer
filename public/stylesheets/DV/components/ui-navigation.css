@@ -274,6 +274,10 @@
   border-radius: 5px;
 }
 
+.shareSVG, .pagesSVG {
+  padding-right: 10px;
+}
+
 .storyJump {
   background: #00518d;
   color: #dadada;

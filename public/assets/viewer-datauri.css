@@ -202,7 +202,7 @@
   .DV-edition-section-label h3 {
     font-family: Arial, Helvetica, "sans-serif";
     font-size: 20px;
-    text-shadow: 1px 1px 0px #fff;
+    text-shadow: 0px;
   }
 
 /* View Article Text Mode */
@@ -247,9 +247,8 @@
 /* End View Article Text Mode */
 
 .DV-header .issue-pub-date {
-  position: absolute;
-  right: 0;
-}
+/*  position: absolute;
+*/}
 .DV-controls .brand a {
   margin-top: 2px;
 }
@@ -1140,8 +1139,8 @@
   height: 50px;
   border-top: 1px solid #aaa;
   z-index: 20000;
-/*  text-shadow: 0px 1px 0px #ddd;
-*/  color: #333;
+  text-shadow: 0px;
+  color: #333;
   background-color: #c5c5c5;
   box-shadow: 0 0 25px rgba(0,0,0,.05); -webkit-box-shadow: 0 0 25px rgba(0,0,0,.05); -moz-box-shadow: 0 0 25px rgba(0,0,0,.05);
 }
@@ -1261,10 +1260,10 @@
 
 .DV-controls p.issue-pub-date {
   color: #eee;
-  text-shadow: none;
+  text-shadow: 0px;
   margin-top: 10px;
   margin-right: 45px;
-  text-align: right;
+  text-align: center;
 }
 
 .DV-header{
@@ -1303,6 +1302,10 @@
 
 /*taken from viewer.css junk*/
 
+.DV-controls .navbar .navbar-inverse {
+  text-shadow: 0px;
+}
+
 .DV-controls .center, .DV-footer .DV-navControls .center {
   line-height:38px;
   text-align:center;
@@ -1317,7 +1320,7 @@
 .DV-controls .issue-pub-date,
 .DV-controls p.issue-pub-date {
   color: #eee;
-  text-shadow: none;
+  text-shadow: 0px;
   margin-top: 10px;
 }
 
@@ -1683,6 +1686,10 @@
   border-radius: 5px;
 }
 
+.shareSVG, .pagesSVG {
+  padding-right: 10px;
+}
+
 .storyJump {
   background: #00518d;
   color: #dadada;
@@ -2029,8 +2036,8 @@ span.DV-highlighted{
   font-family:Arial,Helvetica,sans-serif;
   font-size:11px;
   float: right;
-  margin: 28px 14px 0 0;
-  position: relative;
+/*  margin: 28px 14px 0 0;
+*/  position: relative;
   z-index: 99999;
 }
   .DV-narrowControls .DV-zoomControls {
@@ -2552,7 +2559,7 @@ span.DV-highlighted{
     margin-top: 0;
     border: 0;
     background: url("data:image/png;charset=utf-8;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAlCAYAAACDKIOpAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADtJREFUeNpiuHv37nemjx8/cjAxAAGE+P//P5RAcMGsf//+QblgFppihASaAWhiCC5OQ9F0YBI/AAIMAImPWEFTMQEnAAAAAElFTkSuQmCC");
-    text-shadow: 0px 1px 0px #ddd;
+    text-shadow: 0px 0px 0px #ddd;
     color: #000;
   }
     .DV-searchInput {

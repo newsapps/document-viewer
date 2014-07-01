@@ -54,7 +54,7 @@
   .DV-edition-section-label h3 {
     font-family: Arial, Helvetica, "sans-serif";
     font-size: 20px;
-    text-shadow: 1px 1px 0px #fff;
+    text-shadow: 0px;
   }
 
 /* View Article Text Mode */
@@ -99,9 +99,8 @@
 /* End View Article Text Mode */
 
 .DV-header .issue-pub-date {
-  position: absolute;
-  right: 0;
-}
+/*  position: absolute;
+*/}
 .DV-controls .brand a {
   margin-top: 2px;
 }
