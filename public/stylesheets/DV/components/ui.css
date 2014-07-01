@@ -124,8 +124,4 @@
   }
 }
 
-@media (max-width: 767px) {
-  .DV-header .issue-pub-date {
-    display: none !important;
-  }
-}
+
