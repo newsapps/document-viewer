@@ -1197,11 +1197,11 @@
   left: 0;
   top: 10px;
 }
-.DV-footer .DV-shareTools {
-/*  position: absolute;*/
+/*.DV-footer .DV-shareTools {
+  position: absolute;
   right: 10px;
   top: 0;
-}
+}*/
 .DV-footer .DV-shareTools .dropdown-menu {
   left: auto;
   right: 0;
@@ -1688,6 +1688,10 @@
 
 .shareSVG, .pagesSVG {
   padding-right: 10px;
+}
+
+.shareSVG {
+  margin-left: 20px;
 }
 
 .storyJump {
@@ -2667,3 +2671,89 @@ span.DV-highlighted{
   .DV-views .DV-last span {
     -webkit-border-top-right-radius: 5px; -moz-border-radius-topright: 5px;
   }
+
+
+@media (min-width: 768px) {
+  .DV-article-modal.modal {
+    width: 868px;
+    margin-left: -434px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1080px) {
+  .DV-article-modal.modal {
+    width: 80%;
+    margin-left: -40%;
+  }
+}
+
+@media (max-width: 767px) {
+  .DV-header .issue-pub-date {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .pagesSVG, .shareSVG, .dec, .resize, .inc {
+    float: left;
+    border: none;
+    padding: 5px 5px 3px 5px;
+    margin: 0px 10px;
+/*    background: #555555;
+*/    fill: #333333;
+    border-radius: 5px;
+  }
+
+  .DV-zoomBox {
+    float: none;
+    display: inline-block;
+  }
+
+  .shareSVG, .DV-shareTools {
+    float: right;
+  }
+
+  .DV-trigger .shareSVG {
+    margin-right: 0px;
+  }
+
+  .pagesSVG:focus, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover,
+  .pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
+    outline: none;
+  }
+
+  .shareSVG:focus, .shareSVG:hover {
+    margin-top: 0px;
+  }
+
+  .DV-footer .DV-navControls {
+    float: none;
+  }
+}
+
+
+
+@media screen and (max-width: 500px) {
+
+  .DV-footer {
+    height: 48px;
+  }
+
+  .pagesSVG, .shareSVG, .dec, .resize, .inc {
+    float: left;
+    border: none;
+    padding: 5px 5px 3px 5px;
+    margin: 0px 5px;
+    background: #c5c5c5;
+    fill: #333333;
+    border-radius: 5px;
+  }
+
+  .pagesSVG:focus, .shareSVG:hover, .dec:hover, .resize:hover, .inc:hover,
+  .pagesSVG:focus, .shareSVG:focus, .dec:focus, .resize:focus, .inc:focus {
+    outline: none;
+    height: 40px;
+  }
+
+}

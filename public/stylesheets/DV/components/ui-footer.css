@@ -62,11 +62,11 @@
   left: 0;
   top: 10px;
 }
-.DV-footer .DV-shareTools {
-/*  position: absolute;*/
+/*.DV-footer .DV-shareTools {
+  position: absolute;
   right: 10px;
   top: 0;
-}
+}*/
 .DV-footer .DV-shareTools .dropdown-menu {
   left: auto;
   right: 0;

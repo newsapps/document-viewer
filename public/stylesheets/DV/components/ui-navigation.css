@@ -278,6 +278,10 @@
   padding-right: 10px;
 }
 
+.shareSVG {
+  margin-left: 20px;
+}
+
 .storyJump {
   background: #00518d;
   color: #dadada;
