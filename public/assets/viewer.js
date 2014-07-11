@@ -14067,11 +14067,15 @@ DV.model.Articles.prototype = {
   },
 
   triggerAnalytics: function(slug) {
+      console.log(this);
+      var title = this.viewer.models.articles.activeArticle.title;
+      var date = this.viewer.schema.document.date;
+      var value = title + ' (' + date + ')';
       if (this.viewer.options.google_analytics)
-        ga('send', 'event', 'article', 'click', 'article', slug);
+        ga('send', 'event', 'Article', 'View', value);
 
       if (this.viewer.options.omniture)
-        console.log('@todo omniture article view event:', slug);   
+        console.log('@todo omniture article view event:', value);
   },
 
   moveToArticle: function(page, slug, zoom) {
@@ -15613,19 +15617,18 @@ DV.Schema.helpers = {
       }, viewer.options.socialServices);
 
       _.each(socialServices, function(v, i) {
-        var tmpl = _.template('<li><a target="_blank" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
-
+        var tmpl = _.template('<li><a target="_blank" data-event-label="<%= name %>" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
         if (type == 'article') {
           article = viewer.models.articles.activeArticle;
           var shareItemData = {
             url: encodeURIComponent(window.location.origin + viewer.history.root + 'page/' + article.start_page + '/article/' + article.slug),
-            text: encodeURIComponent(article.title + ' from the ' + viewer.schema.document.title)
+            text: encodeURIComponent('Tribune Archives: ' + article.title + ' (' + viewer.schema.document.date + ')')
           }
 
         } else {
           var shareItemData = {
             url: encodeURIComponent(window.location.origin + viewer.history.root),
-            text: encodeURIComponent(viewer.schema.document.title)
+            text: encodeURIComponent('Chicago Tribune Archives: ' + viewer.schema.document.date)
           }
         }
         var shareLi = _.template(tmpl, shareItemData);

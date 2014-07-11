@@ -481,19 +481,18 @@ DV.Schema.helpers = {
       }, viewer.options.socialServices);
 
       _.each(socialServices, function(v, i) {
-        var tmpl = _.template('<li><a target="_blank" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
-
+        var tmpl = _.template('<li><a target="_blank" data-event-label="<%= name %>" href="<%= href %>"><%= name %></a></li>', { href: v, name: i });
         if (type == 'article') {
           article = viewer.models.articles.activeArticle;
           var shareItemData = {
             url: encodeURIComponent(window.location.origin + viewer.history.root + 'page/' + article.start_page + '/article/' + article.slug),
-            text: encodeURIComponent(article.title + ' from the ' + viewer.schema.document.title)
+            text: encodeURIComponent('Tribune Archives: ' + article.title + ' (' + viewer.schema.document.date + ')')
           }
 
         } else {
           var shareItemData = {
             url: encodeURIComponent(window.location.origin + viewer.history.root),
-            text: encodeURIComponent(viewer.schema.document.title)
+            text: encodeURIComponent('Chicago Tribune Archives: ' + viewer.schema.document.date)
           }
         }
         var shareLi = _.template(tmpl, shareItemData);

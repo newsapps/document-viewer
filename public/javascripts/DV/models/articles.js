@@ -166,11 +166,15 @@ DV.model.Articles.prototype = {
   },
 
   triggerAnalytics: function(slug) {
+      console.log(this);
+      var title = this.viewer.models.articles.activeArticle.title;
+      var date = this.viewer.schema.document.date;
+      var value = title + ' (' + date + ')';
       if (this.viewer.options.google_analytics)
-        ga('send', 'event', 'article', 'click', 'article', slug);
+        ga('send', 'event', 'Article', 'View', value);
 
       if (this.viewer.options.omniture)
-        console.log('@todo omniture article view event:', slug);   
+        console.log('@todo omniture article view event:', value);
   },
 
   moveToArticle: function(page, slug, zoom) {
