@@ -152,7 +152,7 @@ DV.model.Articles.prototype = {
                 this.showOptions(page, article.slug);
                 this.triggerAnalytics(article.slug);
                 this.viewer.history.navigate(
-                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false});
+                  'page/' + article.start_page + '/article/' + article.slug, {trigger: false, replace: true});
               }
               clickCount += 1;
               clickTimeout = setTimeout(function() {clickCount = 0;}, 500);
