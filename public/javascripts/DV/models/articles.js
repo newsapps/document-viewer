@@ -166,11 +166,12 @@ DV.model.Articles.prototype = {
   },
 
   triggerAnalytics: function(slug) {
-      var title = this.viewer.models.articles.activeArticle.title,
+      var ga_opts = {'page': DOCUMENT_ROOT},
+          title = this.viewer.models.articles.activeArticle.title,
           date = this.viewer.schema.document.date,
           value = title + ' (' + date + ')';
       if (this.viewer.options.google_analytics)
-        ga('send', 'event', 'Article', 'View', value);
+        ga('send', 'event', 'Article', 'View', value, ga_opts);
 
       if (this.viewer.options.omniture)
         console.log('@todo omniture article view event:', value);
