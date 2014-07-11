@@ -166,10 +166,9 @@ DV.model.Articles.prototype = {
   },
 
   triggerAnalytics: function(slug) {
-      console.log(this);
-      var title = this.viewer.models.articles.activeArticle.title;
-      var date = this.viewer.schema.document.date;
-      var value = title + ' (' + date + ')';
+      var title = this.viewer.models.articles.activeArticle.title,
+          date = this.viewer.schema.document.date,
+          value = title + ' (' + date + ')';
       if (this.viewer.options.google_analytics)
         ga('send', 'event', 'Article', 'View', value);
 
@@ -200,6 +199,7 @@ DV.model.Articles.prototype = {
         scaleFactor, width, height;
 
     this.activeArticle = article;
+    this.triggerAnalytics(article.slug);
 
     if (zoom) {
       for (var i = zoomRanges.length; i-- > 0; ) {
