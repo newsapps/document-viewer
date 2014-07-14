@@ -16234,15 +16234,15 @@ DV.model.Articles.prototype = {
   },
 
   triggerAnalytics: function(slug) {
-      var ga_opts = {'page': DOCUMENT_ROOT},
-          title = this.viewer.models.articles.activeArticle.title,
-          date = this.viewer.schema.document.date,
-          value = title + ' (' + date + ')';
-      if (this.viewer.options.google_analytics)
-        ga('send', 'event', 'Article', 'View', value, ga_opts);
+    var ga_opts = {'page': DOCUMENT_ROOT},
+        title = this.viewer.models.articles.activeArticle.title,
+        date = this.viewer.schema.document.date,
+        value = title + ' (' + date + ')';
+    if (this.viewer.options.google_analytics)
+      ga('send', 'event', 'Article', 'View', value, ga_opts);
 
-      if (this.viewer.options.omniture)
-        console.log('@todo omniture article view event:', value);
+    if (this.viewer.options.omniture)
+      console.log('@todo omniture article view event:', value);
   },
 
   moveToArticle: function(page, slug, zoom) {

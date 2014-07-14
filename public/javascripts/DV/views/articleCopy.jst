@@ -1,0 +1,11 @@
+<article itemscope itemtype="http://schema.org/Article">
+  <h1 itemprop="headline"><%= article.title %></h1>
+  <% if (article.contributors) { %>
+    by <% _.each(article.contributors, function(contributor, i) { %>
+      <span itemprop="author"><%= contributor %></span><% if (i+1<article.contributors.length) { %>,<% } %>
+      <% }); %>
+  <% } %>
+  <% if (article.section) { %><span itemprop="articleSection"><%= article.section %></span><% } %>
+  <span itemprop="datePublished"><%= display_date %></span>
+  <div itemprop="text"><% if (article.legible) { %><%= article.body %><% } else { %><%= article.abstract %><% } %></span>
+</article>
